@@ -62,16 +62,16 @@ self.addEventListener('fetch',e=>{
   const req=e.request;
   if(req.method!=='GET')return;
   const url=new URL(req.url);
-  if(url.origin!==location.origin)return;
+  if(url.origin!==location.origin||url.pathname.endsWith('/sw.js'))return;
   // Página: primero internet (para tomar cambios), si no hay, la guardada
   if(req.mode==='navigate'){
-    e.respondWith(fetch(req).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put('./',cp));return r}).catch(()=>caches.match('./',{ignoreSearch:true})));
+    e.respondWith(fetch(req).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put('./',cp));return r}).catch(()=>caches.open(CACHE).then(c=>c.match('./',{ignoreSearch:true}))));
     return;
   }
   // Videos: el navegador pide pedazos (Range); los servimos desde el archivo guardado
   const range=req.headers.get('range');
   if(range){
-    e.respondWith(caches.match(req.url,{ignoreSearch:true}).then(async hit=>{
+    e.respondWith(caches.open(CACHE).then(c=>c.match(req.url,{ignoreSearch:true})).then(async hit=>{
       if(!hit)return fetch(req);
       const buf=await hit.arrayBuffer();const total=buf.byteLength;
       const m=/bytes=(\d*)-(\d*)/.exec(range)||[];
@@ -83,5 +83,5 @@ self.addEventListener('fetch',e=>{
     return;
   }
   // Resto (imágenes, fuentes, scripts): primero lo guardado, rápido
-  e.respondWith(caches.match(req,{ignoreSearch:true}).then(hit=>hit||fetch(req).then(r=>{if(r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(req,cp))}return r})));
+  e.respondWith(caches.open(CACHE).then(c=>c.match(req,{ignoreSearch:true})).then(hit=>hit||fetch(req).then(r=>{if(r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(req,cp))}return r})));
 });
