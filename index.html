@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Expo Uruguay · Mapa</title>
+<meta name="description" content="ExpoCannabis Uruguay 2026 · Mapa interactivo (DEMO). Sáb 5 y dom 6 de diciembre, Centro de Eventos LATU, Montevideo.">
+<meta name="theme-color" content="#0E0D2E">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Expo Uruguay">
+<link rel="preload" href="assets/fonts/lilita-one-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/nunito-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+</head>
+<body>
+
+<style>
+/* Kiosco vertical 9:16, un solo look oscuro y tranquilo (paleta ExpoCannabis en pasteles): logo · mapa de raíces · panel con fichas */
+:root{
+  color-scheme:dark;
+  --noche:#0E0D2E; --noche2:#15143A; --surface:#1C1B47; --surface2:#26255A; --line:rgba(200,195,255,.13);
+  --violeta:#6E5CC9; --morado:#3B3470; --magenta:#D93FBF; --verde:#8EE6A8; --lima:#C9E88A; --celeste:#7FE3E0;
+  --amarillo:#F6E08A; --naranja:#F4B183; --rosa:#F3B4DC; --blanco:#FFFFFF; --gris:#4A4A4A;
+  --fg:#F2F0FF; --lavanda:#B7A6F5; --menta:#8EE6A8; --muted:#ABA7D6; --ink:#14133A; --lila:#B7A6F5;
+  --f-head:"Lilita One","Fredoka","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-cond:"Montserrat","Arial Black",system-ui,sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+[hidden]{display:none!important}
+html,body{height:100%;background:var(--noche);color:var(--fg)}
+body{font-family:var(--f-body);overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;padding:0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--amarillo);outline-offset:2px;border-radius:.5em}
+svg.i{width:1.2em;height:1.2em;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.app{height:100%;aspect-ratio:9/16;max-width:100%;margin:0 auto;container-type:size;position:relative;overflow:hidden;background:var(--noche)}
+.tex{display:none}
+.shell{position:relative;height:100%;display:flex;flex-direction:column;font-size:clamp(11px,2.35cqw,32px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* encabezado */
+.top{display:flex;align-items:center;gap:.7em;padding-block:.8em .45em}
+.ed{flex:0 0 auto;background:var(--verde);color:var(--ink);border-radius:.55em;padding:.35em .5em;font-family:var(--f-head);line-height:.9;text-align:center;font-size:.9em}
+.ed small{display:block;font-family:var(--f-cond);font-weight:800;font-size:.52em;letter-spacing:.06em}
+.ed.ed-sm{display:inline-flex;align-items:center;gap:.35em;padding:.2em .6em;border-radius:999px;font-size:.7em;line-height:1}
+.ed.ed-sm small{display:inline;font-size:.75em}
+.brand{min-width:0;flex:1}
+.brand{display:flex;align-items:center;gap:.7em}
+.brand .logo{height:3.1em;width:auto;display:block;flex:0 0 auto}
+.brand .meta{display:flex;flex-direction:column;gap:.3em;min-width:0}
+.brand p{margin:0;display:flex;gap:.35em;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:.35em;border-radius:999px;padding:.2em .65em;font-weight:800;font-size:.68em;white-space:nowrap}
+.pill{font-family:var(--f-cond)}
+.pill.date{background:var(--gris);color:var(--blanco)}
+.pill.date b{color:var(--blanco)}
+.pill.aq{background:var(--celeste);color:var(--ink)}
+.pill.mn{background:var(--menta);color:var(--ink)}
+.clock{font-family:var(--f-cond);font-weight:800;font-size:.95em;letter-spacing:0;color:var(--amarillo);text-align:right;white-space:nowrap;line-height:1}
+.clock small{display:block;font-family:var(--f-body);color:var(--muted);font-size:.42em;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.toolbar{display:flex;gap:.4em;align-items:center;padding-bottom:.55em;min-width:0}
+.langs{display:flex;gap:.15em;background:var(--surface);border-radius:999px;padding:.18em;flex:0 0 auto}
+.langs button{padding:.3em .6em;border-radius:999px;font-weight:900;font-size:.74em;color:var(--muted);letter-spacing:.04em}
+.langs button[aria-pressed="true"]{background:var(--celeste);color:var(--ink)}
+.demo{flex:0 0 auto;font-size:.6em;letter-spacing:.14em;font-weight:900;color:var(--ink);background:var(--amarillo);padding:.3em .7em;border-radius:999px}
+.livechip{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:.45em;font-size:.74em;font-weight:800;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.32em .75em;overflow:hidden}
+.livechip span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec{width:.6em;height:.6em;border-radius:50%;background:var(--rosa);flex:0 0 auto;animation:rec 1.6s ease-in-out infinite}
+@keyframes rec{50%{opacity:.35}}
+.tbtn{flex:0 0 auto;display:flex;align-items:center;gap:.35em;background:var(--lavanda);color:var(--ink);padding:.38em .75em;border-radius:999px;font-size:.74em;font-weight:800}
+.tbtn.ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line);padding:.38em .55em}
+
+/* mapa */
+.mapwrap{flex:1 1 auto;min-height:0;position:relative;margin-top:.1em;border-radius:1.1em;overflow:hidden;background:#0C0B28;border:1px solid var(--line)}
+#map{width:100%;height:100%;display:block;touch-action:manipulation}
+#map text{pointer-events:none}
+#map .zl{font-family:var(--f-cond);font-weight:800;letter-spacing:.4px;fill:var(--fg)}
+#map .zl.ink{fill:var(--ink)} #map .ink2{fill:#4A4870}
+#map .zs{font-family:var(--f-body);font-weight:700;fill:var(--muted)}
+#map .sn{font-family:var(--f-body);font-weight:900;fill:var(--ink)}
+#map .num{font-family:var(--f-head);fill:var(--blanco)}
+#map .hit{cursor:pointer}
+#map .hit .shape{transition:stroke-width .2s}
+#map .hit.sel .shape{stroke:var(--ink);stroke-width:5}
+#map .hit.sel{outline:none}
+.mapwrap.picking #map .hit{cursor:crosshair}
+.mapwrap.picking #map .hit:hover .shape{stroke-width:4}
+#map .stand{transition:opacity .3s}
+#map .stand.dim{opacity:.22}
+#route{fill:none;stroke:var(--amarillo);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+#routeBase{fill:none;stroke:var(--ink);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.where{position:absolute;left:.6em;bottom:.6em;max-width:calc(100% - 1.2em);display:flex;align-items:center;gap:.45em;background:var(--amarillo);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:.35em .9em .35em .6em;font-size:.76em;font-weight:800;text-align:left}
+.where span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where u{text-decoration:none;background:var(--ink);color:var(--amarillo);border-radius:999px;padding:.1em .6em;margin-left:.2em;white-space:nowrap;flex:0 0 auto}
+.mapwrap.picking{outline:3px dashed var(--amarillo);outline-offset:-3px}
+.mapwrap.picking .where,.mapwrap.picking .spstrip{display:none}
+.pickbar{position:absolute;left:.6em;right:.6em;bottom:.6em;background:var(--amarillo);color:var(--ink);border:2px solid var(--ink);border-radius:1em;padding:.6em .8em;display:flex;flex-direction:column;gap:.5em;font-weight:800;font-size:.85em}
+.pickbtns{display:flex;gap:.4em}
+.pb{flex:1;background:var(--ink);color:var(--amarillo);border-radius:999px;padding:.5em .8em;font-weight:800;font-size:.9em}
+.pb.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.toast{position:absolute;left:50%;top:.6em;transform:translateX(-50%);background:var(--menta);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:.35em 1em;font-size:.78em;font-weight:800;white-space:nowrap;max-width:calc(100% - 1.2em);overflow:hidden;text-overflow:ellipsis;z-index:3}
+.plist{display:flex;flex-direction:column;gap:.4em}
+.pitem{display:flex;align-items:center;gap:.6em;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:.8em;padding:.5em .7em;font-weight:800;font-size:.88em}
+.pitem .no{width:1.8em;height:1.8em;border-radius:50%;background:var(--c);color:var(--ink);display:grid;place-items:center;font-family:var(--f-head);font-size:.85em;flex:0 0 auto}
+.pitem.on{border-color:var(--amarillo);background:var(--surface2)}
+.ph2{font-family:var(--f-head);font-size:1.3em;margin:0 0 .2em}
+.spstrip{position:absolute;right:.6em;top:.6em;max-width:70%;display:flex;align-items:center;gap:.45em;background:rgba(14,13,46,.9);border:1px solid var(--line);border-radius:999px;padding:.32em .85em;font-size:.72em}
+.spstrip .lv{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;font-size:.78em;letter-spacing:.06em}
+.spstrip .nm{font-family:var(--f-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spstrip.swap{animation:swap .5s ease}
+@keyframes swap{0%{opacity:.2;transform:translateY(.4em)}100%{opacity:1;transform:none}}
+
+/* panel */
+.panel{flex:0 0 39cqh;min-height:0;display:flex;flex-direction:column;position:relative;overflow:hidden;padding-block:.6em max(.6em,env(safe-area-inset-bottom,0px))}
+.tabs{display:flex;gap:.35em;overflow-x:auto;scrollbar-width:none;padding-bottom:.55em;flex:0 0 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;display:flex;align-items:center;gap:.4em;padding:.5em .9em;border-radius:999px;font-weight:900;font-size:.82em;background:var(--surface);color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--blanco);color:var(--ink)}
+.pane{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:.4em}
+.pane>*{animation:rise .35s ease both}
+@keyframes rise{from{transform:translateY(.6em);opacity:.4}to{transform:none;opacity:1}}
+.filters{display:flex;flex-direction:column;gap:.45em;margin-bottom:.6em}
+.search{width:100%;box-sizing:border-box;font:inherit;font-size:.9em;font-weight:700;padding:.6em 1em;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.search::placeholder{color:var(--muted);font-weight:400}
+.chips{display:flex;gap:.35em;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:.4em;padding:.35em .8em;border-radius:999px;border:1.5px solid var(--line);font-size:.74em;font-weight:800;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--c,var(--blanco));color:var(--ink);background:var(--c,var(--blanco))}
+.dot{width:.7em;height:.7em;border-radius:50%;flex:0 0 auto;background:var(--c)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55em}
+.empty{color:var(--muted);font-size:.85em;padding:1em 0}
+
+/* tarjeta STAND */
+.scard{display:flex;flex-direction:column;border-radius:1em;overflow:hidden;background:var(--c) var(--teximg) center/9em;background-blend-mode:luminosity;text-align:left;min-width:0}
+.scard .hd{display:flex;align-items:center;gap:.45em;padding:.4em .55em;color:var(--ink);min-width:0}
+.scard .no{width:1.75em;height:1.75em;border-radius:50%;background:var(--ink);color:var(--c);display:grid;place-items:center;font-family:var(--f-head);font-size:.85em;flex:0 0 auto}
+.scard .hd small{font-weight:900;font-size:.66em;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.scard .star{font-size:.9em;flex:0 0 auto}
+.scard .bd{background:var(--blanco);margin:0 .3em .3em;border-radius:.75em;padding:.55em .6em;display:flex;align-items:center;gap:.5em;min-height:2.6em}
+.scard .bd b{font-family:var(--f-head);font-weight:400;color:var(--ink);font-size:1em;line-height:1.05;min-width:0;overflow-wrap:anywhere}
+.scard .bd img,.scard .bd .ico{width:2.3em;height:2.3em;border-radius:.5em;object-fit:cover;flex:0 0 auto}
+.ico{display:grid;place-items:center;background:var(--ink);color:var(--c)}
+
+/* filas de grilla */
+.days{display:flex;gap:.35em;margin-bottom:.6em}
+.days button{flex:1;padding:.5em;border-radius:999px;border:1.5px solid var(--line);font-weight:900;font-size:.82em;color:var(--muted)}
+.days button[aria-pressed="true"]{border-color:var(--lavanda);background:var(--lavanda);color:var(--ink)}
+.note{display:flex;align-items:center;gap:.5em;font-size:.68em;color:var(--muted);margin:-.2em 0 .6em;font-weight:700}
+.rows{display:flex;flex-direction:column;gap:.4em}
+.row{display:grid;grid-template-columns:3.6em minmax(0,1fr) auto;gap:.7em;align-items:center;text-align:left;padding:.55em .8em;border-radius:.9em;background:var(--surface);border:1px solid var(--line)}
+.row .t{font-family:var(--f-cond);font-weight:800;font-size:.92em;letter-spacing:0;color:var(--celeste);line-height:1}
+.row b{display:block;font-size:.9em;font-weight:900}
+.row small{display:block;color:var(--muted);font-size:.72em;margin-top:.1em}
+.row.past{opacity:.42}
+.row.is-live{border-color:var(--magenta);background:linear-gradient(90deg,rgba(217,63,191,.22),var(--surface) 70%)}
+.badge{font-size:.6em;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:.3em .6em;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:.4em}
+.badge.live{background:var(--magenta);color:var(--blanco)}
+.badge.next{border:1.5px solid var(--amarillo);color:var(--amarillo)}
+.badge.room{border:1px solid var(--line);color:var(--muted)}
+.badge.kind{background:var(--lima);color:var(--ink)}
+
+/* listas genéricas */
+.sec{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;font-size:.72em;letter-spacing:.1em;color:var(--muted);margin:.9em 0 .45em;display:flex;align-items:center;gap:.5em}
+.sec:first-child{margin-top:0}
+.fcard{display:flex;gap:.6em;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:.9em;padding:.4em;min-width:0}
+.fcard img,.fcard .ico{width:3.2em;height:3.2em;border-radius:.65em;object-fit:cover;flex:0 0 auto}
+.fcard .tx{min-width:0;flex:1}
+.fcard b{display:block;font-family:var(--f-head);font-weight:400;font-size:.98em;line-height:1.05}
+.fcard small{display:block;color:var(--muted);font-size:.7em;margin-top:.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* sponsors y entradas */
+.tier{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5em}
+.sp{border-radius:1em;padding:.8em .9em;text-align:left;display:flex;flex-direction:column;gap:.15em;min-width:0}
+.sp .lv{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;font-size:.62em;letter-spacing:.1em}
+.sp .nm{font-family:var(--f-head);font-size:1.25em;line-height:1}
+.sp small{font-size:.7em;font-weight:700;opacity:.85}
+.sp.main{grid-column:1/-1;border:2px dashed var(--amarillo);color:var(--fg)}
+.sp.main .lv{color:var(--amarillo)}
+.sp.oro{background:var(--amarillo);color:var(--ink)}
+.sp.plata{background:#D9D5EE;color:var(--ink)}
+.sp.media{background:var(--surface);border:1px solid var(--line)}
+.sp.media .lv{color:var(--celeste)}
+.fine{font-size:.68em;color:var(--muted);margin:.7em 0 0;line-height:1.4}
+.tk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5em}
+.ticket{position:relative;border-radius:1em;padding:.75em .9em;color:var(--ink);display:flex;flex-direction:column;gap:.1em;min-width:0}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:.9em;height:.9em;border-radius:50%;background:var(--noche);transform:translateY(-50%)}
+.ticket::before{left:-.45em}.ticket::after{right:-.45em}
+.ticket .nm{font-family:var(--f-head);font-size:1.05em;line-height:1.05}
+.xp{margin-top:.8em;border:2px solid var(--c);border-radius:1em;overflow:hidden}
+.xph{background:var(--c);color:var(--ink);font-family:var(--f-head);font-size:1.05em;padding:.45em .9em;text-transform:uppercase}
+.xph b{font-weight:400}
+.xp ul{list-style:none;margin:0;padding:.5em .9em;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35em .8em}
+.xp li{display:flex;align-items:center;gap:.45em;font-size:.8em;font-weight:800;min-width:0}
+.xp li img{width:1em;height:auto;flex:0 0 auto;opacity:.85}
+.ticket small{font-size:.66em;font-weight:800}
+.incl{display:flex;flex-wrap:wrap;gap:.35em}
+.incl span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.25em .7em;font-size:.72em;font-weight:700}
+
+/* ficha */
+.sheet{position:absolute;inset:0;background:var(--noche2);border-radius:1.2em 1.2em 0 0;border:1px solid var(--line);border-bottom:0;z-index:5;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.sheet.open{transform:none;visibility:visible}
+.sheet-in{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.hero{position:relative;height:10cqh;background:var(--c);overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;display:block;animation:kb 9s ease-out both}
+.hero.ill img{object-position:center 45%}
+@keyframes kb{from{transform:scale(1.12)}to{transform:scale(1)}}
+.hero .ico{width:100%;height:100%;background:var(--c);color:var(--ink);border-radius:0}
+.hero .ico svg{width:5.5em;height:5.5em;stroke-width:1.4}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:linear-gradient(transparent,var(--noche2))}
+.x{position:absolute;top:.5em;right:.5em;z-index:2;width:2.4em;height:2.4em;border-radius:50%;background:rgba(14,13,46,.85);display:grid;place-items:center}
+.band{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;background:var(--c);color:var(--ink);padding:.45em .9em}
+.band .no{width:1.9em;height:1.9em;border-radius:50%;background:var(--ink);color:var(--c);display:grid;place-items:center;font-family:var(--f-head)}
+.band b{font-weight:900;font-size:.78em;letter-spacing:.08em;text-transform:uppercase}
+.band .tg{font-size:.6em;font-weight:900;letter-spacing:.1em;padding:.2em .55em;border-radius:999px;background:var(--ink);color:var(--blanco)}
+.band.speaker{background:var(--lima)}
+.band.speaker b{font-family:var(--f-head);font-weight:400;font-size:1.05em;letter-spacing:.02em}
+.body{padding:.7em 1em 1em;display:flex;flex-direction:column;gap:.65em}
+.body h2{font-family:var(--f-head);font-weight:400;font-size:1.75em;line-height:1;margin:0;text-wrap:balance}
+.body .desc{margin:0;font-size:.92em;line-height:1.45;max-width:40em}
+.prods{background:var(--blanco);color:var(--ink);border-radius:.9em;padding:.6em .85em}
+.prods .ph{display:flex;justify-content:space-between;align-items:center;gap:.5em;margin-bottom:.3em}
+.prods .ph span:first-child{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;font-size:.72em;letter-spacing:.1em}
+.ex{font-size:.58em;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:var(--amarillo);color:var(--ink);padding:.25em .6em;border-radius:999px;white-space:nowrap}
+.prod{display:flex;justify-content:space-between;gap:.8em;padding:.38em 0;border-top:1px dashed #CFC8EE;font-size:.88em}
+.prod:first-of-type{border-top:0}
+.prod b{font-weight:900;white-space:nowrap;font-variant-numeric:tabular-nums}
+.facts{display:flex;gap:.45em;flex-wrap:wrap}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:.8em;padding:.4em .8em;display:flex;flex-direction:column}
+.fact span{font-size:.6em;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:800}
+.fact b{font-family:var(--f-cond);font-size:.95em;letter-spacing:0;font-weight:800;line-height:1.05}
+.rnote{display:flex;align-items:center;gap:.6em;font-size:.8em;font-weight:800;color:var(--amarillo)}
+.rnote i{width:1.8em;height:.35em;border-radius:1em;background:var(--amarillo);flex:0 0 auto}
+
+/* bienvenida */
+.attract{position:absolute;inset:0;z-index:50;overflow:hidden;cursor:pointer;background:var(--noche);font-size:clamp(11px,2.35cqw,32px)}
+.attract .bg{position:absolute;inset:0;background:var(--bgimg) center/cover no-repeat}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.035)}}
+.a-in{position:relative;height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;text-align:center;padding-block:max(1.6em,env(safe-area-inset-top,0px)) max(1.4em,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.a-top{display:flex;justify-content:space-between;align-items:flex-start;width:100%;max-width:30em}
+.slot{border:2px dashed rgba(255,255,255,.35);border-radius:.7em;padding:.6em .8em;font-size:.6em;font-weight:900;letter-spacing:.12em;color:rgba(255,255,255,.6);background:rgba(14,13,46,.55)}
+.a-main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.8em;max-width:19em}
+.a-kick{font-family:var(--f-head);font-size:1.3em;text-transform:uppercase;letter-spacing:.02em}
+.a-kick span{color:var(--magenta)}
+.a-logo{width:min(100%,16em);height:auto;display:block;animation:float 5.5s ease-in-out infinite alternate}
+@keyframes float{from{transform:translateY(.15em) scale(1)}to{transform:translateY(-.3em) scale(1.02)}}
+.lema{font-family:var(--f-head);font-weight:400;font-size:3.4em;line-height:.9;margin:.1em 0 0;text-transform:uppercase;display:flex;align-items:center;gap:.22em}
+.lema .cx{height:.95em;width:auto;display:block;animation:spin 7s ease-in-out infinite}
+@keyframes spin{0%,62%{transform:rotate(0) scale(1)}81%{transform:rotate(200deg) scale(1.15)}100%{transform:rotate(360deg) scale(1)}}
+.a-sub{font-size:1.02em;font-weight:700;line-height:1.4;margin:0;color:var(--fg);background:rgba(14,13,46,.6);padding:.4em .8em;border-radius:.8em}
+.a-pills{display:flex;gap:.4em;flex-wrap:wrap;justify-content:center}
+.a-pills .pill{font-size:.85em}
+.touch{display:flex;align-items:center;gap:.7em;font-family:var(--f-head);font-size:1.5em;margin-top:.3em;background:var(--celeste);color:var(--ink);padding:.45em 1.1em;border-radius:999px;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-.15em) scale(1.03)}}
+.touch{position:relative}
+.touch::before,.touch::after{content:"";position:absolute;inset:0;border-radius:inherit;border:3px solid var(--celeste);pointer-events:none;animation:ring 3s ease-out infinite}
+.touch::after{animation-delay:.5s}
+@keyframes ring{0%{transform:scale(1);opacity:.85}55%,100%{transform:scale(1.18,1.7);opacity:0}}
+.a-langs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45em;width:100%;max-width:19em;margin-top:.3em}
+.a-langs button{padding:.7em .8em;border-radius:999px;background:rgba(23,18,77,.92);border:1px solid var(--line);font-weight:900;font-size:.9em;display:flex;justify-content:space-between;align-items:center}
+.a-langs button span{font-family:var(--f-cond);font-weight:800;font-size:.8em;color:var(--celeste)}
+.a-foot{width:100%;max-width:30em;display:flex;flex-direction:column;gap:.55em}
+.ticker{overflow:hidden;white-space:nowrap;border-radius:999px;background:rgba(14,13,46,.88);border:1px solid var(--line);padding:.55em 0}
+.ticker-track{display:inline-flex;gap:2.2em;padding-left:100%;animation:tick 30s linear infinite;font-family:var(--f-head);font-size:.95em}
+.ticker-track span{color:var(--fg);display:inline-flex;align-items:center;gap:.5em} .ticker-track em{font-style:normal;font-family:var(--f-cond);font-weight:800;text-transform:uppercase;font-size:.7em;letter-spacing:.08em;color:var(--amarillo)} .ticker-track img{height:1em;width:auto;opacity:.8}
+@keyframes tick{to{transform:translateX(-100%)}}
+.a-meta{display:flex;justify-content:space-between;align-items:center;gap:.6em;font-size:.75em;font-weight:700;color:var(--muted)}
+
+/* QR */
+.modal{position:absolute;inset:0;z-index:60;background:rgba(14,13,46,.9);display:grid;place-items:center;padding:1em;font-size:clamp(11px,2.35cqw,32px)}
+.mcard{background:var(--surface);border:1px solid var(--line);border-radius:1.2em;padding:1.4em;max-width:22em;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:.8em;text-align:center}
+.mcard h3{font-family:var(--f-head);font-weight:400;font-size:1.5em;margin:0;text-wrap:balance}
+.mcard p{margin:0;color:var(--muted);font-size:.85em;line-height:1.4}
+#qr{background:#fff;padding:.8em;border-radius:.8em;line-height:0}
+#qr img,#qr canvas{width:11em;height:11em;max-width:100%}
+.btn{width:100%;padding:.75em;border-radius:999px;font-weight:900;background:var(--celeste);color:var(--ink)}
+
+/* vistas */
+.view{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;animation:viewIn .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(1.2em) scale(.985)}to{opacity:1;transform:none}}
+.scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:max(1em,env(safe-area-inset-bottom,0px))}
+.scroll::-webkit-scrollbar{display:none}
+.vhead{display:flex;align-items:center;gap:.6em;padding:.2em 0 .7em}
+.back{display:flex;align-items:center;gap:.35em;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.4em .85em .4em .6em;font-weight:800;font-size:.8em;flex:0 0 auto}
+.back svg{transform:rotate(180deg)}
+.vhead h2{font-family:var(--f-head);font-weight:400;font-size:1.6em;line-height:1;margin:0;min-width:0}
+.vhead small{display:block;font-family:var(--f-body);font-size:.45em;color:var(--muted);font-weight:700;margin-top:.25em}
+.stagger>*{animation:rise2 .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*60ms)}
+@keyframes rise2{from{opacity:0;transform:translateY(1.4em) scale(.96)}to{opacity:1;transform:none}}
+button:active{transform:scale(.97)}
+.kb{animation:kbloop 16s ease-in-out infinite alternate}
+@keyframes kbloop{from{transform:scale(1.02)}to{transform:scale(1.14) translate(-2%,-1%)}}
+
+/* inicio / dashboard */
+.dhero{position:relative;border-radius:1.2em;overflow:hidden;height:19cqh;margin-bottom:.6em;border:1px solid var(--line);flex:0 0 auto}
+.dhero video,.dhero .vbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.dhero .in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:.3em;padding:0 1em}
+.dhero h2{font-family:var(--f-head);font-weight:400;font-size:2.2em;line-height:.95;margin:0;text-wrap:balance}
+.dhero p{margin:0;font-weight:700;color:var(--muted);font-size:.85em}
+.dhero .spinx{width:2.2em;height:auto;animation:slowspin 14s linear infinite}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6em}
+.tile{position:relative;border-radius:1.2em;overflow:hidden;text-align:left;min-width:0;min-height:9.5em;background:var(--c,var(--surface));color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;border:2px solid var(--ink);isolation:isolate}
+.tile.wide{grid-column:1/-1}
+.tile .media{position:absolute;inset:0;z-index:-1;overflow:hidden}
+.tile .media img,.tile .media video{width:100%;height:100%;object-fit:cover;display:block}
+.tile .lab{background:var(--blanco);margin:.45em;border-radius:.85em;padding:.5em .7em;display:flex;align-items:center;gap:.5em;border:2px solid var(--ink)}
+.tile .lab b{font-family:var(--f-head);font-weight:400;font-size:1.15em;line-height:1;display:block}
+.tile .lab small{display:block;font-size:.68em;font-weight:800;color:#4A4870;margin-top:.15em}
+.tile .lab .tx{min-width:0;flex:1}
+.tile .lab .go{width:1.9em;height:1.9em;border-radius:50%;background:var(--ink);color:var(--c,var(--amarillo));display:grid;place-items:center;flex:0 0 auto}
+.tile .lab .go svg{width:1em;height:1em}
+.tile.tall{min-height:13em}
+.tile .strip{position:absolute;top:.5em;left:.5em;right:.5em;display:flex;gap:.35em;flex-wrap:wrap}
+.tile .strip span{background:var(--blanco);border:1.5px solid var(--ink);border-radius:999px;padding:.15em .55em;font-size:.62em;font-weight:900;font-family:var(--f-cond)}
+.mosaic{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr)}
+.mosaic>*{overflow:hidden;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.mosaic img{width:100%;height:100%;object-fit:cover;display:block}
+.mosaic .ico{width:100%;height:100%;border-radius:0}
+.mosaic .ico svg{width:45%;height:45%}
+.livecard{display:flex;align-items:center;gap:.7em;background:var(--rosa);color:var(--ink);border:2px solid var(--ink);border-radius:1.1em;padding:.6em .8em;text-align:left;margin-bottom:.6em;width:100%;box-sizing:border-box}
+.livecard .ic{width:2.4em;height:2.4em;border-radius:50%;background:var(--ink);color:var(--rosa);display:grid;place-items:center;flex:0 0 auto}
+.livecard .tx{min-width:0;flex:1}
+.livecard b{display:block;font-family:var(--f-head);font-weight:400;font-size:1.1em;line-height:1.05}
+.livecard small{display:block;font-size:.72em;font-weight:800;margin-top:.1em}
+.livecard .k{font-family:var(--f-cond);font-weight:800;font-size:.62em;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.4em}
+.livecard .rec{background:var(--magenta)}
+.mapmini{position:absolute;inset:0}
+.eq{display:flex;align-items:flex-end;gap:.12em;height:1.1em}
+.eq i{width:.22em;border-radius:.1em;background:var(--rosa);animation:eq .9s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:-.3s;animation-duration:.7s}.eq i:nth-child(3){animation-delay:-.6s;animation-duration:1.1s}.eq i:nth-child(4){animation-delay:-.15s;animation-duration:.8s}
+@keyframes eq{from{height:20%}to{height:100%}}
+/* dashboard v3: grilla pareja de botones tipo sticker */
+.dgrid3{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75em .65em;padding-bottom:.5em}
+.dtile{position:relative;display:flex;flex-direction:column;min-width:0;min-height:max(11em,19cqh);border-radius:1.1em;border:2px solid var(--ink);background:var(--c);color:var(--ink);text-align:left;overflow:hidden;box-shadow:0 .32em 0 var(--ink);margin-bottom:.32em;transition:transform .12s ease,box-shadow .12s ease;isolation:isolate}
+.dtile:active{transform:translateY(.28em)!important;box-shadow:0 .04em 0 var(--ink)}
+.dtile .art{position:relative;flex:1;min-height:0;overflow:hidden;background:var(--c) var(--teximg) center/9em;background-blend-mode:luminosity;display:grid;place-items:center}
+.dtile .art>img:not(.xm),.dtile .art>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.dtile .art .big{width:3.4em;height:3.4em;stroke-width:1.3;color:var(--ink)}
+.dtile .art .xm{width:38%;height:auto;filter:invert(1) brightness(.2)}
+.dtile .art .mosaic{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}
+.dtile .foot{display:flex;align-items:center;gap:.45em;background:var(--c);border-top:2px solid var(--ink);padding:.5em .55em .5em .7em}
+.dtile .foot .tx{min-width:0;flex:1}
+.dtile .foot b{display:block;font-family:var(--f-head);font-weight:400;font-size:1.12em;line-height:1}
+.dtile .foot small{display:block;font-size:.66em;font-weight:800;margin-top:.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
+.dtile .go{width:1.9em;height:1.9em;border-radius:50%;background:var(--ink);color:var(--c);display:grid;place-items:center;flex:0 0 auto}
+.dtile .go svg{width:1em;height:1em}
+.dtile .badge2{position:absolute;top:.45em;left:.45em;z-index:1;background:var(--blanco);border:1.5px solid var(--ink);border-radius:999px;padding:.12em .55em;font-family:var(--f-cond);font-weight:800;font-size:.6em}
+.mapmini svg{width:100%;height:100%;display:block}
+
+/* locales */
+.cgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55em}
+.ctile{position:relative;border-radius:1.1em;overflow:hidden;min-height:8.5em;border:2px solid var(--ink);background:var(--c);text-align:left;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;min-width:0}
+.ctile .media{position:absolute;inset:0;z-index:-1}
+.ctile .media img,.ctile .media video{width:100%;height:100%;object-fit:cover;display:block}
+.ctile .media .ico{width:100%;height:100%;border-radius:0;background:var(--c) var(--teximg) center/9em;background-blend-mode:luminosity;color:var(--ink)}
+.ctile .media .ico svg{width:3.4em;height:3.4em;stroke-width:1.4}
+.ctile .lab{background:var(--blanco);color:var(--ink);margin:.4em;border-radius:.8em;border:2px solid var(--ink);padding:.4em .6em;display:flex;align-items:center;gap:.5em}
+.ctile .lab b{font-family:var(--f-head);font-weight:400;font-size:1em;line-height:1.05;flex:1;min-width:0}
+.ctile .lab .n{background:var(--ink);color:var(--blanco);border-radius:999px;font-family:var(--f-cond);font-weight:800;font-size:.7em;padding:.2em .55em;flex:0 0 auto}
+.list1{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55em}
+.cbanner{position:relative;height:14cqh;border-radius:1.1em;overflow:hidden;border:2px solid var(--ink);margin-bottom:.7em;background:var(--c)}
+.cbanner img,.cbanner video{width:100%;height:100%;object-fit:cover;display:block}
+.cbanner .ico{width:100%;height:100%;border-radius:0;background:var(--c) var(--teximg) center/9em;background-blend-mode:luminosity;color:var(--ink)}
+.cbanner .ico svg{width:4em;height:4em}
+
+/* agenda */
+.seg{display:flex;gap:.3em;background:var(--surface);border-radius:999px;padding:.25em;margin-bottom:.55em}
+.seg button{flex:1;padding:.55em .4em;border-radius:999px;font-weight:900;font-size:.8em;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:.35em}
+.seg button[aria-pressed="true"]{background:var(--blanco);color:var(--ink)}
+
+/* mapa: botón volver */
+.mapback{position:absolute;left:.6em;top:.6em;z-index:2}
+#map .stand,#map .poi{animation:pop .45s cubic-bezier(.2,.9,.3,1.3) both;animation-delay:calc(var(--i,0)*22ms);transform-box:fill-box;transform-origin:center}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+#map.noanim .stand,#map.noanim .poi{animation:none}
+
+/* carga */
+.loader{position:absolute;inset:0;z-index:70;background:var(--noche);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1em;font-size:clamp(11px,2.35cqw,32px)}
+.loader img.lx{width:5em;height:auto;animation:lx 1.2s cubic-bezier(.5,0,.2,1) both}
+@keyframes lx{0%{transform:rotate(-90deg) scale(.4);opacity:0}60%{transform:rotate(15deg) scale(1.08);opacity:1}100%{transform:rotate(0) scale(1)}}
+.loader p{margin:0;font-weight:800;color:var(--muted)}
+.bar{width:12em;height:.5em;border-radius:999px;background:var(--surface);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--celeste),var(--menta),var(--amarillo));border-radius:999px;animation:fill 1.1s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes fill{to{width:100%}}
+.attract video.bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="ic-shirt" viewBox="0 0 24 24"><path d="M8 3 3 6l2 4 3-1v12h8V9l3 1 2-4-5-3c-.6 1.5-2 2.5-4 2.5S8.6 4.5 8 3z"/></symbol>
+ <symbol id="ic-spark" viewBox="0 0 24 24"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l2.8 2.8M15.2 15.2 18 18M6 18l2.8-2.8M15.2 8.8 18 6"/></symbol>
+ <symbol id="ic-flower" viewBox="0 0 24 24"><circle cx="12" cy="9" r="2.5"/><circle cx="12" cy="4.5" r="2"/><circle cx="16.5" cy="9" r="2"/><circle cx="7.5" cy="9" r="2"/><path d="M12 11.5V21M12 18c-2-1.6-4-1.6-5.5-.5M12 16c2-1.6 4-1.6 5.5-.5"/></symbol>
+ <symbol id="ic-glass" viewBox="0 0 24 24"><path d="M7 3h10l-1 8a4 4 0 0 1-8 0zM12 15v6M8 21h8M7.5 7h9"/></symbol>
+ <symbol id="ic-wc" viewBox="0 0 24 24"><circle cx="7" cy="4.5" r="2"/><circle cx="17" cy="4.5" r="2"/><path d="M5 21v-7H4l1-6h4l1 6H9v7M15 21v-6l-1.5-1L15 8h4l1.5 6L19 15v6"/></symbol>
+ <symbol id="ic-cross" viewBox="0 0 24 24"><path d="M9.5 3h5v6.5H21v5h-6.5V21h-5v-6.5H3v-5h6.5z"/></symbol>
+ <symbol id="ic-door" viewBox="0 0 24 24"><path d="M5 21V3h11v18M16 6h3v15M3 21h18M12.5 12h.01"/></symbol>
+ <symbol id="ic-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+ <symbol id="ic-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+ <symbol id="ic-leaf" viewBox="0 0 24 24"><path d="M5 19C5 11 11 5 20 4c-1 9-7 15-15 15zM5 19l7-7"/></symbol>
+ <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></symbol>
+ <symbol id="ic-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M15.5 14.5c3 0 5.5 2 5.5 5"/></symbol>
+ <symbol id="ic-tools" viewBox="0 0 24 24"><path d="M14 3l7 7-3 3-7-7zM11 6l-7 7 7 7 7-7"/></symbol>
+ <symbol id="ic-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6zM8 21h8"/></symbol>
+ <symbol id="ic-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M17 20h4M20 17v3"/></symbol>
+ <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/></symbol>
+ <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+ <symbol id="ic-mush" viewBox="0 0 24 24"><path d="M3 12a9 7 0 0 1 18 0zM9.5 12v6a2.5 2.5 0 0 0 5 0v-6"/><circle cx="9" cy="8" r="1"/><circle cx="14.5" cy="7" r="1"/></symbol>
+ <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+ <symbol id="ic-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+ <symbol id="ic-sound" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+ <symbol id="ic-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9l5 6M21 9l-5 6"/></symbol>
+ <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+ <symbol id="ic-store" viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9h16v2a3 3 0 0 1-5.3 2A3 3 0 0 1 12 14a3 3 0 0 1-2.7-1A3 3 0 0 1 4 11zM5 13v8h14v-8M10 21v-5h4v5"/></symbol>
+ <symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="ic-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
+ <symbol id="ic-ticket" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 0 0 4v6h18v-6a2 2 0 0 1 0-4V5H3zM14 5v12" stroke-dasharray="0"/></symbol>
+ <symbol id="ic-food" viewBox="0 0 24 24"><path d="M5 3v8a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2.5 1.5-3.5 4-3.5 8h3.5"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <div class="tex" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <img class="logo" id="logoTop" alt="ExpoCannabis Uruguay 2026">
+        <div class="meta"><p><span class="pill aq"><b>5-6</b>&nbsp;|&nbsp;<span id="decLbl"></span></span><span class="pill mn">LATU</span></p><p><span class="ed ed-sm">13° <small id="edLbl"></small></span></p></div>
+      </div>
+      <div class="clock" id="clock"></div>
+    </header>
+    <div class="toolbar">
+      <div class="langs" id="langs" role="group" aria-label="Idioma"></div>
+      <span class="demo">DEMO</span>
+      <button class="livechip" id="liveChip" type="button"></button>
+      <button class="tbtn" id="qrBtn" type="button"></button>
+      <button class="tbtn ghost" id="sndBtn" type="button" aria-label="Sonido"></button>
+      <button class="tbtn ghost" id="homeBtn" type="button" aria-label="Inicio"><svg class="i"><use href="#ic-grid"/></svg></button>
+    </div>
+    <div class="view" id="vHome"><div class="scroll" id="homeIn"></div></div>
+    <div class="view" id="vList" hidden><div class="scroll" id="listIn"></div></div>
+    <div class="view" id="vAgenda" hidden><div class="scroll" id="agIn"></div></div>
+    <div class="view" id="vMap" hidden>
+    <div class="mapwrap">
+      <button class="back mapback" id="mapBack" type="button"></button>
+      <svg id="map" viewBox="0 0 1000 1180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Plano de la expo"></svg>
+      <button class="where" id="whereBtn" type="button"></button>
+      <div class="pickbar" id="pickBar" hidden><span id="pickTxt"></span><div class="pickbtns"><button type="button" class="pb" id="pickList"></button><button type="button" class="pb ghost" id="pickCancel"></button></div></div>
+      <div class="toast" id="toast" hidden></div>
+      <button class="spstrip" id="spStrip" type="button"></button>
+    </div>
+    <section class="panel">
+      <nav class="tabs" id="tabs" role="tablist"></nav>
+      <div class="pane" id="pane"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="false"></div>
+    </section>
+    </div>
+  </div>
+
+  <div class="attract" id="attract" role="dialog" aria-label="Bienvenida">
+    <div class="bg" aria-hidden="true"></div>
+    <video class="bgv" id="introVid" muted loop playsinline autoplay aria-hidden="true"></video>
+    <div class="a-in">
+      <div class="a-top"><span></span><span class="ed" style="font-size:1.3em">13°<small id="edLbl2"></small></span></div>
+      <div class="a-main">
+        <img class="a-logo" id="logoBig" alt="ExpoCannabis Uruguay 2026">
+        <h2 class="lema" aria-label="Es por todos">Es <img class="cx" id="xLema" alt=""> todos</h2>
+        <div class="a-pills"><span class="pill aq"><b>5-6</b>&nbsp;|&nbsp;<span id="decLbl2"></span></span><span class="pill mn">Centro de Eventos LATU</span></div>
+        <p class="a-sub" id="aSub"></p>
+        <div class="touch" id="aTouch"></div>
+        <div class="a-langs" id="aLangs"></div>
+      </div>
+      <div class="a-foot">
+        <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+        <div class="a-meta"><span id="aDate"></span><span class="demo">DEMO</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loader" id="loader" hidden><img class="lx" id="loadX" alt=""><div class="bar"><i></i></div><p id="loadTxt"></p></div>
+
+  <div class="modal" id="qrModal" hidden>
+    <div class="mcard">
+      <h3 id="qrTitle"></h3>
+      <div id="qr"></div>
+      <p id="qrText"></p>
+      <button class="btn" id="qrClose" type="button"></button>
+    </div>
+  </div>
+</div>
+
+<script>const IMG={"pizza": "assets/img/pizza.webp", "bg": "assets/img/bg.webp", "burger": "assets/img/burger.webp", "helado": "assets/img/helado.webp", "bowl": "assets/img/bowl.webp", "cafe": "assets/img/cafe.webp", "logo": "assets/img/logo.webp", "xmark": "assets/img/xmark.webp", "sem": "assets/img/sem.webp", "cul": "assets/img/cul.webp", "consult": "assets/img/consult.webp", "cbd": "assets/img/cbd.webp", "tex": "assets/img/tex.webp", "par": "assets/img/par.webp", "introVid": "assets/video/introVid.mp4"};
+Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});</script>
+<script src="assets/js/qrcode.min.js"></script>
+<script>
+(function(){
+const L=(es,pt,en,de)=>({es,pt,en,de});
+let lang='es';
+const T=v=>v==null?'':(typeof v==='string'?v:(v[lang]??v.es));
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ic=(n,cls)=>`<svg class="i${cls?' '+cls:''}" aria-hidden="true"><use href="#ic-${n}"/></svg>`;
+document.getElementById('app').style.setProperty('--bgimg',`url(${IMG.bg})`);document.getElementById('app').style.setProperty('--teximg',`url(${IMG.tex})`);
+['logoTop','logoBig'].forEach(i=>document.getElementById(i).src=IMG.logo);document.getElementById('xLema').src=IMG.xmark;
+
+/* ---------- textos ---------- */
+const UI={
+  ed:L('EDICIÓN','EDIÇÃO','EDITION','AUSGABE'),
+  dec:L('DIC','DEZ','DEC','DEZ'),
+  qr:L('Llevalo en tu celu','Leve no celular','Take it with you','Aufs Handy'),
+  hint:L('Tocá un lugar y te llevamos','Toque um lugar e te levamos','Tap a spot, we’ll guide you','Tippe auf einen Ort'),
+  youAre:L('Estás en','Você está em','You are at','Du bist bei'),
+  hello:L('¿Qué querés hacer?','O que você quer fazer?','What would you like to do?','Was möchtest du tun?'),
+  helloSub:L('Tocá una opción para empezar','Toque uma opção para começar','Tap an option to start','Tippe auf eine Option'),
+  tMap:L('Plano y cómo llegar','Mapa e como chegar','Map & directions','Karte & Wegweiser'),
+  tMapSub:L('Tocá un lugar y te marcamos el camino','Toque um lugar e mostramos o caminho','Tap a spot and we show the way','Tippe auf einen Ort, wir zeigen den Weg'),
+  tLoc:L('Locales','Lojas','Stands','Stände'),
+  tLocSub:L('Por rubro: comida, parafernalia, hongos, clubes, semillas…','Por categoria: comida, parafernália, cogumelos, clubes, sementes…','By category: food, accessories, mushrooms, clubs, seeds…','Nach Bereich: Essen, Zubehör, Pilze, Clubs, Samen…'),
+  tAg:L('Agenda','Agenda','Schedule','Programm'),
+  tAgSub:L('Bandas, charlas y eventos','Bandas, palestras e eventos','Bands, talks and events','Bands, Vorträge und Events'),
+  tFood:L('Comer y tomar','Comer e beber','Food & drinks','Essen & Trinken'),
+  tSp:L('Sponsors','Patrocinadores','Sponsors','Sponsoren'),
+  tTix:L('Entradas','Ingressos','Tickets','Tickets'),
+  home:L('Inicio','Início','Home','Start'),
+  locSub:L('Elegí un rubro','Escolha uma categoria','Pick a category','Wähle einen Bereich'),
+  places_n:L('lugares','lugares','spots','Orte'),
+  bands:L('Bandas','Bandas','Bands','Bands'), talks2:L('Charlas','Palestras','Talks','Vorträge'), events:L('Talleres y eventos','Oficinas e eventos','Workshops & events','Workshops & Events'),
+  agSub:L('Tocá una actividad para ver dónde es','Toque uma atividade para ver onde é','Tap an activity to see where it is','Tippe auf einen Programmpunkt'),
+  loading:L('Preparando tu recorrido…','Preparando seu passeio…','Getting your tour ready…','Dein Rundgang wird vorbereitet…'),
+  nextTalk:L('Próxima charla','Próxima palestra','Next talk','Nächster Vortrag'),
+  sndOn:L('Sonido activado','Som ativado','Sound on','Ton an'), sndOff:L('Sonido apagado','Som desligado','Sound off','Ton aus'), change:L('Cambiar','Mudar','Change','Ändern'),
+  pickTxt:L('Tocá en el mapa dónde estás ahora','Toque no mapa onde você está agora','Tap where you are on the map','Tippe auf der Karte, wo du gerade bist'),
+  pickList:L('Elegir de la lista','Escolher na lista','Pick from list','Aus Liste wählen'), cancel:L('Cancelar','Cancelar','Cancel','Abbrechen'),
+  pickTitle:L('¿Dónde estás?','Onde você está?','Where are you?','Wo bist du?'),
+  pickSub:L('Elegí el lugar más cercano a vos. La ruta se calcula desde ahí.','Escolha o lugar mais próximo. A rota é calculada a partir dele.','Pick the spot closest to you. Directions start from there.','Wähle den nächsten Ort. Der Weg startet dort.'),
+  nowAt:L('Listo, ahora estás en','Pronto, agora você está em','Done, you are now at','Okay, du bist jetzt bei'),
+  places:L('Lugares','Lugares','Places','Orte'),
+  tabs:{stands:L('Stands','Estandes','Stands','Stände'),stage:L('Escenario','Palco','Stage','Bühne'),talks:L('Charlas','Palestras','Talks','Vorträge'),food:L('Comer y servicios','Comida e serviços','Food & services','Essen & Service'),spons:L('Sponsors','Patrocinadores','Sponsors','Sponsoren'),tix:L('Entradas','Ingressos','Tickets','Tickets')},
+  tabIc:{stands:'map',stage:'music',talks:'mic',food:'food',spons:'star',tix:'ticket'},
+  search:L('Buscá marca o producto…','Busque marca ou produto…','Search brand or product…','Marke oder Produkt suchen…'),
+  all:L('Todos','Todos','All','Alle'),
+  none:L('No encontramos stands con esa búsqueda.','Nenhum estande encontrado.','No stands match that search.','Keine passenden Stände.'),
+  sat:L('Sáb 5','Sáb 5','Sat 5','Sa 5.'), sun:L('Dom 6','Dom 6','Sun 6','So 6.'),
+  live:L('En vivo','Ao vivo','Live','Live'), next:L('Sigue','A seguir','Up next','Danach'),
+  ends:L('termina en','termina em','ends in','endet in'),
+  nowLive:L('Ahora en el escenario','Agora no palco','Now on stage','Jetzt auf der Bühne'),
+  nothingLive:L('Escenario: sigue','Palco: a seguir','Stage: up next','Bühne: danach'),
+  gridDemo:L('Grilla DEMO: mezcla anuncios reales 2026, nombres 2025 y relleno de ejemplo','Programação DEMO: anúncios reais 2026, nomes de 2025 e exemplos','DEMO lineup: real 2026 announcements, 2025 names and sample filler','DEMO-Programm: echte Ankündigungen 2026, Namen von 2025 und Beispiele'),
+  food:L('Patio de comidas','Praça de alimentação','Food court','Food Court'), bars:L('Barras','Bares','Bars','Bars'), svc:L('Servicios y espacios','Serviços e espaços','Services & spaces','Service & Bereiche'),
+  menu:L('Menú','Cardápio','Menu','Speisekarte'), prods:L('Productos','Produtos','Products','Produkte'),
+  example:L('Precio de ejemplo','Preço de exemplo','Sample price','Beispielpreis'),
+  walk:L('A pie','A pé','Walk','Zu Fuß'), dist:L('Distancia','Distância','Distance','Entfernung'), where:L('Dónde','Onde','Where','Wo'), when:L('Cuándo','Quando','When','Wann'),
+  min:L('min','min','min','Min.'),
+  follow:L('Seguí la línea amarilla desde “Estás acá”. ¿No estás ahí? Tocá “Cambiar”','Siga a linha amarela a partir de “Você está aqui”. Não está aí? Toque em “Mudar”','Follow the yellow line from “You are here”. Not there? Tap “Change”','Folge der gelben Linie ab „Du bist hier“. Nicht dort? Tippe auf „Ändern“'),
+  close:L('Cerrar','Fechar','Close','Schließen'),
+  here:L('Estás acá','Você está aqui','You are here','Du bist hier'),
+  stand:L('Stand','Estande','Stand','Stand'),
+  demoLoc:L('DEMO','DEMO','DEMO','DEMO'),
+  aSub:L('Stands, shows, charlas y comida. Tocá lo que buscás y te llevamos hasta ahí.','Estandes, shows, palestras e comida. Toque o que procura e te levamos até lá.','Stands, shows, talks and food. Tap what you’re looking for and we’ll take you there.','Stände, Shows, Vorträge und Essen. Tippe, was du suchst – wir zeigen dir den Weg.'),
+  aTouch:L('Tocá para empezar','Toque para começar','Tap to start','Zum Starten tippen'),
+  aDate:L('Sáb 5 y dom 6 de diciembre · 13 a 21 h · +18','Sáb 5 e dom 6 de dezembro · 13h às 21h · +18','Sat Dec 5 & Sun Dec 6 · 1–9 pm · 18+','Sa 5. & So 6. Dezember · 13–21 Uhr · ab 18'),
+  qrTitle:L('Llevá el mapa en tu celular','Leve o mapa no seu celular','Take the map on your phone','Nimm die Karte aufs Handy'),
+  qrText:L('Escaneá con la cámara: se abre la misma app y la podés sumar a tu pantalla de inicio. En el demo apunta a esta página.','Escaneie com a câmera: abre o mesmo app e você pode adicioná-lo à tela inicial. No demo aponta para esta página.','Scan with your camera: the same app opens and you can add it to your home screen. In the demo it points to this page.','Mit der Kamera scannen: dieselbe App öffnet sich und lässt sich zum Startbildschirm hinzufügen. Im Demo zeigt er auf diese Seite.'),
+  week:L(['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],['So','Mo','Di','Mi','Do','Fr','Sa']),
+  simClock:L('Hora simulada','Hora simulada','Simulated time','Simulierte Zeit'),
+  main:L('Espacio Main disponible','Espaço Main disponível','Main slot available','Main-Platz frei'),
+  mainTx:L('Tu marca en la bienvenida, en el mapa y en todas las pantallas.','Sua marca na abertura, no mapa e em todas as telas.','Your brand on the welcome screen, the map and every screen.','Deine Marke auf dem Startbildschirm, der Karte und allen Screens.'),
+  oro:L('Sponsor Oro','Patrocinador Ouro','Gold sponsor','Gold-Sponsor'), plata:L('Sponsor Plata','Patrocinador Prata','Silver sponsor','Silber-Sponsor'),
+  mediaP:L('Media partner','Media partner','Media partner','Medienpartner'), apoyo:L('Apoyan','Apoio','Supported by','Unterstützt von'),
+  logosNote:L('Los logos oficiales se suman cuando la organización y cada marca pasen sus archivos.','Os logos oficiais entram quando a organização e cada marca enviarem os arquivos.','Official logos go in once the organizers and each brand send their files.','Offizielle Logos folgen, sobald Veranstalter und Marken ihre Dateien schicken.'),
+  withThe:L('Con la','Com a','With','Mit'), youGet:L('tenés:','você tem:','you get:','bekommst du:'),
+  incl:L('La entrada incluye','O ingresso inclui','Your ticket includes','Im Ticket enthalten'),
+  tixNote:L('Conseguí tu entrada en RedTickets. Solo mayores de 18.','Garanta seu ingresso no RedTickets. Somente maiores de 18.','Get your ticket on RedTickets. 18+ only.','Tickets bei RedTickets. Ab 18.'),
+  included:L('Incluida con la entrada','Incluída no ingresso','Included with your ticket','Im Ticket enthalten'),
+  ask:L('Consultar','Consultar','Ask','Anfragen'),
+  gift:L('Regalo','Presente','Free','Gratis'),
+  room:L('Sala','Sala','Room','Saal'),
+};
+const LANGS=[['es','ES','Español'],['pt','PT','Português'],['en','EN','English'],['de','DE','Deutsch']];
+
+/* ---------- rubros ---------- */
+const CATS={
+  par:{c:'#F3B4DC',n:L('Parafernalia','Parafernália','Accessories','Zubehör'),img:'par'},
+  sem:{c:'#8EE6A8',n:L('Semillas','Sementes','Seeds','Samen'),img:'sem'},
+  cul:{c:'#F6E08A',n:L('Cultivo','Cultivo','Grow','Anbau'),img:'cul'},
+  cbd:{c:'#7FE3E0',n:L('Cáñamo / CBD','Cânhamo / CBD','Hemp / CBD','Hanf / CBD'),img:'cbd'},
+  ind:{c:'#F4B183',n:L('Indumentaria','Vestuário','Clothing','Kleidung'),icon:'shirt'},
+  svc:{c:'#B7A6F5',n:L('Servicios','Serviços','Services','Service'),img:'consult'},
+  tbc:{c:'#C9C1F2',n:L('A confirmar','A confirmar','TBC','Folgt'),icon:'spark'},
+  exh:{c:'#D4C8FF',n:L('Exhibición','Exposição','Exhibit','Ausstellung'),icon:'flower'},
+  net:{c:'#D4C8FF',n:L('Encuentro','Encontro','Meetup','Treffpunkt'),icon:'people'},
+  hon:{c:'#C9E88A',n:L('Hongos','Cogumelos','Mushrooms','Pilze'),icon:'mush'},
+  club:{c:'#A9D8F5',n:L('Clubes de cannabis','Clubes de cannabis','Cannabis clubs','Cannabis-Clubs'),icon:'people'},
+  food:{c:'#F4B183',n:L('Comida','Comida','Food','Essen')},
+  bar:{c:'#F4B183',n:L('Barra','Bar','Bar','Bar'),icon:'glass'},
+  stage:{c:'#F6E08A',n:L('Escenario','Palco','Stage','Bühne'),icon:'music'},
+  zone:{c:'#B7A6F5',n:L('Espacio','Espaço','Area','Bereich'),icon:'leaf'},
+  room:{c:'#8EE6A8',n:L('Sala','Sala','Room','Saal'),icon:'mic'},
+  care:{c:'#7FE3E0',n:L('Servicio','Serviço','Service','Service'),icon:'cross'},
+};
+const STAND_CATS=['par','hon','club','sem','cul','cbd','ind','svc','tbc','exh'];
+
+/* ---------- productos ---------- */
+const PR=(n,p)=>({n,p});
+const PAPEL=L('Papelillos','Sedas','Rolling papers','Blättchen'), CONOS=L('Conos x6','Cones x6','Cones x6','Cones x6'), BAND=L('Bandeja','Bandeja','Rolling tray','Drehtablett');
+
+/* ---------- pabellón: geometría ---------- */
+const ROWS={A:{y:400,h:80,aisle:500},B:{y:520,h:80,aisle:500},C:{y:622,h:80,aisle:722},D:{y:742,h:80,aisle:722}};
+const geom=(row,col,span)=>{const r=ROWS[row];return{x:70+106*col+3,y:r.y,w:106*span-6,h:r.h,aisle:r.aisle}};
+const S=(id,name,short,cat,row,col,span,no,desc,prods,extra)=>Object.assign({id,kind:'stand',name,short,cat,row,col,span,no,desc,prods},extra||{});
+const STANDS=[
+ S('blunt','Blunt Rey','Blunt Rey','par','A',0,2,1,L('Marca de papelillos y accesorios para armar. Sponsor oro de la edición 2026.','Marca de sedas e acessórios para bolar. Patrocinador ouro da edição 2026.','Rolling papers and accessories brand. Gold sponsor of the 2026 edition.','Marke für Blättchen und Drehzubehör. Gold-Sponsor der Ausgabe 2026.'),
+   [PR(L('Papelillos 1¼','Sedas 1¼','Rolling papers 1¼','Blättchen 1¼'),90),PR(L('Kit caja de bambú + accesorios','Kit caixa de bambu + acessórios','Bamboo box kit + accessories','Bambusbox-Set + Zubehör'),2400),PR(BAND,650)],{tier:'oro'}),
+ S('lion','Lion Rolling Circus','Lion Rolling Circus','par','A',2,2,3,L('Papelillos y accesorios para armar. Sponsor plata 2026.','Sedas e acessórios para bolar. Patrocinador prata 2026.','Rolling papers and accessories. Silver sponsor 2026.','Blättchen und Drehzubehör. Silber-Sponsor 2026.'),
+   [PR(PAPEL,110),PR(L('Filtros','Piteiras','Tips','Filter'),80),PR(CONOS,260)],{tier:'plata'}),
+ S('raw','RAW','RAW','par','A',4,1,5,L('Fundada en 2005 por Josh Kesselman. Papeles sin blanquear. En 2025 tuvo escenario propio en la expo.','Fundada em 2005 por Josh Kesselman. Sedas sem branqueamento. Em 2025 teve palco próprio na expo.','Founded in 2005 by Josh Kesselman. Unbleached papers. Had its own stage at the 2025 expo.','2005 von Josh Kesselman gegründet. Ungebleichte Blättchen. 2025 mit eigener Bühne auf der Messe.'),
+   [PR(L('Papelillos Classic','Sedas Classic','Classic papers','Classic-Blättchen'),120),PR(CONOS,290),PR(BAND,750)]),
+ S('papelito','Papelito','Papelito','par','A',5,1,6,L('Marca de papelillos que estuvo en la expo 2025. Historia a completar con la marca.','Marca de sedas presente na expo 2025. História a completar com a marca.','Rolling paper brand that took part in the 2025 expo. Story to be completed with the brand.','Blättchen-Marke, 2025 auf der Messe. Geschichte folgt mit der Marke.'),
+   [PR(PAPEL,80),PR(L('Combo + filtros','Combo + piteiras','Combo + tips','Kombi + Filter'),150)]),
+ S('dutch','Dutch Passion','Dutch Passion','sem','B',0,1,7,L('Banco holandés nacido en Ámsterdam a fines de los 80. Pionero de las semillas feminizadas. En Uruguay tiene su comunidad: Comunidutch.','Banco holandês nascido em Amsterdã no fim dos anos 80. Pioneiro das sementes feminizadas. No Uruguai tem a comunidade Comunidutch.','Dutch seed bank born in Amsterdam in the late 80s. A pioneer of feminized seeds. Its Uruguayan community is called Comunidutch.','Niederländische Samenbank, Ende der 80er in Amsterdam gegründet. Pionier feminisierter Samen. In Uruguay: die Community Comunidutch.'),
+   [PR(L('Feminizadas x3','Feminizadas x3','Feminized x3','Feminisiert x3'),1900),PR(L('Autoflorecientes x5','Automáticas x5','Autoflowers x5','Autoflowers x5'),2600),PR(L('Promo expo: 1 semilla de regalo','Promo expo: 1 semente de presente','Expo deal: 1 free seed','Messe-Aktion: 1 Samen gratis'),'gift')]),
+ S('humboldt','Humboldt Seed Company','Humboldt','sem','B',1,1,8,L('Fundada en 2001 en el Triángulo Esmeralda, California, por Nathaniel Pennington. Desde 2018 hace búsquedas de fenotipos junto a cultivadores.','Fundada em 2001 no Triângulo Esmeralda, Califórnia, por Nathaniel Pennington. Desde 2018 faz caças de fenótipos com cultivadores.','Founded in 2001 in California’s Emerald Triangle by Nathaniel Pennington. Runs phenotype hunts with growers since 2018.','2001 im Emerald Triangle (Kalifornien) von Nathaniel Pennington gegründet. Seit 2018 Phänotyp-Suchen mit Growern.'),
+   [PR(L('Feminizadas x5','Feminizadas x5','Feminized x5','Feminisiert x5'),2900),PR(L('Autos x5','Automáticas x5','Autos x5','Autos x5'),2700)]),
+ S('positronics','Positronics Seeds','Positronics','sem','B',2,1,9,L('Trabaja en híbridos desde los 80 y se instaló en Holanda para hacerlo de forma profesional. Solo semillas feminizadas.','Trabalha com híbridos desde os anos 80 e se instalou na Holanda para fazê-lo profissionalmente. Só sementes feminizadas.','Breeding hybrids since the 80s, it moved to the Netherlands to do it professionally. Feminized seeds only.','Züchtet Hybride seit den 80ern und zog dafür professionell in die Niederlande. Nur feminisierte Samen.'),
+   [PR(L('Feminizadas x3','Feminizadas x3','Feminized x3','Feminisiert x3'),1700),PR(L('Feminizadas x5','Feminizadas x5','Feminized x5','Feminisiert x5'),2500)]),
+ S('plagron','Plagron','Plagron','cul','B',3,1,10,L('Sustratos y nutrientes de origen holandés. En 2025 estuvo con banner en el ingreso.','Substratos e nutrientes de origem holandesa. Em 2025 esteve com banner na entrada.','Dutch substrates and nutrients. Had a banner at the 2025 entrance.','Substrate und Dünger aus den Niederlanden. 2025 mit Banner am Eingang.'),
+   [PR(L('Sustrato 50 L','Substrato 50 L','Substrate 50 L','Substrat 50 L'),1250),PR(L('Nutriente 1 L','Nutriente 1 L','Nutrient 1 L','Dünger 1 L'),890),PR(L('Kit de inicio','Kit inicial','Starter kit','Starter-Set'),2900)]),
+ S('sunflower','Sunflower Trimmer','Sunflower','cul','B',4,1,11,L('Equipos para cosecha y manicurado. Historia a completar con la marca.','Equipamentos para colheita e manicure. História a completar com a marca.','Harvest and trimming equipment. Story to be completed with the brand.','Geräte für Ernte und Trimmen. Geschichte folgt mit der Marke.'),
+   [PR(L('Trimmer de mesa','Trimmer de mesa','Table trimmer','Tisch-Trimmer'),'ask'),PR(L('Tijeras','Tesouras','Scissors','Schere'),590)]),
+ S('uhx','UHX · Uruguayan Hemp Exchange','UHX','cbd','B',5,1,12,L('Cáñamo uruguayo y CBD puro.','Cânhamo uruguaio e CBD puro.','Uruguayan hemp and pure CBD.','Uruguayischer Hanf und reines CBD.'),
+   [PR(L('Aceite CBD 10 ml','Óleo CBD 10 ml','CBD oil 10 ml','CBD-Öl 10 ml'),1800),PR(L('Flor de cáñamo 5 g','Flor de cânhamo 5 g','Hemp flower 5 g','Hanfblüte 5 g'),900),PR(L('Crema','Creme','Cream','Creme'),750)]),
+ S('santa','Santa María + Psilosofía','Santa María + Psilosofía','tbc','C',0,2,13,L('Stand compartido anunciado para 2026. Rubro e historia a confirmar.','Estande compartilhado anunciado para 2026. Categoria e história a confirmar.','Shared stand announced for 2026. Category and story to be confirmed.','Gemeinsamer Stand, für 2026 angekündigt. Kategorie und Geschichte folgen.'),[] ,{realAnn:true}),
+ S('alterna','Alterna','Alterna','ind','C',2,1,15,L('Moda sustentable. Historia a validar con la marca.','Moda sustentável. História a validar com a marca.','Sustainable fashion. Story to be confirmed with the brand.','Nachhaltige Mode. Geschichte folgt mit der Marke.'),
+   [PR(L('Remera','Camiseta','T-shirt','T-Shirt'),1100),PR(L('Gorro','Gorro','Beanie','Mütze'),650)]),
+ S('podesta','Estudio Podestá','Estudio Podestá','svc','C',3,1,16,L('Abogados y escribanos. Sponsor legal 2025. Atiende en el consultorio legal.','Advogados e tabeliães. Patrocinador jurídico 2025. Atende no consultório jurídico.','Lawyers and notaries. 2025 legal sponsor. Staffs the legal advice desk.','Anwälte und Notare. Rechtssponsor 2025. Betreut die Rechtsberatung.'),
+   [PR(L('Consulta en la expo','Consulta na expo','On-site consultation','Beratung vor Ort'),'incl')]),
+ S('club','Club Social Cannábico','Club Social','club','C',5,1,18,L('Stand de ejemplo. Cómo funciona un club de membresía en Uruguay: quién puede asociarse, cómo es el registro ante el IRCCA y qué incluye la cuota.','Estande de exemplo. Como funciona um clube de associação no Uruguai: quem pode se associar, como é o registro no IRCCA e o que inclui a mensalidade.','Sample stand. How a membership club works in Uruguay: who can join, how registration with IRCCA works and what the fee covers.','Beispielstand. So funktioniert ein Mitgliederclub in Uruguay: wer beitreten kann, wie die IRCCA-Registrierung läuft und was der Beitrag umfasst.'),[PR(L('Charla informativa','Conversa informativa','Info session','Infogespräch'),'incl')]),
+ S('galeria',L('Galería de arte cannábico','Galeria de arte canábica','Cannabis art gallery','Cannabis-Kunstgalerie'),L('Galería','Galeria','Gallery','Galerie'),'exh','C',4,1,17,L('Obras de artistas de la región inspiradas en la planta.','Obras de artistas da região inspiradas na planta.','Works by regional artists inspired by the plant.','Werke regionaler Künstler, inspiriert von der Pflanze.'),[]),
+ S('jardin',L('Jardín de plantas vivas','Jardim de plantas vivas','Live plant garden','Garten lebender Pflanzen'),L('Jardín de plantas vivas','Jardim de plantas vivas','Live plant garden','Lebende Pflanzen'),'exh','D',0,3,19,L('Plantas en floración de cultivadores uruguayos. Se mira, no se toca.','Plantas em floração de cultivadores uruguaios. Pode olhar, não tocar.','Flowering plants from Uruguayan growers. Look, don’t touch.','Blühende Pflanzen uruguayischer Grower. Nur schauen, nicht anfassen.'),[]),
+ S('hongos','Hongos del Sur','Hongos del Sur','hon','D',5,1,24,L('Stand de ejemplo. Hongos comestibles y funcionales cultivados en Uruguay: gírgolas, shiitake y melena de león, frescos, secos y en kits para cultivar en casa.','Estande de exemplo. Cogumelos comestíveis e funcionais cultivados no Uruguai: shimeji, shiitake e juba de leão, frescos, secos e em kits.','Sample stand. Edible and functional mushrooms grown in Uruguay: oyster, shiitake and lion’s mane, fresh, dried and in grow-at-home kits.','Beispielstand. Speise- und Vitalpilze aus Uruguay: Austernpilz, Shiitake und Igelstachelbart, frisch, getrocknet und als Zuchtset.'),[PR(L('Kit para cultivar gírgolas','Kit para cultivar shimeji','Oyster mushroom grow kit','Austernpilz-Zuchtset'),690),PR(L('Melena de león seca 30 g','Juba de leão seca 30 g','Dried lion’s mane 30 g','Igelstachelbart getrocknet 30 g'),450),PR(L('Shiitake fresco 250 g','Shiitake fresco 250 g','Fresh shiitake 250 g','Frische Shiitake 250 g'),320)]),
+ S('network','Networking',L('Networking','Networking','Networking','Networking'),'net','D',3,2,22,L('Punto de encuentro para marcas, clubes y emprendedores. Incluido con la entrada.','Ponto de encontro para marcas, clubes e empreendedores. Incluído no ingresso.','Meeting point for brands, clubs and entrepreneurs. Included with your ticket.','Treffpunkt für Marken, Clubs und Gründer. Im Ticket enthalten.'),[]),
+];
+STANDS.forEach(s=>{const g=geom(s.row,s.col,s.span);s.g=g;s.node='S'+g.aisle;s.tail=[[g.x+g.w/2,g.aisle]]});
+
+/* ---------- comida, barras, servicios ---------- */
+const P=(id,kind,name,cat,shape,node,tail,desc,extra)=>Object.assign({id,kind,name,cat,shape,node,tail,desc},extra||{});
+const DRINKS=[PR(L('Cerveza artesanal 500 cc','Cerveja artesanal 500 ml','Craft beer 500 ml','Craft-Bier 0,5 l'),250),PR(L('Trago','Drink','Cocktail','Cocktail'),350),PR(L('Limonada','Limonada','Lemonade','Limonade'),150),PR(L('Agua','Água','Water','Wasser'),90),PR(L('Sin alcohol','Sem álcool','Alcohol-free','Alkoholfrei'),180)];
+const FOOD=[
+ P('f1','food','La Parrilla Verde','food',{x:795,y:420,w:72,h:58},'S449',[[785,449],[831,449]],L('Chivitos, hamburguesas y choripán a la parrilla.','Chivitos, hambúrgueres e choripán na grelha.','Grilled chivitos, burgers and choripán.','Chivitos, Burger und Choripán vom Grill.'),
+   {img:'burger',no:'T1',prods:[PR(L('Chivito canadiense al pan','Chivito canadense no pão','Chivito sandwich','Chivito-Sandwich'),590),PR(L('Hamburguesa con medallón de cáñamo','Hambúrguer de cânhamo','Hemp patty burger','Hanf-Burger'),480),PR(L('Papas fritas','Batata frita','Fries','Pommes'),220),PR('Choripán',320)]}),
+ P('f2','food','Hemp Bowls','food',{x:877,y:420,w:72,h:58},'S449',[[785,449],[913,449]],L('Bowls y wraps vegetales con semillas de cáñamo.','Bowls e wraps vegetais com sementes de cânhamo.','Plant-based bowls and wraps with hemp seeds.','Vegane Bowls und Wraps mit Hanfsamen.'),
+   {img:'bowl',no:'T2',prods:[PR(L('Bowl verde (quinoa, palta, semillas de cáñamo)','Bowl verde (quinoa, abacate, sementes de cânhamo)','Green bowl (quinoa, avocado, hemp seeds)','Grüne Bowl (Quinoa, Avocado, Hanfsamen)'),420),PR(L('Bowl mediterráneo','Bowl mediterrâneo','Mediterranean bowl','Mediterrane Bowl'),440),PR(L('Wrap vegetal','Wrap vegetal','Veggie wrap','Veggie-Wrap'),360)]}),
+ P('f3','food','Pizza Sativa','food',{x:795,y:486,w:72,h:58},'S515',[[785,515],[831,515]],L('Pizza a la piedra y fainá.','Pizza na pedra e fainá.','Stone-baked pizza and fainá.','Steinofenpizza und Fainá.'),
+   {img:'pizza',no:'T3',prods:[PR(L('Porción muzzarella','Fatia muçarela','Mozzarella slice','Stück Mozzarella'),180),PR(L('Porción fugazzeta','Fatia fugazzeta','Fugazzeta slice','Stück Fugazzeta'),200),PR(L('Pizza entera','Pizza inteira','Whole pizza','Ganze Pizza'),900),PR('Fainá',90)]}),
+ P('f4','food','Café Raíz','food',{x:877,y:486,w:72,h:58},'S515',[[785,515],[913,515]],L('Café, tortas y agua caliente para el mate.','Café, bolos e água quente para o mate.','Coffee, cakes and hot water for your mate.','Kaffee, Kuchen und heißes Wasser für den Mate.'),
+   {img:'cafe',no:'T4',prods:[PR(L('Café','Café','Coffee','Kaffee'),120),PR(L('Café con leche de cáñamo','Café com leite de cânhamo','Coffee with hemp milk','Kaffee mit Hanfmilch'),160),PR(L('Torta del día','Bolo do dia','Cake of the day','Kuchen des Tages'),190),PR(L('Agua para el termo','Água para a garrafa térmica','Hot water refill','Heißwasser für die Thermoskanne'),60)]}),
+ P('f5','food','Heladería Nube','food',{x:795,y:552,w:72,h:58},'S581',[[785,581],[831,581]],L('Helado artesanal y paletas veganas.','Sorvete artesanal e picolés veganos.','Craft ice cream and vegan popsicles.','Handgemachtes Eis und vegane Eis am Stiel.'),
+   {img:'helado',no:'T5',prods:[PR(L('1 bocha','1 bola','1 scoop','1 Kugel'),140),PR(L('2 bochas','2 bolas','2 scoops','2 Kugeln'),220),PR(L('Paleta vegana','Picolé vegano','Vegan popsicle','Veganes Eis am Stiel'),160)]}),
+];
+const BARS=[
+ P('b1','bar',L('Barra Oeste','Bar Oeste','West bar','Bar West'),'bar',{x:60,y:50,w:130,h:64},'T125',[[125,114]],L('Barra sobre el césped, junto al chill-out.','Bar no gramado, ao lado do chill-out.','Bar on the lawn, next to the chill-out.','Bar auf dem Rasen, neben dem Chill-out.'),{prods:DRINKS}),
+ P('b2','bar',L('Barra Este','Bar Leste','East bar','Bar Ost'),'bar',{x:810,y:50,w:130,h:64},'T875',[[875,114]],L('Barra sobre el césped, junto al VIP.','Bar no gramado, ao lado do VIP.','Bar on the lawn, next to VIP.','Bar auf dem Rasen, neben VIP.'),{prods:DRINKS}),
+ P('b3','bar',L('Barra del patio','Bar da praça','Food court bar','Food-Court-Bar'),'bar',{x:795,y:620,w:154,h:44},'S640',[[785,642],[872,642]],L('Bebidas frías junto al patio de comidas.','Bebidas geladas ao lado da praça de alimentação.','Cold drinks by the food court.','Kalte Getränke am Food Court.'),{prods:DRINKS}),
+];
+const SVC=[
+ P('stage','zone',L('Escenario principal','Palco principal','Main stage','Hauptbühne'),'stage',{x:380,y:40,w:240,h:96},'T500',[[500,136]],L('Bandas y DJs los dos días, de 14 a 21 h.','Bandas e DJs nos dois dias, das 14h às 21h.','Bands and DJs both days, 2–9 pm.','Bands und DJs an beiden Tagen, 14–21 Uhr.')),
+ P('chill','zone','Chill-out','zone',{x:70,y:170,w:280,h:140},'T210',[[210,310]],L('Césped, sombra y puffs para bajar un cambio frente al escenario.','Gramado, sombra e pufes para relaxar em frente ao palco.','Lawn, shade and beanbags to slow down facing the stage.','Rasen, Schatten und Sitzsäcke vor der Bühne.')),
+ P('vip','zone','VIP','zone',{x:640,y:165,w:170,h:80},'T725',[[725,245]],L('Vista al escenario, barra propia y gastronomía. Acceso con entrada VIP.','Vista do palco, bar próprio e gastronomia. Acesso com ingresso VIP.','Stage view, private bar and catering. VIP ticket only.','Bühnenblick, eigene Bar und Catering. Nur mit VIP-Ticket.'),{icon:'star'}),
+ P('conf','room',L('Sala de conferencias','Sala de conferências','Conference room','Konferenzsaal'),'room',{x:60,y:868,w:250,h:200},'B185',[[185,1068]],L('Conferencias, foros y proyecciones.','Conferências, fóruns e exibições.','Talks, forums and screenings.','Vorträge, Foren und Filmvorführungen.')),
+ P('foro','room',L('Foro y talleres','Fórum e oficinas','Forum & workshops','Forum & Workshops'),'room',{x:325,y:868,w:190,h:200},'B420',[[420,1068]],L('Talleres prácticos con cupo. Anotate en la puerta.','Oficinas práticas com vagas limitadas. Inscreva-se na porta.','Hands-on workshops with limited spots. Sign up at the door.','Praxis-Workshops mit begrenzten Plätzen. Anmeldung an der Tür.'),{icon:'tools'}),
+ P('med','svc',L('Consultorio medicinal','Consultório medicinal','Medical advice desk','Medizinische Beratung'),'care',{x:530,y:868,w:182,h:96},'S916',[[712,916]],L('Orientación con profesionales de la salud sobre uso medicinal. Incluido con la entrada.','Orientação com profissionais de saúde sobre uso medicinal. Incluído no ingresso.','Guidance from health professionals on medical use. Included with your ticket.','Beratung durch Gesundheitsfachleute zur medizinischen Anwendung. Im Ticket enthalten.'),{img:'consult',icon:'cross'}),
+ P('legal','svc',L('Consultorio legal','Consultório jurídico','Legal advice desk','Rechtsberatung'),'care',{x:530,y:972,w:182,h:96},'S1020',[[712,1020]],L('Asesoramiento sobre la regulación uruguaya, con Estudio Podestá (DEMO). Incluido con la entrada.','Orientação sobre a regulação uruguaia, com Estudio Podestá (DEMO). Incluído no ingresso.','Advice on Uruguayan regulation, with Estudio Podestá (DEMO). Included with your ticket.','Beratung zur Regulierung in Uruguay, mit Estudio Podestá (DEMO). Im Ticket enthalten.'),{img:'consult',icon:'scale'}),
+ P('wc','svc',L('Baños','Banheiros','Restrooms','Toiletten'),'care',{x:785,y:730,w:170,h:52},'S756',[[785,756]],L('Baños accesibles y cambiador.','Banheiros acessíveis e fraldário.','Accessible restrooms and changing table.','Barrierefreie Toiletten und Wickeltisch.'),{icon:'wc'}),
+ P('aid','svc',L('Primeros auxilios','Primeiros socorros','First aid','Erste Hilfe'),'care',{x:785,y:794,w:170,h:52},'S820',[[785,820]],L('Personal de salud durante todo el evento.','Equipe de saúde durante todo o evento.','Medical staff on site throughout the event.','Sanitätsdienst während der ganzen Veranstaltung.'),{icon:'cross'}),
+ P('entry','svc',L('Acceso y boletería','Entrada e bilheteria','Entrance & tickets','Eingang & Tickets'),'care',{x:785,y:975,w:170,h:90},'K',[[870,1065]],L('Entradas, pulseras y guardarropa. Solo mayores de 18.','Ingressos, pulseiras e guarda-volumes. Somente maiores de 18.','Tickets, wristbands and cloakroom. 18+ only.','Tickets, Bändchen und Garderobe. Ab 18.'),{icon:'door'}),
+];
+const ALL=[...STANDS,...FOOD,...BARS,...SVC];
+ALL.forEach(x=>{if(x.prods)x.prods=[]}); // v3: sin productos ni precios
+const byId=Object.fromEntries(ALL.map(x=>[x.id,x]));
+
+/* ---------- grilla DEMO ---------- */
+const SH=(day,start,end,place,title,sub,o)=>Object.assign({day,start,end,place,title,sub},o||{});
+const SHOWS=[
+ SH(5,'14:00','15:00','stage','Manglus',L('DJ set','DJ set','DJ set','DJ-Set')),
+ SH(5,'15:30','16:30','stage','Flor Sakeo',L('En vivo','Ao vivo','Live set','Live')),
+ SH(5,'17:00','18:00','stage','Mala Praxxis',L('En vivo','Ao vivo','Live set','Live')),
+ SH(5,'18:30','19:30','stage','La Poppins',L('En vivo','Ao vivo','Live set','Live')),
+ SH(5,'20:00','21:00','stage','Abuela Coca',L('Confirmada 2026 · día DEMO','Confirmada 2026 · dia DEMO','Confirmed for 2026 · day is DEMO','Für 2026 bestätigt · Tag DEMO'),{real:true}),
+ SH(6,'14:00','15:00','stage','Raíz Dub',L('Dub · ejemplo','Dub · exemplo','Dub · sample','Dub · Beispiel')),
+ SH(6,'15:30','16:30','stage','Candombe Sativa',L('Candombe fusión · ejemplo','Candombe fusão · exemplo','Candombe fusion · sample','Candombe-Fusion · Beispiel')),
+ SH(6,'17:00','18:00','stage','La Tormenta Verde',L('Reggae · ejemplo','Reggae · exemplo','Reggae · sample','Reggae · Beispiel')),
+ SH(6,'18:30','19:30','stage','Murga La Semillera',L('Murga · ejemplo','Murga · exemplo','Murga · sample','Murga · Beispiel')),
+ SH(6,'20:00','21:00','stage','Sol de Costa',L('Reggae · ejemplo','Reggae · exemplo','Reggae · sample','Reggae · Beispiel')),
+];
+const K_CONF=L('Conferencia','Conferência','Talk','Vortrag'),K_FORO=L('Foro','Fórum','Forum','Forum'),K_TALLER=L('Taller','Oficina','Workshop','Workshop'),K_FILM=L('Proyección','Exibição','Screening','Film');
+const TALKS=[
+ SH(5,'14:00','15:00','conf',L('Pepe Mujica: el camino de la regulación','Pepe Mujica: o caminho da regulação','Pepe Mujica: the road to regulation','Pepe Mujica: der Weg zur Regulierung'),K_CONF,{who:'Sen. Sebastián Sabini',cc:'UY',desc:L('Conferencia homenaje y repaso de cómo Uruguay llegó a regular el cannabis.','Conferência em homenagem e panorama de como o Uruguai chegou à regulação.','A tribute talk on how Uruguay came to regulate cannabis.','Gedenkvortrag: wie Uruguay zur Cannabis-Regulierung kam.')}),
+ SH(5,'15:30','16:30','foro',L('Mujeres cultivadoras','Mulheres cultivadoras','Women growers','Frauen im Anbau'),K_FORO,{who:L('Panel de cultivadoras','Painel de cultivadoras','Growers panel','Panel von Growerinnen'),desc:L('Cultivadoras cuentan su experiencia en clubes, autocultivo y emprendimientos.','Cultivadoras contam sua experiência em clubes, autocultivo e negócios.','Women growers share their experience in clubs, home growing and business.','Growerinnen berichten aus Clubs, Eigenanbau und Unternehmen.')}),
+ SH(5,'17:00','18:00','conf',L('Encuentro de liderazgos: sector público y privado','Encontro de lideranças: setor público e privado','Leadership meeting: public and private sectors','Führungstreffen: öffentlicher und privater Sektor'),K_CONF,{who:'Dr. Daniel Podestá',cc:'UY',desc:L('Diálogo entre referentes del Estado y de las empresas sobre el futuro de la industria.','Diálogo entre referências do Estado e das empresas sobre o futuro da indústria.','State and business leaders discuss the future of the industry.','Staat und Wirtschaft über die Zukunft der Branche.')}),
+ SH(5,'17:00','18:30','foro',L('Cannabis sin humo: el futuro también se come','Cannabis sem fumaça: o futuro também se come','Smoke-free cannabis: the future is edible too','Cannabis ohne Rauch: die Zukunft ist auch essbar'),K_TALLER,{who:'Claudia Rodríguez',cc:'UY',real:true,desc:L('Taller anunciado para 2026. Horario DEMO.','Oficina anunciada para 2026. Horário DEMO.','Workshop announced for 2026. Time slot is DEMO.','Für 2026 angekündigter Workshop. Uhrzeit DEMO.')}),
+ SH(5,'18:30','19:30','conf',L('Alemania: el puente global del cannabis','Alemanha: a ponte global da cannabis','Germany: the global cannabis bridge','Deutschland: die globale Cannabis-Brücke'),K_CONF,{who:'Aleksandra Vujinović',desc:L('Qué cambió con la regulación alemana y qué oportunidades abre para la región.','O que mudou com a regulação alemã e que oportunidades abre para a região.','What changed with German regulation and what it opens up for the region.','Was sich mit der deutschen Regulierung änderte und welche Chancen sie der Region bietet.')}),
+ SH(5,'19:30','20:30','foro',L('Suelo vivo: cultivar sin químicos','Solo vivo: cultivar sem químicos','Living soil: growing without chemicals','Lebendiger Boden: Anbau ohne Chemie'),K_TALLER,{who:'Carla Duarte',desc:L('Microbiología del suelo, coberturas y reciclado del sustrato. Disertante de ejemplo.','Microbiologia do solo, coberturas e reciclagem do substrato. Palestrante de exemplo.','Soil microbiology, mulch and substrate recycling. Sample speaker.','Bodenmikrobiologie, Mulch und Substrat-Recycling. Beispiel-Referentin.')}),
+ SH(6,'14:00','15:00','conf',L('Genética: cómo se estabiliza una variedad','Genética: como se estabiliza uma variedade','Genetics: how a strain gets stabilized','Genetik: wie eine Sorte stabilisiert wird'),K_CONF,{who:'Javier Morales',desc:L('Selección de fenotipos, retrocruzas y producción de semillas. Disertante de ejemplo.','Seleção de fenótipos, retrocruzamentos e produção de sementes. Palestrante de exemplo.','Phenotype selection, backcrossing and seed production. Sample speaker.','Phänotypenauswahl, Rückkreuzung und Saatgut. Beispiel-Referent.')}),
+ SH(6,'15:00','16:30','foro',L('Taller de esquejes','Oficina de clones','Cloning workshop','Stecklings-Workshop'),K_TALLER,{who:'Melina Rocha',desc:L('Cortar, enraizar y cuidar clones paso a paso. Tallerista de ejemplo.','Cortar, enraizar e cuidar clones passo a passo. Exemplo.','Cut, root and care for clones step by step. Sample host.','Stecklinge schneiden, bewurzeln, pflegen. Beispiel.')}),
+ SH(6,'16:00','17:00','conf',L('Cannabis medicinal: evidencia y acceso','Cannabis medicinal: evidência e acesso','Medical cannabis: evidence and access','Medizinisches Cannabis: Evidenz und Zugang'),K_CONF,{who:'Dr. Pablo Iturralde',desc:L('Qué dice hoy la evidencia y cómo se accede a tratamientos. Disertante de ejemplo.','O que diz a evidência hoje e como acessar tratamentos. Palestrante de exemplo.','What the evidence says today and how to access treatment. Sample speaker.','Was die Evidenz sagt und wie man Zugang erhält. Beispiel-Referent.')}),
+ SH(6,'17:30','18:30','foro',L('Homenaje a Pepe Mujica','Homenagem a Pepe Mujica','Tribute to Pepe Mujica','Hommage an Pepe Mujica'),K_FORO,{who:L('Foro abierto','Fórum aberto','Open forum','Offenes Forum'),desc:L('Voces de la militancia y la política recuerdan su rol en la ley.','Vozes da militância e da política lembram seu papel na lei.','Activists and politicians remember his role in the law.','Aktivisten und Politiker erinnern an seine Rolle beim Gesetz.')}),
+ SH(6,'18:00','19:00','conf',L('Clubes cannábicos: el modelo uruguayo','Clubes canábicos: o modelo uruguaio','Cannabis clubs: the Uruguayan model','Cannabis-Clubs: das uruguayische Modell'),K_CONF,{who:'Lucía Benítez',desc:L('Cómo se organiza un club, sus reglas y desafíos. Disertante de ejemplo.','Como um clube se organiza, regras e desafios. Palestrante de exemplo.','How a club is organized, its rules and challenges. Sample speaker.','Organisation, Regeln und Herausforderungen eines Clubs. Beispiel.')}),
+ SH(6,'20:00','21:00','conf','“The Real Deal”',K_FILM,{who:'Humboldt Seed Company',desc:L('Proyección de la película presentada por Humboldt Seed Company (en 2025 fue el domingo a las 20 h).','Exibição do filme apresentado pela Humboldt Seed Company (em 2025 foi no domingo às 20h).','Film screening presented by Humboldt Seed Company (in 2025 it was Sunday at 8 pm).','Filmvorführung, präsentiert von Humboldt Seed Company (2025: Sonntag 20 Uhr).')}),
+];
+
+/* ---------- sponsors y entradas ---------- */
+const SPONS=[
+ {lv:'oro',name:'Blunt Rey',id:'blunt'},{lv:'plata',name:'Lion Rolling Circus',id:'lion'},
+ {lv:'media',name:'la diaria'},{lv:'media',name:'RedTickets'},
+ {lv:'apoyo',name:'MINTUR'},{lv:'apoyo',name:'Uruguay Sorprende'},
+];
+const TIX=[
+ {n:L('General sábado','Geral sábado','General · Saturday','Tagesticket Samstag'),s:L('Sáb 5 · 13 a 21 h','Sáb 5 · 13h às 21h','Sat 5 · 1–9 pm','Sa 5. · 13–21 Uhr'),c:'#7FE3E0'},
+ {n:L('General domingo','Geral domingo','General · Sunday','Tagesticket Sonntag'),s:L('Dom 6 · 13 a 21 h','Dom 6 · 13h às 21h','Sun 6 · 1–9 pm','So 6. · 13–21 Uhr'),c:'#F3B4DC'},
+ {n:L('Pasaporte','Passaporte','Pass','Pass'),s:L('Los 2 días','Os 2 dias','Both days','Beide Tage'),c:'#F6E08A'},
+];
+const XP=[
+ {n:'VIP',c:'#8EE6A8',items:[L('Acceso preferencial','Acesso preferencial','Priority entry','Bevorzugter Einlass'),L('Gastronomía deli','Gastronomia deli','Deli catering','Deli-Catering'),L('Open bar','Open bar','Open bar','Open Bar'),L('Ubicación frente al escenario','Lugar em frente ao palco','Spot in front of the stage','Platz vor der Bühne'),L('Espacio para hacer networking','Espaço para networking','Networking space','Networking-Bereich')]},
+ {n:'Full Experience',c:'#B7A6F5',items:[L('2 días de acceso VIP','2 dias de acesso VIP','2 days of VIP access','2 Tage VIP-Zugang'),L('Todas las comidas','Todas as refeições','All meals','Alle Mahlzeiten'),L('Open bar','Open bar','Open bar','Open Bar'),L('Talleres, stands y conferencias','Oficinas, estandes e conferências','Workshops, stands and talks','Workshops, Stände und Vorträge'),L('Tour de bares por Montevideo','Tour de bares por Montevidéu','Montevideo bar tour','Bar-Tour durch Montevideo'),L('Almuerzo típico uruguayo','Almoço típico uruguaio','Traditional Uruguayan lunch','Typisch uruguayisches Mittagessen'),L('Traslados','Traslados','Transfers','Transfers'),L('Tour cultural','Tour cultural','Cultural tour','Kulturtour'),L('Y un gift especial','E um presente especial','And a special gift','Und ein besonderes Geschenk')]},
+];
+const INCL=[L('Stands','Estandes','Stands','Stände'),L('Shows','Shows','Shows','Shows'),L('Conferencias','Conferências','Talks','Vorträge'),L('Talleres','Oficinas','Workshops','Workshops'),L('Consultorio legal y medicinal','Consultório jurídico e medicinal','Legal & medical advice','Rechts- & Medizinberatung'),L('Sector de comidas','Praça de alimentação','Food court','Food Court'),L('Networking','Networking','Networking','Networking'),L('Bebidas','Bebidas','Drinks','Getränke'),L('Chill-out','Chill-out','Chill-out','Chill-out')];
+
+/* ---------- grafo de caminos ---------- */
+const N={K:[870,1110],B760:[760,1110],B420:[420,1110],B185:[185,1110]};
+[360,449,500,515,581,640,722,756,820,916,1020].forEach(y=>N['S'+y]=[760,y]);
+[125,210,500,725,875].forEach(x=>N['T'+x]=[x,360]);
+const chain=ids=>ids.slice(1).map((b,i)=>[ids[i],b]);
+const E=[...chain(['S360','S449','S500','S515','S581','S640','S722','S756','S820','S916','S1020','B760']),...chain(['K','B760']),...chain(['B760','B420','B185']),
+ ...chain(['T125','T210','T500','T725','S360']),['S360','T875']];
+const adj={};Object.keys(N).forEach(k=>adj[k]=[]);
+const d2=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+E.forEach(([a,b])=>{const w=d2(N[a],N[b]);adj[a].push([b,w]);adj[b].push([a,w])});
+function path(from,to){
+  const dist={},prev={},q=new Set(Object.keys(N));Object.keys(N).forEach(k=>dist[k]=Infinity);dist[from]=0;
+  while(q.size){let u=null;q.forEach(k=>{if(u===null||dist[k]<dist[u])u=k});q.delete(u);if(u===to)break;
+    adj[u].forEach(([v,w])=>{if(dist[u]+w<dist[v]){dist[v]=dist[u]+w;prev[v]=u}})}
+  const out=[];let c=to;while(c){out.unshift(N[c]);if(c===from)break;c=prev[c]}return out;
+}
+/* punto de partida: por defecto el acceso; se cambia con "¿Dónde estoy?" */
+const startPlace=()=>byId[st.from]||byId.entry;
+function startPt(){const p=startPlace();return p.id==='entry'?N.K:p.tail[p.tail.length-1]}
+function routeFor(p){const a=startPlace();
+  const head=a.id==='entry'?[]:[...a.tail].reverse();
+  const pts=[...head,...path(a.node,p.node),...p.tail];
+  const clean=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);
+  let len=0;for(let i=1;i<clean.length;i++)len+=d2(clean[i-1],clean[i]);return{pts:clean,m:Math.round(len*0.15)}}
+
+/* ---------- reloj simulado: sáb 5/12 17:22 ---------- */
+const t0=Date.now(),base=new Date(2026,11,5,17,22,0);
+const now=()=>new Date(base.getTime()+(Date.now()-t0));
+const toMin=s=>{const[h,m]=s.split(':').map(Number);return h*60+m};
+const nowMin=()=>{const n=now();return n.getHours()*60+n.getMinutes()};
+function status(it){const day=now().getDate(),m=nowMin();
+  if(it.day<day)return'past';if(it.day>day)return'future';
+  if(m>=toMin(it.end))return'past';if(m>=toMin(it.start))return'live';return'future'}
+
+/* ---------- estado ---------- */
+const st={tab:'stands',cat:'all',q:'',day:5,sel:null,extra:null,from:'entry',picking:false,view:null,lcat:null,ag:'bands'};
+const mediaOf=p=>{if(p.img)return{img:IMG[p.img]};const c=CATS[p.cat];if(c.img)return{img:IMG[c.img]};return{icon:p.icon||c.icon||'spark'}};
+const thumb=(p,cls)=>{const m=mediaOf(p);return m.img?`<img src="${m.img}" alt="" loading="lazy">`:`<span class="ico ${cls||''}">${ic(m.icon)}</span>`};
+const price=v=>v==='gift'?T(UI.gift):v==='ask'?T(UI.ask):v==='incl'?T(UI.included):'$'+Number(v).toLocaleString('es-UY');
+
+/* ---------- mapa: papel botánico ---------- */
+const INK='#14133A',PAPER='#FFFFFF';
+const WALKS='M60 360H940M760 360V1110M60 1110H940M712 500H760M712 722H760M500 360V136M210 360V310M725 360V245M125 360V114M875 360V114M185 1110V1068M420 1110V1068M712 916H760M712 1020H760M760 449H785M760 515H785M760 581H785M760 642H785M760 756H785M760 820H785M870 1110V1065';
+const zl=(x,y,t,s,a,fill)=>`<text class="zl" x="${x}" y="${y}" font-size="${Math.round(s*.7)}" text-anchor="${a||'middle'}"${fill?` style="fill:${fill}"`:''}>${esc(t)}</text>`;
+function zone(p,label,size,sub,icon,fill){const s=p.shape,c=CATS[p.cat].c,cx=s.x+s.w/2,cy=s.y+s.h/2;
+  const iy=sub||label?cy-(s.h>90?26:12):cy;const big=s.h>90;
+  return `<g class="poi hit" data-id="${p.id}" tabindex="0" role="button" aria-label="${esc(T(p.name))}"><rect class="shape" x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="${p.id==='chill'?70:16}" fill="${fill||PAPER}" stroke="${INK}" stroke-width="2"/>`+
+  (fill?'':`<rect x="${s.x+6}" y="${s.y+6}" width="${s.w-12}" height="8" rx="4" fill="${c}"/>`)+
+  (icon?`<use href="#ic-${icon}" x="${cx-(big?17:11)}" y="${iy-(big?17:11)}" width="${big?34:22}" height="${big?34:22}" stroke="${INK}" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`:'')+
+  (label?`<text class="zl ink" x="${cx}" y="${icon?iy+(big?42:28):cy+8}" font-size="${Math.round((size||24)*.66)}" text-anchor="middle">${esc(label)}</text>`:'')+
+  (sub?`<text class="zs ink2" x="${cx}" y="${(icon?iy+(big?64:46):cy+28)}" font-size="14" text-anchor="middle">${esc(sub)}</text>`:'')+`</g>`}
+function wrap(t,max){const w=t.split(' ');const ls=[''];w.forEach(x=>{const c=ls[ls.length-1];if(c&&(c+' '+x).length>max)ls.push(x);else ls[ls.length-1]=c?c+' '+x:x});return ls.slice(0,2)}
+function renderMap(){
+  let h=`<defs><pattern id="texp" patternUnits="userSpaceOnUse" width="260" height="260"><image href="${IMG.tex}" width="260" height="260"/></pattern>
+  <pattern id="dots" patternUnits="userSpaceOnUse" width="22" height="22"><circle cx="2" cy="2" r="1.3" fill="#2B2A5C"/></pattern></defs>`;
+  h+=`<rect width="1000" height="1180" fill="#0E0D2E"/><rect width="1000" height="1180" fill="url(#dots)"/>`;
+  // césped con la textura botánica
+  h+=`<rect x="30" y="20" width="940" height="320" rx="30" fill="url(#texp)" stroke="${INK}" stroke-width="2"/>`;
+  h+=`<rect x="30" y="20" width="940" height="320" rx="30" fill="#7FE3E0" opacity=".25"/>`;
+  // caminos: sendero blanco punteado
+  h+=`<path d="${WALKS}" stroke="#23224F" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  h+=`<path d="${WALKS}" stroke="#E9E6FF" stroke-width="2.2" stroke-dasharray="2 9" fill="none" stroke-linecap="round" opacity=".7"/>`;
+  // arriba
+  h+=zone(byId.stage,T(byId.stage.name),26,null,'music','#F6E08A');
+  h+=zone(byId.chill,'CHILL-OUT',24,null,'leaf','#8EE6A8');
+  h+=zone(byId.vip,'VIP',24,null,'star','#B7A6F5');
+  BARS.slice(0,2).forEach(b=>h+=zone(b,T(b.name),20,null,'glass','#F4B183'));
+  // pabellón: hoja de papel
+  h+=`<rect x="60" y="385" width="652" height="452" rx="18" fill="${PAPER}" stroke="${INK}" stroke-width="2"/>`;
+  [500,722].forEach(y=>h+=`<path d="M76 ${y}H700" stroke="${INK}" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 7"/>`);
+  h+=zl(72,376,T(L('PABELLÓN DE STANDS','PAVILHÃO DE ESTANDES','EXHIBITOR HALL','AUSSTELLERHALLE')),20,'start');
+  STANDS.forEach(s=>{const g=s.g,c=CATS[s.cat].c;const nm=T(s.short);const ls=wrap(nm,Math.max(8,Math.floor(g.w/10.5)));
+    h+=`<g class="stand hit${st.sel===s.id?' sel':''}" style="--i:${s.no}" data-id="${s.id}" tabindex="0" role="button" aria-label="${esc(T(s.name))}"><rect class="shape" x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" rx="10" fill="${c}" stroke="${INK}" stroke-width="1.6"/>`+
+    `<circle cx="${g.x+17}" cy="${g.y+17}" r="12" fill="${INK}"/><text class="num" x="${g.x+17}" y="${g.y+22.5}" font-size="14" text-anchor="middle">${s.no}</text>`+
+    (s.tier?`<use href="#ic-star" x="${g.x+g.w-25}" y="${g.y+6}" width="19" height="19" fill="${INK}" stroke="none"/>`:'')+
+    ls.map((l,i)=>`<text class="sn" x="${g.x+g.w/2}" y="${g.y+g.h-12-(ls.length-1-i)*15}" font-size="13.5" text-anchor="middle">${esc(l)}</text>`).join('')+`</g>`});
+  // patio de comidas
+  h+=`<rect x="785" y="385" width="170" height="290" rx="18" fill="${PAPER}" stroke="${INK}" stroke-width="2"/><rect x="791" y="391" width="158" height="22" rx="8" fill="#F4B183"/>`;
+  h+=zl(870,407,T(L('PATIO DE COMIDAS','PRAÇA DE ALIMENTAÇÃO','FOOD COURT','FOOD COURT')),17,'middle',INK);
+  FOOD.forEach(f=>{const s=f.shape;const ls=wrap(f.name,9);h+=`<g class="poi hit" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.name)}"><rect class="shape" x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="10" fill="#FBE3D2" stroke="${INK}" stroke-width="1.5"/>${ls.map((l,i)=>`<text class="sn" x="${s.x+s.w/2}" y="${s.y+s.h/2+5+(i-(ls.length-1)/2)*14}" font-size="12" text-anchor="middle">${esc(l)}</text>`).join('')}</g>`});
+  h+=`<rect x="877" y="552" width="72" height="58" rx="10" fill="none" stroke="${INK}" stroke-opacity=".4" stroke-dasharray="4 5"/><text class="zs ink2" x="913" y="586" font-size="12" text-anchor="middle">${esc(T(L('Mesas','Mesas','Tables','Tische')))}</text>`;
+  h+=zone(byId.b3,T(byId.b3.name),18,null,null,'#F4B183');
+  h+=zone(byId.wc,T(byId.wc.name),20);
+  h+=zone(byId.aid,T(byId.aid.name),20);
+  h+=zone(byId.conf,T(byId.conf.name),24,null,'mic');
+  h+=zone(byId.foro,T(byId.foro.name),22,null,'tools');
+  h+=zone(byId.med,T(byId.med.name),18,null,'cross');
+  h+=zone(byId.legal,T(byId.legal.name),18,null,'scale');
+  h+=zone(byId.entry,T(byId.entry.name),20,'↓ Av. Italia','door');
+  // ruta, destino y "estás acá"
+  h+=`<path id="routeBase" d=""/><path id="route" d=""/><g id="dest"></g><g id="me"></g>`;
+  $('map').innerHTML=h;
+  drawMe();
+  if(st.sel&&byId[st.sel])drawRoute(byId[st.sel],true);
+  dimStands();
+}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function drawMe(){
+  const k=startPt(),lbl=T(UI.here),lw=lbl.length*10+30;
+  const below=k[1]<1000,left=k[0]>500;
+  const bx=left?k[0]-lw-16:k[0]+16,by=below?k[1]+16:k[1]-50;
+  $('me').innerHTML=`<circle cx="${k[0]}" cy="${k[1]}" r="16" fill="#F6E08A" opacity=".35">${reduce?'':'<animate attributeName="r" values="14;40" dur="1.9s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="1.9s" repeatCount="indefinite"/>'}</circle><circle cx="${k[0]}" cy="${k[1]}" r="12" fill="#F6E08A" stroke="${INK}" stroke-width="3.5"/>`+
+   `<rect x="${bx}" y="${by}" width="${lw}" height="34" rx="17" fill="#F6E08A" stroke="${INK}" stroke-width="2"/><text x="${bx+lw/2}" y="${by+23}" font-size="17" font-weight="900" fill="${INK}" text-anchor="middle" font-family="Nunito,sans-serif">${esc(lbl)}</text>`;
+}
+let raf=0;
+function drawRoute(p,instant){
+  const r=$('route'),rb=$('routeBase'),d=$('dest');
+  document.querySelectorAll('#map .sel').forEach(e=>e.classList.remove('sel'));
+  if(!p){r.setAttribute('d','');rb.setAttribute('d','');d.innerHTML='';return null}
+  const R=routeFor(p);const dd='M'+R.pts.map(q=>q.join(' ')).join('L');
+  r.setAttribute('d',dd);rb.setAttribute('d',dd);
+  const t=R.pts[R.pts.length-1];
+  d.innerHTML=`<circle cx="${t[0]}" cy="${t[1]}" r="10" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>`;
+  if(!reduce){const L0=Math.max(1,r.getTotalLength()),dur=Math.max(2.4,L0/170).toFixed(1);
+    d.insertAdjacentHTML('beforeend',`<circle r="7" fill="${INK}" stroke="#F6E08A" stroke-width="3" opacity="0"><animateMotion dur="${dur}s" repeatCount="indefinite" begin="indefinite" path="${dd}"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.85;1" dur="${dur}s" repeatCount="indefinite" begin="indefinite"/></circle>`);
+    const w=d.lastElementChild;setTimeout(()=>{if(w.isConnected){w.setAttribute('opacity','1');w.querySelectorAll('animate,animateMotion').forEach(a=>{try{a.beginElement()}catch(_){}})}},instant?50:1150)}
+  const el=document.querySelector(`#map [data-id="${p.id}"]`);if(el)el.classList.add('sel');
+  const len=r.getTotalLength();
+  if(!instant)snd('route');
+  if(reduce||instant){r.style.transition='none';r.style.strokeDasharray='none';r.style.strokeDashoffset=0}
+  else{r.style.transition='none';r.style.strokeDasharray=len;r.style.strokeDashoffset=len;r.getBoundingClientRect();r.style.transition='stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)';r.style.strokeDashoffset=0}
+  return R;
+}
+function standList(){const q=st.q.trim().toLowerCase();
+  return STANDS.filter(s=>(st.cat==='all'||s.cat===st.cat)&&(!q||[T(s.name),T(s.desc),T(CATS[s.cat].n),...s.prods.map(p=>T(p.n))].join(' ').toLowerCase().includes(q)))}
+function dimStands(){const on=st.tab==='stands';const ids=new Set(standList().map(s=>s.id));document.querySelectorAll('#map .stand').forEach(g=>g.classList.toggle('dim',on&&!ids.has(g.dataset.id)))}
+
+/* ---------- panel ---------- */
+function renderTabs(){$('tabs').innerHTML=Object.keys(UI.tabs).map(k=>`<button type="button" role="tab" aria-selected="${st.tab===k}" data-tab="${k}">${ic(UI.tabIc[k])}${esc(T(UI.tabs[k]))}</button>`).join('')}
+function scard(s){const c=CATS[s.cat].c;return `<button type="button" class="scard" data-open="${s.id}" style="--c:${c}"><span class="hd"><span class="no">${s.no}</span><small>${esc(T(CATS[s.cat].n))}</small>${s.tier?`<span class="star">${s.tier==='oro'?'★':'☆'}</span>`:''}</span><span class="bd">${thumb(s)}<b>${esc(T(s.name))}</b></span></button>`}
+function fcard(p,sub){const c=CATS[p.cat].c;return `<button type="button" class="fcard" data-open="${p.id}" style="--c:${c}">${thumb(p)}<span class="tx"><b>${esc(T(p.name))}</b><small>${esc(sub)}</small></span></button>`}
+const dayToggle=()=>`<div class="days" role="group">${[5,6].map(d=>`<button type="button" data-day="${d}" aria-pressed="${st.day===d}">${esc(T(d===5?UI.sat:UI.sun))}</button>`).join('')}</div>`;
+function schedRows(list,key){
+  const items=list.map((x,i)=>[x,i]).filter(([x])=>x.day===st.day).sort((a,b)=>toMin(a[0].start)-toMin(b[0].start));
+  let nextMarked=false;const today=now().getDate();
+  return `<div class="note"><span class="demo">DEMO</span>${esc(T(UI.gridDemo))}</div><div class="rows">${items.map(([x,i])=>{const s=status(x);let badge='';
+    if(s==='live')badge=`<span class="badge live"><span class="rec"></span>${esc(T(UI.live))} · ${toMin(x.end)-nowMin()} min</span>`;
+    else if(s==='future'&&!nextMarked&&x.day===today){nextMarked=true;badge=`<span class="badge next">${esc(T(UI.next))}</span>`}
+    else if(x.place!=='stage')badge=`<span class="badge room">${esc(T(x.sub))}</span>`;
+    const who=x.who?T(x.who)+' · ':'';
+    return `<button type="button" class="row${s==='past'?' past':''}${s==='live'?' is-live':''}" data-sched="${key}${i}"><span class="t">${x.start}</span><span style="min-width:0"><b>${esc(T(x.title))}</b><small>${esc(x.place==='stage'?T(x.sub):who+T(byId[x.place].name))}</small></span>${badge}</button>`}).join('')}</div>`;
+}
+function renderPane(){
+  const pane=$('pane');let h='';
+  if(st.tab==='stands'){
+    const list=standList();
+    h+=`<div class="filters"><input class="search" id="search" type="search" autocomplete="off" placeholder="${esc(T(UI.search))}" value="${esc(st.q)}"><div class="chips" role="group"><button type="button" class="chip" data-cat="all" aria-pressed="${st.cat==='all'}">${esc(T(UI.all))}</button>`+
+      STAND_CATS.map(c=>`<button type="button" class="chip" data-cat="${c}" aria-pressed="${st.cat===c}" style="--c:${CATS[c].c}"><span class="dot"></span>${esc(T(CATS[c].n))}</button>`).join('')+`</div></div>`;
+    h+=list.length?`<div class="grid">${list.map(scard).join('')}</div>`:`<p class="empty">${esc(T(UI.none))}</p>`;
+  } else if(st.tab==='stage'){h+=dayToggle()+schedRows(SHOWS,'s')}
+  else if(st.tab==='talks'){h+=dayToggle()+schedRows(TALKS,'t')}
+  else if(st.tab==='food'){
+    h+=`<div class="sec">${ic('food')}${esc(T(UI.food))}</div><div class="grid">${FOOD.map(f=>fcard(f,T(f.desc))).join('')}</div>`;
+    h+=`<div class="sec">${ic('glass')}${esc(T(UI.bars))}</div><div class="grid">${BARS.map(b=>fcard(b,T(b.desc))).join('')}</div>`;
+    h+=`<div class="sec">${ic('cross')}${esc(T(UI.svc))}</div><div class="grid">${SVC.map(s=>fcard(s,T(s.desc))).join('')}</div>`;
+  } else if(st.tab==='spons'){
+    const nm=lv=>SPONS.filter(s=>s.lv===lv);
+    h+=`<div class="tier"><div class="sp main"><span class="lv">MAIN</span><span class="nm">${esc(T(UI.main))}</span><small>${esc(T(UI.mainTx))}</small></div>`+
+      nm('oro').map(s=>`<button type="button" class="sp oro" data-open="${s.id}"><span class="lv">${esc(T(UI.oro))}</span><span class="nm">${esc(s.name)}</span><small>${esc(T(UI.stand))} ${byId[s.id].no}</small></button>`).join('')+
+      nm('plata').map(s=>`<button type="button" class="sp plata" data-open="${s.id}"><span class="lv">${esc(T(UI.plata))}</span><span class="nm">${esc(s.name)}</span><small>${esc(T(UI.stand))} ${byId[s.id].no}</small></button>`).join('')+`</div>`;
+    h+=`<div class="sec">${esc(T(UI.mediaP))}</div><div class="tier">${nm('media').map(s=>`<div class="sp media"><span class="nm">${esc(s.name)}</span></div>`).join('')}</div>`;
+    h+=`<div class="sec">${esc(T(UI.apoyo))}</div><div class="tier">${nm('apoyo').map(s=>`<div class="sp media"><span class="nm">${esc(s.name)}</span></div>`).join('')}</div>`;
+    h+=`<p class="fine">${esc(T(UI.logosNote))}</p>`;
+  } else if(st.tab==='tix'){
+    h+=`<div class="tk">${TIX.map(t=>`<div class="ticket" style="background:${t.c}"><span class="nm">${esc(T(t.n))}</span><small>${esc(T(t.s))}</small></div>`).join('')}</div>`;
+    h+=`<div class="sec">${esc(T(UI.incl))}</div><div class="incl">${INCL.map(x=>`<span>${esc(T(x))}</span>`).join('')}</div>`;
+    h+=XP.map(x=>`<div class="xp" style="--c:${x.c}"><div class="xph">${esc(T(UI.withThe))} <b>${esc(x.n)}</b> ${esc(T(UI.youGet))}</div><ul>${x.items.map(i=>`<li><img src="${IMG.xmark}" alt="">${esc(T(i))}</li>`).join('')}</ul></div>`).join('');
+    h+=`<p class="fine">${esc(T(UI.tixNote))}</p>`;
+  }
+  pane.innerHTML=h;dimStands();
+  const si=$('search');if(si){si.addEventListener('input',e=>{st.q=e.target.value;const pos=e.target.selectionStart;renderPane();const n=$('search');n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}})}
+}
+
+/* ---------- ficha ---------- */
+const walkMin=m=>Math.max(1,Math.ceil(m/70));
+function openPlace(p,extra){
+  st.listing=false;st.sel=p.id;st.extra=extra||null;const R=drawRoute(p);const c=CATS[p.cat].c;const m=mediaOf(p);
+  let h=`<div class="sheet-in" style="--c:${c}"><div class="hero">${m.img?`<img src="${m.img}" alt="">`:`<span class="ico">${ic(m.icon)}</span>`}</div><button type="button" class="x" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button>`;
+  if(extra){
+    h+=`<div class="band speaker"><b>${esc(T(extra.who||extra.title))}</b>${extra.cc?`<span class="tg">${extra.cc}</span>`:''}<span class="tg" style="background:#D93FBF">${extra.real?esc(T(L('ANUNCIADO','ANUNCIADO','ANNOUNCED','ANGEKÜNDIGT'))):'DEMO'}</span></div>`;
+    h+=`<div class="body"><span class="badge kind" style="align-self:flex-start">${esc(T(extra.sub))}</span><h2>${esc(T(extra.title))}</h2>${extra.desc?`<p class="desc">${esc(T(extra.desc))}</p>`:''}`;
+  } else {
+    const no=p.no||'';
+    h+=`<div class="band">${no?`<span class="no">${no}</span>`:''}<b>${esc(T(CATS[p.cat].n))}</b>${p.tier?`<span class="tg" style="background:${p.tier==='oro'?'#14133A':'#14133A'}">★ ${esc(T(p.tier==='oro'?UI.oro:UI.plata))}</span>`:''}<span class="tg" style="background:#D93FBF">DEMO</span></div>`;
+    h+=`<div class="body"><h2>${esc(T(p.name))}</h2><p class="desc">${esc(T(p.desc))}</p>`;
+    if(p.prods&&p.prods.length)h+=`<div class="prods"><div class="ph"><span>${esc(T(p.kind==='stand'?UI.prods:UI.menu))}</span><span class="ex">${esc(T(UI.example))}</span></div>${p.prods.map(x=>`<div class="prod"><span>${esc(T(x.n))}</span><b>${price(x.p)}</b></div>`).join('')}</div>`;
+  }
+  h+=`<div class="facts">`;
+  if(extra)h+=`<div class="fact"><span>${esc(T(UI.when))}</span><b>${esc(T(extra.day===5?UI.sat:UI.sun))} · ${extra.start}–${extra.end}</b></div>`;
+  h+=`<div class="fact"><span>${esc(T(UI.where))}</span><b>${esc(p.kind==='stand'?T(UI.stand)+' '+p.no:T(p.name))}</b></div>`;
+  h+=`<div class="fact"><span>${esc(T(UI.walk))}</span><b>≈ ${walkMin(R.m)} ${esc(T(UI.min))}</b></div><div class="fact"><span>${esc(T(UI.dist))}</span><b>${R.m} m</b></div></div>`;
+  h+=`<div class="rnote"><i></i>${esc(T(UI.follow))}</div>`;
+  if(p.kind==='stand')h+=`<p style="margin:0;display:flex;gap:.35em;flex-wrap:wrap"><span class="pill date"><b>5-6</b> | ${esc(T(UI.dec))}</span><span class="pill date">Centro de Eventos LATU</span></p>`;
+  h+=`</div></div>`;
+  const sh=$('sheet');sh.innerHTML=h;sh.classList.add('open');sh.querySelector('.sheet-in').scrollTop=0;
+  $('sheetX').onclick=closeSheet;
+}
+function closeSheet(){st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');drawRoute(null)}
+
+/* ---------- ¿dónde estoy? ---------- */
+const placeLabel=p=>p.kind==='stand'?`${T(UI.stand)} ${p.no} · ${T(p.name)}`:T(p.name);
+function renderWhere(){$('whereBtn').innerHTML=`${ic('pin')}<span>${esc(T(UI.youAre))} <b>${esc(placeLabel(startPlace()))}</b></span><u>${esc(T(UI.change))}</u>`}
+function startPick(){st.picking=true;$('pickBar').hidden=false;document.querySelector('.mapwrap').classList.add('picking')}
+function stopPick(){st.picking=false;$('pickBar').hidden=true;document.querySelector('.mapwrap').classList.remove('picking')}
+let toastT;function toast(msg){const t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+function setFrom(id){snd('pin');st.from=id;stopPick();drawMe();renderWhere();toast(`${T(UI.nowAt)} ${placeLabel(startPlace())}`);
+  if(st.sel&&byId[st.sel]){openPlace(byId[st.sel],st.extra)}else if(!$('sheet').classList.contains('open')||st.listing){closeSheet()}}
+function openPlaceList(){
+  st.listing=true;const it=p=>`<button type="button" class="pitem${st.from===p.id?' on':''}" data-from="${p.id}" style="--c:${CATS[p.cat].c}"><span class="no">${p.no||ic(p.icon||CATS[p.cat].icon||'pin')}</span>${esc(T(p.name))}</button>`;
+  const h=`<div class="sheet-in"><button type="button" class="x" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button><div class="body"><h2 class="ph2">${esc(T(UI.pickTitle))}</h2><p class="desc">${esc(T(UI.pickSub))}</p>
+   <div class="sec">${esc(T(UI.svc))}</div><div class="plist">${[byId.entry,byId.stage,byId.chill,byId.vip,byId.conf,byId.foro,byId.med,byId.legal,byId.wc,byId.aid].map(it).join('')}</div>
+   <div class="sec">${esc(T(UI.food))} · ${esc(T(UI.bars))}</div><div class="plist">${[...FOOD,...BARS].map(it).join('')}</div>
+   <div class="sec">${esc(T(UI.tabs.stands))}</div><div class="plist">${STANDS.map(it).join('')}</div></div></div>`;
+  const sh=$('sheet');sh.innerHTML=h;sh.classList.add('open');$('sheetX').onclick=()=>{st.listing=false;stopPick();closeSheet()};
+}
+
+/* ---------- sonido: todo sintetizado, sin archivos ---------- */
+const SND={on:true,ctx:null,out:null};
+try{if(localStorage.getItem('expoSnd')==='0')SND.on=false}catch(_){}
+function ac(){if(!SND.ctx){try{const C=window.AudioContext||window.webkitAudioContext;SND.ctx=new C();const g=SND.ctx.createGain();g.gain.value=.55;const lp=SND.ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=5200;g.connect(lp).connect(SND.ctx.destination);SND.out=g}catch(_){return null}}
+  if(SND.ctx.state==='suspended')SND.ctx.resume();return SND.ctx}
+function tone(f,at,dur,type,vol){const c=ac();if(!c)return;const t=c.currentTime+at,o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.12,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(SND.out);o.start(t);o.stop(t+dur+.05)}
+function whoosh(at,dur,f1,f2,vol){const c=ac();if(!c)return;const t=c.currentTime+at,len=Math.floor(c.sampleRate*dur),b=c.createBuffer(1,len,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const s=c.createBufferSource();s.buffer=b;const bp=c.createBiquadFilter();bp.type='bandpass';bp.Q.value=1.4;bp.frequency.setValueAtTime(f1,t);bp.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.12,t+dur*.4);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(bp).connect(g).connect(SND.out);s.start(t);s.stop(t+dur)}
+const NOTE={C5:523.25,D5:587.33,E5:659.25,G5:783.99,A5:880,C6:1046.5,D6:1174.66,E6:1318.5,G6:1568};
+function snd(k){if(!SND.on)return;try{switch(k){
+  case'tap':tone(NOTE.A5,0,.07,'sine',.06);tone(NOTE.E6,0,.04,'triangle',.02);break;
+  case'open':tone(NOTE.E5,0,.16,'triangle',.09);tone(NOTE.A5,.07,.22,'triangle',.08);break;
+  case'back':tone(NOTE.A5,0,.14,'triangle',.07);tone(NOTE.E5,.07,.2,'triangle',.06);break;
+  case'go':whoosh(0,.32,500,2600,.06);tone(NOTE.G5,.12,.25,'sine',.07);tone(NOTE.D6,.18,.3,'sine',.04);break;
+  case'route':[NOTE.C5,NOTE.E5,NOTE.G5,NOTE.C6].forEach((f,i)=>tone(f,i*.1,.3,'triangle',.08));break;
+  case'pin':tone(NOTE.D6,0,.12,'sine',.08);tone(NOTE.G6,.08,.3,'sine',.05);break;
+  case'load':whoosh(0,1,200,3200,.09);[NOTE.C5,NOTE.E5,NOTE.G5,NOTE.D6].forEach((f,i)=>tone(f,.75+i*.07,1.1,'sine',.06));break;
+  case'lang':tone(NOTE.G5,0,.1,'sine',.07);break;
+}}catch(_){}}
+function renderSnd(){$('sndBtn').innerHTML=ic(SND.on?'sound':'mute');$('sndBtn').setAttribute('aria-label',T(SND.on?UI.sndOn:UI.sndOff))}
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('button,[data-id]');if(b&&!b.dataset.noTap)snd('tap')},{passive:true});
+
+/* ---------- vistas: inicio · locales · agenda · plano ---------- */
+const media=(key,cls)=>IMG['v_'+key]?`<video class="${cls||''}" src="${IMG['v_'+key]}" muted loop playsinline autoplay></video>`:IMG[key]?`<img class="${cls||''}" src="${IMG[key]}" alt="">`:'';
+function go(v,opt){if(st.view===v&&!opt)return;const prev=st.view;st.view=v;if(v!=='map'){closeSheet();stopPick()}
+  ['Home','List','Agenda','Map'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
+  if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();
+  if(v==='map'){const m=$('map');m.classList.remove('noanim');renderMap();setTimeout(()=>m.classList.add('noanim'),1400)}
+  if(prev)snd(v==='home'?'back':'go');bump();
+}
+const backBtn=(to)=>`<button type="button" class="back" data-go="${to}">${ic('arrow')}${esc(T(to==='home'?UI.home:UI.tLoc))}</button>`;
+function liveData(){const l=liveNow();const day=now().getDate(),m=nowMin();
+  const nt=TALKS.filter(x=>x.day===day&&toMin(x.start)>=m).sort((a,b)=>toMin(a.start)-toMin(b.start))[0];return{l,nt}}
+function renderHome(){
+  const {l,nt}=liveData();
+  const cats=['par','sem','cul','cbd','consult','pizza','hon','club'];
+  const mos=cats.map(k=>k==='hon'||k==='club'?`<span class="ico" style="--c:${CATS[k].c};background:${CATS[k].c};color:var(--ink)">${ic(CATS[k].icon)}</span>`:`<img class="kb" src="${IMG[k]}" alt="" style="animation-delay:-${(k.length*3)%9}s">`).join('');
+  let h=`<div class="dhero"><div class="vbg" style="background:var(--bgimg) center 35%/cover"></div>${IMG.introVid?`<video src="${IMG.introVid}" muted loop playsinline autoplay></video>`:''}<div class="in"><img class="spinx" src="${IMG.xmark}" alt=""><h2>${esc(T(UI.hello))}</h2><p>${esc(T(UI.helloSub))}</p></div></div>`;
+  if(l)h+=`<button type="button" class="livecard" data-go="agenda" data-ag="bands"><span class="ic">${l.live?'<span class="eq"><i></i><i></i><i></i><i></i></span>':ic('music')}</span><span class="tx"><span class="k">${l.live?`<span class="rec"></span>${esc(T(UI.live))}`:esc(T(UI.next))} · ${esc(T(byId.stage.name))}</span><b>${esc(l.s.title)}</b><small>${l.live?`${esc(T(UI.ends))} ${toMin(l.s.end)-nowMin()} min`:l.s.start}${nt?` · ${esc(T(UI.nextTalk))} ${nt.start}: ${esc(T(nt.title))}`:''}</small></span></button>`;
+  const arw=`<span class="go">${ic('arrow')}</span>`;
+  const big=n=>ic(n).replace('class="i"','class="i big"');
+  const tile=(i,c,attrs,art,title,sub,badge)=>`<button type="button" class="dtile" ${attrs} style="--i:${i};--c:${c}">${badge?`<span class="badge2">${badge}</span>`:''}<span class="art">${art}</span><span class="foot"><span class="tx"><b>${esc(title)}</b><small>${esc(sub)}</small></span>${arw}</span></button>`;
+  const nRub=LOCS.filter(o=>o.items().length).length;
+  const mos4=['par','sem','cul','cbd'].map(k=>`<img class="kb" src="${IMG[k]}" alt="" style="animation-delay:-${(k.length*3)%9}s">`).join('');
+  h+=`<div class="dgrid3 stagger">`;
+  h+=tile(0,'#7FE3E0','data-go="map"',`<span class="mapmini" id="mapMini"></span>`,T(UI.tMap),`${T(UI.youAre)} ${placeLabel(startPlace())}`);
+  h+=tile(1,'#F3B4DC','data-go="list"',`<span class="mosaic">${mos4}</span>`,T(UI.tLoc),`${nRub} ${T(L('rubros','categorias','categories','Bereiche'))}`);
+  h+=tile(2,'#B7A6F5','data-go="agenda"',media('ag','kb')||big('cal'),T(UI.tAg),T(UI.tAgSub));
+  h+=tile(3,'#F4B183','data-go="list" data-catgo="food"',media('pizza','kb'),T(UI.tFood),`${FOOD.length+BARS.length} ${T(UI.places_n)}`);
+  h+=tile(4,'#F6E08A','data-go="map" data-tabgo="spons"',media('spons','kb')||`<img class="xm" src="${IMG.xmark}" alt="">`,T(UI.tSp),'Blunt Rey · Lion Rolling Circus');
+  h+=tile(5,'#8EE6A8','data-go="map" data-tabgo="tix"',media('tix','kb')||big('ticket'),T(UI.tTix),'VIP · Full Experience');
+  h+=`</div>`;
+  $('homeIn').innerHTML=h;
+  // mini plano: copia liviana del dibujo actual
+  const mm=$('mapMini');if(mm){if(!$('map').innerHTML)renderMap();const svg=$('map').cloneNode(true);svg.removeAttribute('id');svg.querySelectorAll('[id]').forEach(n=>{if(n.id==='texp'||n.id==='dots')return;n.removeAttribute('id')});svg.setAttribute('preserveAspectRatio','xMidYMid slice');svg.setAttribute('aria-hidden','true');mm.appendChild(svg)}
+  $('homeIn').scrollTop=0;
+}
+const LOCS=[
+ {k:'food',n:UI.food,c:'#F4B183',img:'pizza',items:()=>FOOD},
+ {k:'par',img:'par'},{k:'hon'},{k:'club'},{k:'sem',img:'sem'},{k:'cul',img:'cul'},{k:'cbd',img:'cbd'},{k:'ind',img:'ind'},{k:'svc',img:'consult'},
+ {k:'exh',items:()=>STANDS.filter(s=>s.cat==='exh'||s.cat==='net')},{k:'tbc'},
+ {k:'bar',n:UI.bars,c:'#F4B183',items:()=>BARS},
+].map(o=>Object.assign({n:CATS[o.k]?CATS[o.k].n:o.n,c:CATS[o.k]?CATS[o.k].c:o.c,icon:CATS[o.k]&&CATS[o.k].icon,items:()=>STANDS.filter(s=>s.cat===o.k)},o));
+function locMedia(o,cls){return o.img?media(o.img,cls):`<span class="ico" style="--c:${o.c}">${ic(o.icon||'store')}</span>`}
+function renderLocales(){
+  let h='';
+  if(!st.lcat){
+    h+=`<div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tLoc))}<small>${esc(T(UI.locSub))}</small></h2></div><div class="cgrid stagger">`;
+    LOCS.forEach((o,i)=>{const n=o.items().length;if(!n)return;h+=`<button type="button" class="ctile" data-lcat="${o.k}" style="--i:${i};--c:${o.c}"><span class="media">${locMedia(o,'kb')}</span><span class="lab"><b>${esc(T(o.n))}</b><span class="n">${n}</span></span></button>`});
+    h+=`</div>`;
+  } else {
+    const o=LOCS.find(x=>x.k===st.lcat);const items=o.items();
+    h+=`<div class="vhead"><button type="button" class="back" data-lcat="">${ic('arrow')}${esc(T(UI.tLoc))}</button><h2>${esc(T(o.n))}<small>${items.length} ${esc(T(UI.places_n))}</small></h2></div>`;
+    h+=`<div class="cbanner" style="--c:${o.c}">${locMedia(o,'kb')}</div><div class="list1 stagger">${items.map((p,i)=>p.kind==='stand'?scard(p).replace('class="scard"',`class="scard" style="--c:${CATS[p.cat].c};--i:${i}"`):fcard(p,T(p.desc)).replace('class="fcard"',`class="fcard" style="--c:${CATS[p.cat].c};--i:${i}"`)).join('')}</div>`;
+  }
+  $('listIn').innerHTML=h;$('listIn').scrollTop=0;
+}
+const AGK={bands:{list:SHOWS,key:'s',f:()=>true},talks:{list:TALKS,key:'t',f:x=>x.sub===K_CONF||x.sub===K_FORO},events:{list:TALKS,key:'t',f:x=>x.sub===K_TALLER||x.sub===K_FILM}};
+function renderAgenda(){
+  const a=AGK[st.ag]||AGK.bands;const today=now().getDate();
+  const items=a.list.map((x,i)=>[x,i]).filter(([x])=>x.day===st.day&&a.f(x)).sort((p,q)=>toMin(p[0].start)-toMin(q[0].start));
+  let nextMarked=false;
+  let h=`<div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tAg))}<small>${esc(T(UI.agSub))}</small></h2></div>`;
+  h+=`<div class="seg" role="group">${[['bands','music',UI.bands],['talks','mic',UI.talks2],['events','tools',UI.events]].map(([k,i,n])=>`<button type="button" data-ag="${k}" aria-pressed="${(st.ag||'bands')===k}">${ic(i)}${esc(T(n))}</button>`).join('')}</div>`;
+  h+=dayToggle()+`<div class="note"><span class="demo">DEMO</span>${esc(T(UI.gridDemo))}</div><div class="rows stagger">`;
+  h+=items.map(([x,i],n)=>{const s=status(x);let badge='';
+    if(s==='live')badge=`<span class="badge live"><span class="rec"></span>${esc(T(UI.live))} · ${toMin(x.end)-nowMin()} min</span>`;
+    else if(s==='future'&&!nextMarked&&x.day===today){nextMarked=true;badge=`<span class="badge next">${esc(T(UI.next))}</span>`}
+    else if(x.place!=='stage')badge=`<span class="badge room">${esc(T(x.sub))}</span>`;
+    const who=x.who?T(x.who)+' · ':'';
+    return `<button type="button" class="row${s==='past'?' past':''}${s==='live'?' is-live':''}" style="--i:${n}" data-sched="${a.key}${i}"><span class="t">${x.start}</span><span style="min-width:0"><b>${esc(T(x.title))}</b><small>${esc(x.place==='stage'?T(x.sub):who+T(byId[x.place].name))}</small></span>${badge}</button>`}).join('');
+  h+=`</div>`;
+  $('agIn').innerHTML=h;
+}
+function ensureMap(){if(st.view!=='map')go('map')}
+
+/* ---------- en vivo + sponsors rotando ---------- */
+function liveNow(){const day=now().getDate(),m=nowMin();const today=SHOWS.filter(s=>s.day===day);
+  const live=today.find(s=>m>=toMin(s.start)&&m<toMin(s.end));if(live)return{s:live,live:true};
+  const nx=today.filter(s=>toMin(s.start)>m).sort((a,b)=>toMin(a.start)-toMin(b.start))[0];return nx?{s:nx,live:false}:null}
+function renderLive(){const l=liveNow();const el=$('liveChip');
+  if(!l){el.hidden=true;return}el.hidden=false;
+  el.innerHTML=l.live?`<span class="rec"></span><span><b>${esc(T(UI.live).toUpperCase())}</b> · ${esc(l.s.title)} · ${esc(T(UI.ends))} ${toMin(l.s.end)-nowMin()} min</span>`:`${ic('music')}<span>${esc(T(UI.nothingLive))} ${l.s.start} · ${esc(l.s.title)}</span>`}
+let spIdx=0;
+function renderStrip(){const s=SPONS[spIdx%SPONS.length];const el=$('spStrip');
+  const lv=s.lv==='oro'?UI.oro:s.lv==='plata'?UI.plata:s.lv==='media'?UI.mediaP:UI.apoyo;const col=s.lv==='oro'?'#F6E08A':s.lv==='plata'?'#D9D5EE':'#7FE3E0';
+  el.innerHTML=`<span class="lv" style="color:${col}">${esc(T(lv))}</span><span class="nm">${esc(s.name)}</span>`;el.dataset.open=s.id||'';
+  el.classList.remove('swap');void el.offsetWidth;el.classList.add('swap')}
+
+/* ---------- estáticos ---------- */
+function renderStatic(){
+  document.documentElement.lang=lang;
+  $('edLbl').textContent=T(UI.ed);$('edLbl2').textContent=T(UI.ed);$('decLbl').textContent=T(UI.dec);$('decLbl2').textContent=T(UI.dec);
+  $('qrBtn').innerHTML=`${ic('qr')}<span>${esc(T(UI.qr))}</span>`;renderSnd();$('mapBack').innerHTML=`${ic('arrow')}${esc(T(UI.home))}`;$('mapBack').dataset.go='home';$('loadTxt').textContent=T(UI.loading);
+  renderWhere();$('pickTxt').textContent=T(UI.pickTxt);$('pickList').textContent=T(UI.pickList);$('pickCancel').textContent=T(UI.cancel);
+  $('langs').innerHTML=LANGS.map(([k,c])=>`<button type="button" data-lang="${k}" aria-pressed="${lang===k}">${c}</button>`).join('');
+  $('aSub').textContent=T(UI.aSub);$('aTouch').textContent=T(UI.aTouch);
+  $('aLangs').innerHTML=LANGS.map(([k,c,n])=>`<button type="button" data-alang="${k}">${n}<span>${c}</span></button>`).join('');
+  $('aDate').textContent=T(UI.aDate);
+  const tk=SPONS.map(s=>`<span><img src="${IMG.xmark}" alt=""><em>${esc(T(s.lv==='oro'?UI.oro:s.lv==='plata'?UI.plata:s.lv==='media'?UI.mediaP:UI.apoyo))}</em>${esc(s.name)}</span>`).join('');$('ticker').innerHTML=tk+tk;
+  $('qrTitle').textContent=T(UI.qrTitle);$('qrText').textContent=T(UI.qrText);$('qrClose').textContent=T(UI.close);
+  tickClock();renderLive();renderStrip();
+}
+function tickClock(){const n=now();$('clock').innerHTML=`${T(UI.week)[n.getDay()]} ${n.getDate()} · ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}<small>${esc(T(UI.simClock))}</small>`}
+function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-id]');if(!t)return;
+  if(t.dataset.lang){snd('lang');lang=t.dataset.lang;renderAll();return}
+  if(t.id==='sndBtn'){SND.on=!SND.on;try{localStorage.setItem('expoSnd',SND.on?'1':'0')}catch(_){}renderSnd();if(SND.on)snd('open');return}
+  if(t.dataset.lcat!==undefined&&!t.dataset.go){st.lcat=t.dataset.lcat||null;snd(st.lcat?'open':'back');renderLocales();return}
+  if(t.dataset.ag&&!t.dataset.go){st.ag=t.dataset.ag;renderAgenda();return}
+  if(t.dataset.go){const v=t.dataset.go;if(v==='list')st.lcat=t.dataset.catgo||null;if(v==='agenda'){st.ag=t.dataset.ag||st.ag||'bands';st.day=now().getDate()}
+    if(v==='map'){closeSheet();stopPick();if(t.dataset.tabgo){st.tab=t.dataset.tabgo}renderTabs();renderPane()}
+    go(v,true);return}
+  if(t.dataset.alang){e.stopPropagation();lang=t.dataset.alang;renderAll();hideAttract();return}
+  if(t.dataset.tab){st.tab=t.dataset.tab;closeSheet();renderTabs();renderPane();$('pane').scrollTop=0;return}
+  if(t.dataset.cat){st.cat=t.dataset.cat;renderPane();return}
+  if(t.dataset.day){st.day=+t.dataset.day;if(st.view==='agenda')renderAgenda();else renderPane();return}
+  if(t.id==='liveChip'){st.ag='bands';st.day=now().getDate();go('agenda',true);return}
+  if(t.dataset.open){ensureMap();openPlace(byId[t.dataset.open]);snd('open');return}
+  if(t.dataset.sched){const k=t.dataset.sched;const it=(k[0]==='s'?SHOWS:TALKS)[+k.slice(1)];ensureMap();openPlace(byId[it.place],it);snd('open');return}
+  if(t.dataset.from){setFrom(t.dataset.from);return}
+  if(t.id==='whereBtn'){startPick();return}
+  if(t.id==='pickList'){openPlaceList();return}
+  if(t.id==='pickCancel'){stopPick();if(st.listing)closeSheet();return}
+  if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}openPlace(byId[t.dataset.id]);snd('open');return}
+});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('#map [data-id]')){e.preventDefault();const id=e.target.closest('[data-id]').dataset.id;if(st.picking)setFrom(id);else openPlace(byId[id])}});
+$('attract').addEventListener('click',e=>{if(!e.target.closest('[data-alang]'))hideAttract()});
+$('homeBtn').addEventListener('click',()=>{closeSheet();stopPick();go('home')});
+let loading=false;
+function hideAttract(){if(loading)return;loading=true;const L=$('loader');L.hidden=false;L.innerHTML=L.innerHTML;$('loadX').src=IMG.xmark;$('loadTxt').textContent=T(UI.loading);snd('load');
+  setTimeout(()=>{$('attract').hidden=true;st.view=null;go('home');setTimeout(()=>{L.hidden=true;loading=false},250)},reduce?200:1250);bump()}
+function showAttract(){closeSheet();stopPick();st.from='entry';lang='es';st.tab='stands';st.cat='all';st.q='';st.day=5;st.lcat=null;st.ag='bands';$('qrModal').hidden=true;renderAll();go('home',true);$('attract').hidden=false}
+
+let qrDone=false;
+$('qrBtn').addEventListener('click',()=>{$('qrModal').hidden=false;
+  if(!qrDone){try{new QRCode($('qr'),{text:"https://kionda043-alt.github.io/expo-uruguay-26/",width:220,height:220,colorDark:'#0E0D2E',colorLight:'#ffffff'});qrDone=true}catch(_){$('qr').textContent='QR'}}});
+$('qrClose').addEventListener('click',()=>{$('qrModal').hidden=true});
+$('qrModal').addEventListener('click',e=>{if(e.target.id==='qrModal')$('qrModal').hidden=true});
+
+/* inactividad: vuelve a la bienvenida a los 90 s */
+let idle;function bump(){clearTimeout(idle);idle=setTimeout(()=>{if($('attract').hidden)showAttract()},90000)}
+['pointerdown','keydown','input'].forEach(ev=>document.addEventListener(ev,bump,{passive:true}));
+try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(_){}
+
+setInterval(()=>{tickClock();renderLive();if(st.view==='agenda'){const sc=$('agIn').scrollTop;renderAgenda();$('agIn').scrollTop=sc}if(st.tab==='stage'||st.tab==='talks'){const sc=$('pane').scrollTop;renderPane();$('pane').scrollTop=sc}},30000);
+setInterval(()=>{spIdx++;renderStrip()},3800);
+$('introVid').src=IMG.introVid||'';$('loadX').src=IMG.xmark;
+renderAll();go('home');
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+</script>
+</body></html>
