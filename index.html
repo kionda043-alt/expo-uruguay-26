@@ -390,6 +390,63 @@ button:active{transform:scale(.97)}
 .attract video.bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== Pantalla horizontal (notebook, TV acostada, celu girado) =====
+   Se activa sola cuando la pantalla es más ancha que alta. La versión vertical no cambia. */
+@media (min-aspect-ratio: 1/1){
+  .app{aspect-ratio:auto;width:100%;max-width:none}
+  .shell,.attract,.modal,.loader{font-size:clamp(11px,min(2.15cqh,1.3cqw),30px)}
+
+  /* barra superior en una sola fila */
+  .shell{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);column-gap:1.1em;align-items:center}
+  .top{display:contents}
+  .brand{grid-column:1;grid-row:1;padding-block:.7em}
+  .toolbar{grid-column:2;grid-row:1;padding-bottom:0}
+  .clock{grid-column:3;grid-row:1}
+  .view{grid-column:1/-1;grid-row:2;align-self:stretch;min-height:0}
+
+  /* bienvenida: dos columnas sobre el video horizontal */
+  .a-top{max-width:none}
+  .a-main{display:grid;grid-template-columns:auto auto;column-gap:3.5em;row-gap:.8em;max-width:none;align-content:center;justify-content:center;align-items:center}
+  .a-logo{grid-column:1;grid-row:1;justify-self:center}
+  .lema{grid-column:1;grid-row:2;justify-self:center}
+  .a-pills{grid-column:1;grid-row:3}
+  .a-sub{grid-column:1;grid-row:4;max-width:22em;justify-self:center}
+  .touch{grid-column:2;grid-row:1/3;align-self:end;justify-self:center}
+  .a-langs{grid-column:2;grid-row:3/5;align-self:start;width:19em;margin-top:0}
+  .a-foot{max-width:48em}
+
+  /* inicio: video y en vivo a la izquierda, 6 botones en 3 por fila */
+  #homeIn{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr);grid-template-rows:minmax(0,1fr) auto;column-gap:.9em}
+  #homeIn>.dhero{grid-column:1;grid-row:1;height:auto;min-height:11em;margin-bottom:.6em}
+  #homeIn>.livecard{grid-column:1;grid-row:2;align-self:end}
+  #homeIn>.dgrid3{grid-column:2;grid-row:1/3;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(10em,1fr)}
+  .dtile{min-height:0}
+
+  /* locales: 4 columnas que llenan la pantalla */
+  #listIn{display:flex;flex-direction:column}
+  .cgrid{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(8.5em,1fr);flex:1 0 auto}
+  .ctile{min-height:0}
+  .list1{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .cbanner{height:20cqh}
+
+  /* agenda: lista en 2 columnas */
+  .rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5em .7em;align-content:start}
+
+  /* plano: mapa a la izquierda, panel y ficha a la derecha */
+  #vMap{flex-direction:row;gap:.9em}
+  #vMap .mapwrap{margin:0 0 max(.9em,env(safe-area-inset-bottom,0px))}
+  #vMap .panel{flex:0 0 min(40%,30em);padding-top:0}
+  .hero{height:16cqh}
+}
+/* pantallas horizontales muy bajitas (celu girado) */
+@media (min-aspect-ratio: 1/1) and (max-height: 500px){
+  .a-logo{width:min(100%,11em)}
+  .lema{font-size:2.6em}
+}
+/* arreglo: tocar el mini plano del botón "Plano y cómo llegar" abre el plano (antes el toque quedaba en un stand del dibujo y no pasaba nada) */
+.mapmini{pointer-events:none}
+
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -494,7 +551,7 @@ button:active{transform:scale(.97)}
 </div>
 
 <script>const IMG={"pizza": "assets/img/pizza.webp", "bg": "assets/img/bg.webp", "burger": "assets/img/burger.webp", "helado": "assets/img/helado.webp", "bowl": "assets/img/bowl.webp", "cafe": "assets/img/cafe.webp", "logo": "assets/img/logo.webp", "xmark": "assets/img/xmark.webp", "sem": "assets/img/sem.webp", "cul": "assets/img/cul.webp", "consult": "assets/img/consult.webp", "cbd": "assets/img/cbd.webp", "tex": "assets/img/tex.webp", "par": "assets/img/par.webp", "introVid": "assets/video/introVid.mp4"};
-Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});</script>
+Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});IMG.introVidH="assets/video/introVidH.mp4";</script>
 <script src="assets/js/qrcode.min.js"></script>
 <script>
 (function(){
@@ -1116,7 +1173,7 @@ try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch
 
 setInterval(()=>{tickClock();renderLive();if(st.view==='agenda'){const sc=$('agIn').scrollTop;renderAgenda();$('agIn').scrollTop=sc}if(st.tab==='stage'||st.tab==='talks'){const sc=$('pane').scrollTop;renderPane();$('pane').scrollTop=sc}},30000);
 setInterval(()=>{spIdx++;renderStrip()},3800);
-$('introVid').src=IMG.introVid||'';$('loadX').src=IMG.xmark;
+const mqL=matchMedia('(min-aspect-ratio: 1/1)');const setIntro=()=>{const v=$('introVid'),src=(mqL.matches&&IMG.introVidH)||IMG.introVid||'';if(v.getAttribute('src')!==src){v.src=src;const p=v.play&&v.play();p&&p.catch&&p.catch(()=>{})}};setIntro();mqL.addEventListener&&mqL.addEventListener('change',setIntro);$('loadX').src=IMG.xmark;
 renderAll();go('home');
 })();
 </script>
