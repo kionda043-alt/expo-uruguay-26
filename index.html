@@ -551,7 +551,7 @@ button:active{transform:scale(.97)}
 </div>
 
 <script>const IMG={"pizza": "assets/img/pizza.webp", "bg": "assets/img/bg.webp", "burger": "assets/img/burger.webp", "helado": "assets/img/helado.webp", "bowl": "assets/img/bowl.webp", "cafe": "assets/img/cafe.webp", "logo": "assets/img/logo.webp", "xmark": "assets/img/xmark.webp", "sem": "assets/img/sem.webp", "cul": "assets/img/cul.webp", "consult": "assets/img/consult.webp", "cbd": "assets/img/cbd.webp", "tex": "assets/img/tex.webp", "par": "assets/img/par.webp", "introVid": "assets/video/introVid.mp4"};
-Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});IMG.introVidH="assets/video/introVidH.mp4";</script>
+Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});IMG.introVidH="assets/video/introVidH.mp4";IMG.food="assets/img/food.webp";IMG.plano="assets/img/plano.webp";IMG.club="assets/img/club.webp";IMG.exh="assets/img/exh.webp";IMG.tbc="assets/img/tbc.webp";IMG.bar="assets/img/bar.webp";IMG.hon="assets/img/hon.webp";IMG.v_food="assets/video/v_food.mp4";IMG.v_plano="assets/video/v_plano.mp4";IMG.v_club="assets/video/v_club.mp4";IMG.v_exh="assets/video/v_exh.mp4";IMG.v_bar="assets/video/v_bar.mp4";IMG.v_hon="assets/video/v_hon.mp4";IMG.v_par="assets/video/v_par.mp4";IMG.v_sem="assets/video/v_sem.mp4";IMG.v_cbd="assets/video/v_cbd.mp4";IMG.v_consult="assets/video/v_consult.mp4";IMG.v_ag="assets/video/v_ag.mp4";IMG.v_tix="assets/video/v_tix.mp4";</script>
 <script src="assets/js/qrcode.min.js"></script>
 <script>
 (function(){
@@ -647,13 +647,13 @@ const CATS={
   cbd:{c:'#7FE3E0',n:L('Cáñamo / CBD','Cânhamo / CBD','Hemp / CBD','Hanf / CBD'),img:'cbd'},
   ind:{c:'#F4B183',n:L('Indumentaria','Vestuário','Clothing','Kleidung'),icon:'shirt'},
   svc:{c:'#B7A6F5',n:L('Servicios','Serviços','Services','Service'),img:'consult'},
-  tbc:{c:'#C9C1F2',n:L('A confirmar','A confirmar','TBC','Folgt'),icon:'spark'},
-  exh:{c:'#D4C8FF',n:L('Exhibición','Exposição','Exhibit','Ausstellung'),icon:'flower'},
+  tbc:{c:'#C9C1F2',n:L('A confirmar','A confirmar','TBC','Folgt'),icon:'spark',img:'tbc'},
+  exh:{c:'#D4C8FF',n:L('Exhibición','Exposição','Exhibit','Ausstellung'),icon:'flower',img:'exh'},
   net:{c:'#D4C8FF',n:L('Encuentro','Encontro','Meetup','Treffpunkt'),icon:'people'},
-  hon:{c:'#C9E88A',n:L('Hongos','Cogumelos','Mushrooms','Pilze'),icon:'mush'},
-  club:{c:'#A9D8F5',n:L('Clubes de cannabis','Clubes de cannabis','Cannabis clubs','Cannabis-Clubs'),icon:'people'},
+  hon:{c:'#C9E88A',n:L('Hongos','Cogumelos','Mushrooms','Pilze'),icon:'mush',img:'hon'},
+  club:{c:'#A9D8F5',n:L('Clubes de cannabis','Clubes de cannabis','Cannabis clubs','Cannabis-Clubs'),icon:'people',img:'club'},
   food:{c:'#F4B183',n:L('Comida','Comida','Food','Essen')},
-  bar:{c:'#F4B183',n:L('Barra','Bar','Bar','Bar'),icon:'glass'},
+  bar:{c:'#F4B183',n:L('Barra','Bar','Bar','Bar'),icon:'glass',img:'bar'},
   stage:{c:'#F6E08A',n:L('Escenario','Palco','Stage','Bühne'),icon:'music'},
   zone:{c:'#B7A6F5',n:L('Espacio','Espaço','Area','Bereich'),icon:'leaf'},
   room:{c:'#8EE6A8',n:L('Sala','Sala','Room','Saal'),icon:'mic'},
@@ -1048,10 +1048,10 @@ function renderHome(){
   const nRub=LOCS.filter(o=>o.items().length).length;
   const mos4=['par','sem','cul','cbd'].map(k=>`<img class="kb" src="${IMG[k]}" alt="" style="animation-delay:-${(k.length*3)%9}s">`).join('');
   h+=`<div class="dgrid3 stagger">`;
-  h+=tile(0,'#7FE3E0','data-go="map"',`<span class="mapmini" id="mapMini"></span>`,T(UI.tMap),`${T(UI.youAre)} ${placeLabel(startPlace())}`);
+  h+=tile(0,'#7FE3E0','data-go="map"',media('plano','kb'),T(UI.tMap),`${T(UI.youAre)} ${placeLabel(startPlace())}`);
   h+=tile(1,'#F3B4DC','data-go="list"',`<span class="mosaic">${mos4}</span>`,T(UI.tLoc),`${nRub} ${T(L('rubros','categorias','categories','Bereiche'))}`);
   h+=tile(2,'#B7A6F5','data-go="agenda"',media('ag','kb')||big('cal'),T(UI.tAg),T(UI.tAgSub));
-  h+=tile(3,'#F4B183','data-go="list" data-catgo="food"',media('pizza','kb'),T(UI.tFood),`${FOOD.length+BARS.length} ${T(UI.places_n)}`);
+  h+=tile(3,'#F4B183','data-go="list" data-catgo="food"',media('food','kb'),T(UI.tFood),`${FOOD.length+BARS.length} ${T(UI.places_n)}`);
   h+=tile(4,'#F6E08A','data-go="map" data-tabgo="spons"',media('spons','kb')||`<img class="xm" src="${IMG.xmark}" alt="">`,T(UI.tSp),'Blunt Rey · Lion Rolling Circus');
   h+=tile(5,'#8EE6A8','data-go="map" data-tabgo="tix"',media('tix','kb')||big('ticket'),T(UI.tTix),'VIP · Full Experience');
   h+=`</div>`;
@@ -1061,10 +1061,10 @@ function renderHome(){
   $('homeIn').scrollTop=0;
 }
 const LOCS=[
- {k:'food',n:UI.food,c:'#F4B183',img:'pizza',items:()=>FOOD},
- {k:'par',img:'par'},{k:'hon'},{k:'club'},{k:'sem',img:'sem'},{k:'cul',img:'cul'},{k:'cbd',img:'cbd'},{k:'ind',img:'ind'},{k:'svc',img:'consult'},
- {k:'exh',items:()=>STANDS.filter(s=>s.cat==='exh'||s.cat==='net')},{k:'tbc'},
- {k:'bar',n:UI.bars,c:'#F4B183',items:()=>BARS},
+ {k:'food',n:UI.food,c:'#F4B183',img:'food',items:()=>FOOD},
+ {k:'par',img:'par'},{k:'hon',img:'hon'},{k:'club',img:'club'},{k:'sem',img:'sem'},{k:'cul',img:'cul'},{k:'cbd',img:'cbd'},{k:'ind',img:'ind'},{k:'svc',img:'consult'},
+ {k:'exh',img:'exh',items:()=>STANDS.filter(s=>s.cat==='exh'||s.cat==='net')},{k:'tbc',img:'tbc'},
+ {k:'bar',n:UI.bars,c:'#F4B183',img:'bar',items:()=>BARS},
 ].map(o=>Object.assign({n:CATS[o.k]?CATS[o.k].n:o.n,c:CATS[o.k]?CATS[o.k].c:o.c,icon:CATS[o.k]&&CATS[o.k].icon,items:()=>STANDS.filter(s=>s.cat===o.k)},o));
 function locMedia(o,cls){return o.img?media(o.img,cls):`<span class="ico" style="--c:${o.c}">${ic(o.icon||'store')}</span>`}
 function renderLocales(){
