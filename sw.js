@@ -1,8 +1,10 @@
-/* Expo Uruguay · service worker. Versión del contenido: f40637dc55
+/* Expo Uruguay · service worker. Versión del contenido: 324fd2f774
    Guarda la app completa la primera vez que se abre, así sigue andando sin internet. */
-const CACHE='expo-uy-f40637dc55';
+const CACHE='expo-uy-324fd2f774';
 const FILES=[
 "./",
+".nojekyll",
+"README.md",
 "assets/fonts/fonts.css",
 "assets/fonts/lilita-one-latin-400.woff2",
 "assets/fonts/lilita-one-latin-ext-400.woff2",
@@ -30,11 +32,13 @@ const FILES=[
 "assets/img/club.webp",
 "assets/img/consult.webp",
 "assets/img/cul.webp",
+"assets/img/emp.webp",
 "assets/img/exh.webp",
 "assets/img/food.webp",
 "assets/img/helado.webp",
 "assets/img/hon.webp",
 "assets/img/ind.webp",
+"assets/img/jugo.webp",
 "assets/img/logo.webp",
 "assets/img/par.webp",
 "assets/img/pizza.webp",
@@ -43,7 +47,9 @@ const FILES=[
 "assets/img/spons.webp",
 "assets/img/tbc.webp",
 "assets/img/tex.webp",
+"assets/img/tfr.webp",
 "assets/img/tix.webp",
+"assets/img/waf.webp",
 "assets/img/xmark.webp",
 "assets/js/qrcode.min.js",
 "assets/video/introVid.mp4",
@@ -84,7 +90,7 @@ self.addEventListener('fetch',e=>{
   if(url.origin!==location.origin||url.pathname.endsWith('/sw.js'))return;
   // Página: primero internet (para tomar cambios), si no hay, la guardada
   if(req.mode==='navigate'){
-    e.respondWith(fetch(req).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put('./',cp));return r}).catch(()=>caches.open(CACHE).then(c=>c.match('./',{ignoreSearch:true}))));
+    e.respondWith(fetch(req,{cache:'no-cache'}).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put('./',cp));return r}).catch(()=>caches.open(CACHE).then(c=>c.match('./',{ignoreSearch:true}))));
     return;
   }
   // Videos: el navegador pide pedazos (Range); los servimos desde el archivo guardado

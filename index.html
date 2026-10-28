@@ -447,6 +447,117 @@ button:active{transform:scale(.97)}
 /* arreglo: tocar el mini plano del botón "Plano y cómo llegar" abre el plano (antes el toque quedaba en un stand del dibujo y no pasaba nada) */
 .mapmini{pointer-events:none}
 
+/* ===== v4 (28/10): letra más grande, barra de navegación abajo, páginas que llenan la pantalla ===== */
+.shell,.attract,.modal,.loader{font-size:clamp(13.5px,2.82cqw,38px)}
+.vhead .back,.mapback{display:none!important}
+.vhead{padding:.15em 0 .6em}
+.vhead h2{font-size:1.75em}
+.vhead small{font-size:.5em}
+
+/* barra inferior: Volver + Inicio */
+.bnav{flex:0 0 auto;display:flex;gap:.6em;padding-block:.55em max(.75em,env(safe-area-inset-bottom,0px))}
+.bnav button{display:flex;align-items:center;justify-content:center;gap:.5em;border-radius:999px;font-weight:900;font-size:1.12em;padding:.7em 1em;min-height:3.2em;box-sizing:border-box}
+.bnav .bback{flex:1.7;background:var(--celeste);color:var(--ink);border:2px solid var(--ink);box-shadow:0 .22em 0 var(--ink);margin-bottom:.22em;transition:transform .12s ease,box-shadow .12s ease}
+.bnav .bback:active{transform:translateY(.2em)!important;box-shadow:0 .02em 0 var(--ink)}
+.bnav .bback svg{transform:rotate(180deg)}
+.bnav .bhome{flex:1;background:var(--surface2);color:var(--fg);border:1px solid var(--line);margin-bottom:.22em}
+.bnav svg.i{width:1.3em;height:1.3em;stroke-width:2.2}
+
+/* páginas que ocupan toda la pantalla */
+.fill{display:flex;flex-direction:column;min-height:100%;box-sizing:border-box}
+.dtile{min-height:max(9.5em,17cqh)}
+.lgrid{flex:1 1 auto;grid-auto-rows:minmax(7.2em,1fr);gap:.75em .65em}
+.lgrid .dtile{min-height:0}
+.lgrid>:last-child:nth-child(odd),.list1>:last-child:nth-child(odd){grid-column:1/-1}
+
+/* rubro: la ilustración crece y llena lo que sobra */
+.rub .cbanner{flex:1 1 13cqh;height:auto;min-height:11cqh;margin-bottom:.7em}
+.list1{gap:.6em}
+.list1 .fcard{padding:.5em;gap:.75em}
+.list1 .fcard img,.list1 .fcard .ico{width:3.9em;height:3.9em}
+.list1 .fcard b{font-size:1.08em}
+.list1 .fcard small{font-size:.78em;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.list1 .scard .bd{min-height:3.2em}
+.list1 .scard .bd b{font-size:1.1em}
+.list1 .scard .bd img,.list1 .scard .bd .ico{width:2.7em;height:2.7em}
+
+/* agenda: filas grandes que llenan la pantalla */
+.agfill .rows{flex:1 1 auto;display:grid;grid-auto-rows:minmax(4.4em,1fr);gap:.55em;padding-bottom:.3em}
+.agfill .row{padding:.7em 1em;gap:.9em;grid-template-columns:4.2em minmax(0,1fr) auto}
+.agfill .row .t{font-size:1.25em}
+.agfill .row b{font-size:1.12em}
+.agfill .row small{font-size:.85em}
+.agfill .badge{font-size:.72em}
+.agfill .seg button{font-size:.92em;padding:.7em .4em}
+.agfill .days button{font-size:.95em;padding:.6em}
+.agfill .note{font-size:.78em}
+
+/* entradas */
+.tixgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7em .65em}
+.tcard{border-radius:1.1em;border:2px solid var(--ink);box-shadow:0 .28em 0 var(--ink);background:var(--c);color:var(--ink);padding:.8em .95em;display:flex;flex-direction:column;gap:.3em;min-width:0;margin-bottom:.28em}
+.tcard.wide{grid-column:1/-1}
+.tcard .tt{display:flex;justify-content:space-between;align-items:flex-start;gap:.6em}
+.tcard:not(.wide) .tt{flex-direction:column;gap:.45em}
+.tcard .tn{font-family:var(--f-head);font-weight:400;font-size:1.45em;line-height:1}
+.tcard .td{font-weight:800;font-size:.85em;opacity:.85}
+.tcard .pr{font-family:var(--f-cond);font-weight:900;font-size:1.25em;letter-spacing:.06em;white-space:nowrap;line-height:1}
+.tcard .pr i{font-style:normal;opacity:.25}
+.tcard ul{list-style:none;margin:.35em 0 0;padding:.55em 0 0;border-top:1.5px dashed rgba(20,19,58,.35);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35em .9em}
+.tcard li{display:flex;gap:.45em;align-items:center;font-weight:800;font-size:.85em;min-width:0}
+.tcard li img{width:1em;height:auto;flex:0 0 auto;filter:brightness(0);opacity:.7}
+.prnote{display:flex;align-items:center;gap:.5em;font-size:.78em;color:var(--muted);font-weight:700;margin:.2em 0 0}
+.days2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65em}
+.dcard{background:var(--surface);border:1px solid var(--line);border-top:.35em solid var(--c);border-radius:1.1em;padding:.75em .9em;display:flex;flex-direction:column;gap:.45em;min-width:0}
+.dcard h3{font-family:var(--f-head);font-weight:400;font-size:1.4em;line-height:1;margin:0}
+.dcard .k2{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.68em;color:var(--muted);margin-top:.25em}
+.dcard .dl{display:flex;gap:.6em;font-size:.92em;font-weight:800;align-items:baseline;min-width:0}
+.dcard .dl span{font-family:var(--f-cond);color:var(--celeste);flex:0 0 2.9em}
+.dcard .hl{background:var(--surface2);border-radius:.8em;padding:.5em .65em;font-size:.86em;font-weight:700;line-height:1.3}
+.dcard .hl span{display:block;font-family:var(--f-cond);color:var(--amarillo);font-weight:800;font-size:.85em}
+.tixpage .incl span{font-size:.82em}
+
+/* sponsors */
+.spgrid{flex:1 1 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(6em,1fr) minmax(9em,1.7fr) minmax(5.5em,1fr) minmax(5.5em,1fr);gap:.65em}
+.sbig{border-radius:1.2em;padding:.95em 1.05em;display:flex;flex-direction:column;justify-content:space-between;gap:.5em;min-width:0;text-align:left;border:2px solid var(--ink);box-shadow:0 .28em 0 var(--ink);margin-bottom:.28em;color:var(--ink)}
+.sbig .lv{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.72em}
+.sbig .nm{font-family:var(--f-head);font-weight:400;font-size:2em;line-height:1;overflow-wrap:anywhere}
+.sbig small{font-weight:800;font-size:.85em}
+.sbig .go2{align-self:flex-start;display:inline-flex;gap:.4em;align-items:center;background:var(--ink);color:var(--blanco);border-radius:999px;padding:.5em .95em;font-weight:900;font-size:.85em}
+.sbig .go2 svg{width:1.1em;height:1.1em}
+.sbig.main{grid-column:1/-1;border:2px dashed var(--amarillo);box-shadow:none;color:var(--fg);background:transparent}
+.sbig.main .lv{color:var(--amarillo)}
+.sbig.oro{background:var(--amarillo)}
+.sbig.plata{background:#D9D5EE}
+.sbig.media{background:var(--surface);border-color:var(--line);box-shadow:none;color:var(--fg)}
+.sbig.media .nm{font-size:1.5em}
+.sbig.media .lv{color:var(--celeste)}
+
+@media (max-aspect-ratio: 1/1){
+  #homeIn{display:flex;flex-direction:column}
+  #homeIn>.dgrid3{flex:1 1 auto;grid-auto-rows:minmax(9.5em,1fr)}
+  #homeIn>.dgrid3 .dtile{min-height:0}
+}
+@media (max-width:520px){#qrBtn span{display:none}#qrBtn{padding:.38em .55em}}
+@media (min-aspect-ratio: 1/1){
+  .shell,.attract,.modal,.loader{font-size:clamp(13.5px,min(2.58cqh,1.56cqw),36px)}
+  .shell{grid-template-rows:auto minmax(0,1fr) auto}
+  .bnav{grid-column:1/-1;grid-row:3;padding-block:.45em max(.6em,env(safe-area-inset-bottom,0px))}
+  .bnav button{min-height:2.8em;padding:.55em 1em}
+  .bnav{justify-content:center}.bnav .bback{flex:0 1 22em}.bnav .bhome{flex:0 1 13em}
+  #homeIn>.dgrid3{grid-auto-rows:minmax(8em,1fr)}
+  .lgrid{grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:minmax(7em,1fr)}
+  .list1{grid-template-columns:repeat(var(--lc,4),minmax(0,1fr))}
+  .list1>:last-child:nth-child(odd){grid-column:auto}
+  .rub .cbanner{min-height:14cqh}
+  .agfill .rows{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(3.8em,1fr)}
+  .agfill .rows>:last-child:nth-child(odd){grid-column:1/-1}
+  .tixpage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:1.1em;align-items:start}
+  .tixpage>.vhead{grid-column:1/-1}
+  .spgrid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:minmax(4em,1fr) minmax(5.5em,1.5fr) minmax(4em,1fr)}
+  .sbig{padding:.7em .9em;gap:.3em}.sbig .nm{font-size:1.7em}.sbig.media .nm{font-size:1.3em}
+  .sbig.oro,.sbig.plata{grid-column:span 2}
+}
+
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -501,6 +612,8 @@ button:active{transform:scale(.97)}
     <div class="view" id="vHome"><div class="scroll" id="homeIn"></div></div>
     <div class="view" id="vList" hidden><div class="scroll" id="listIn"></div></div>
     <div class="view" id="vAgenda" hidden><div class="scroll" id="agIn"></div></div>
+    <div class="view" id="vTix" hidden><div class="scroll" id="tixIn"></div></div>
+    <div class="view" id="vSpons" hidden><div class="scroll" id="spIn"></div></div>
     <div class="view" id="vMap" hidden>
     <div class="mapwrap">
       <button class="back mapback" id="mapBack" type="button"></button>
@@ -516,6 +629,7 @@ button:active{transform:scale(.97)}
       <div class="sheet" id="sheet" role="dialog" aria-modal="false"></div>
     </section>
     </div>
+    <nav class="bnav" id="bnav" hidden><button type="button" class="bback" id="bBack"></button><button type="button" class="bhome" id="bHome"></button></nav>
   </div>
 
   <div class="attract" id="attract" role="dialog" aria-label="Bienvenida">
@@ -551,7 +665,7 @@ button:active{transform:scale(.97)}
 </div>
 
 <script>const IMG={"pizza": "assets/img/pizza.webp", "bg": "assets/img/bg.webp", "burger": "assets/img/burger.webp", "helado": "assets/img/helado.webp", "bowl": "assets/img/bowl.webp", "cafe": "assets/img/cafe.webp", "logo": "assets/img/logo.webp", "xmark": "assets/img/xmark.webp", "sem": "assets/img/sem.webp", "cul": "assets/img/cul.webp", "consult": "assets/img/consult.webp", "cbd": "assets/img/cbd.webp", "tex": "assets/img/tex.webp", "par": "assets/img/par.webp", "introVid": "assets/video/introVid.mp4"};
-Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});IMG.introVidH="assets/video/introVidH.mp4";IMG.food="assets/img/food.webp";IMG.plano="assets/img/plano.webp";IMG.club="assets/img/club.webp";IMG.exh="assets/img/exh.webp";IMG.tbc="assets/img/tbc.webp";IMG.bar="assets/img/bar.webp";IMG.hon="assets/img/hon.webp";IMG.v_food="assets/video/v_food.mp4";IMG.v_plano="assets/video/v_plano.mp4";IMG.v_club="assets/video/v_club.mp4";IMG.v_exh="assets/video/v_exh.mp4";IMG.v_bar="assets/video/v_bar.mp4";IMG.v_hon="assets/video/v_hon.mp4";IMG.v_par="assets/video/v_par.mp4";IMG.v_sem="assets/video/v_sem.mp4";IMG.v_cbd="assets/video/v_cbd.mp4";IMG.v_consult="assets/video/v_consult.mp4";IMG.v_ag="assets/video/v_ag.mp4";IMG.v_tix="assets/video/v_tix.mp4";</script>
+Object.assign(IMG,{"ind": "assets/img/ind.webp", "ag": "assets/img/ag.webp", "spons": "assets/img/spons.webp", "tix": "assets/img/tix.webp", "v_ind": "assets/video/v_ind.mp4", "v_cul": "assets/video/v_cul.mp4", "v_spons": "assets/video/v_spons.mp4"});IMG.introVidH="assets/video/introVidH.mp4";IMG.emp="assets/img/emp.webp";IMG.tfr="assets/img/tfr.webp";IMG.jugo="assets/img/jugo.webp";IMG.waf="assets/img/waf.webp";IMG.food="assets/img/food.webp";IMG.plano="assets/img/plano.webp";IMG.club="assets/img/club.webp";IMG.exh="assets/img/exh.webp";IMG.tbc="assets/img/tbc.webp";IMG.bar="assets/img/bar.webp";IMG.hon="assets/img/hon.webp";IMG.v_food="assets/video/v_food.mp4";IMG.v_plano="assets/video/v_plano.mp4";IMG.v_club="assets/video/v_club.mp4";IMG.v_exh="assets/video/v_exh.mp4";IMG.v_bar="assets/video/v_bar.mp4";IMG.v_hon="assets/video/v_hon.mp4";IMG.v_par="assets/video/v_par.mp4";IMG.v_sem="assets/video/v_sem.mp4";IMG.v_cbd="assets/video/v_cbd.mp4";IMG.v_consult="assets/video/v_consult.mp4";IMG.v_ag="assets/video/v_ag.mp4";IMG.v_tix="assets/video/v_tix.mp4";</script>
 <script src="assets/js/qrcode.min.js"></script>
 <script>
 (function(){
@@ -579,7 +693,7 @@ const UI={
   tLocSub:L('Por rubro: comida, parafernalia, hongos, clubes, semillas…','Por categoria: comida, parafernália, cogumelos, clubes, sementes…','By category: food, accessories, mushrooms, clubs, seeds…','Nach Bereich: Essen, Zubehör, Pilze, Clubs, Samen…'),
   tAg:L('Agenda','Agenda','Schedule','Programm'),
   tAgSub:L('Bandas, charlas y eventos','Bandas, palestras e eventos','Bands, talks and events','Bands, Vorträge und Events'),
-  tFood:L('Comer y tomar','Comer e beber','Food & drinks','Essen & Trinken'),
+  tFood:L('Patio de comidas','Praça de alimentação','Food court','Food Court'),
   tSp:L('Sponsors','Patrocinadores','Sponsors','Sponsoren'),
   tTix:L('Entradas','Ingressos','Tickets','Tickets'),
   home:L('Inicio','Início','Home','Start'),
@@ -596,7 +710,7 @@ const UI={
   pickSub:L('Elegí el lugar más cercano a vos. La ruta se calcula desde ahí.','Escolha o lugar mais próximo. A rota é calculada a partir dele.','Pick the spot closest to you. Directions start from there.','Wähle den nächsten Ort. Der Weg startet dort.'),
   nowAt:L('Listo, ahora estás en','Pronto, agora você está em','Done, you are now at','Okay, du bist jetzt bei'),
   places:L('Lugares','Lugares','Places','Orte'),
-  tabs:{stands:L('Stands','Estandes','Stands','Stände'),stage:L('Escenario','Palco','Stage','Bühne'),talks:L('Charlas','Palestras','Talks','Vorträge'),food:L('Comer y servicios','Comida e serviços','Food & services','Essen & Service'),spons:L('Sponsors','Patrocinadores','Sponsors','Sponsoren'),tix:L('Entradas','Ingressos','Tickets','Tickets')},
+  tabs:{stands:L('Stands','Estandes','Stands','Stände'),stage:L('Escenario','Palco','Stage','Bühne'),talks:L('Charlas','Palestras','Talks','Vorträge'),food:L('Comer y servicios','Comida e serviços','Food & services','Essen & Service')},
   tabIc:{stands:'map',stage:'music',talks:'mic',food:'food',spons:'star',tix:'ticket'},
   search:L('Buscá marca o producto…','Busque marca ou produto…','Search brand or product…','Marke oder Produkt suchen…'),
   all:L('Todos','Todos','All','Alle'),
@@ -636,6 +750,21 @@ const UI={
   ask:L('Consultar','Consultar','Ask','Anfragen'),
   gift:L('Regalo','Presente','Free','Gratis'),
   room:L('Sala','Sala','Room','Saal'),
+  back:L('Volver','Voltar','Back','Zurück'),
+  place1:L('lugar','lugar','spot','Ort'),
+  seeMap:L('Ver en el plano','Ver no mapa','See on map','Auf der Karte'),
+  spSub:L('Las marcas que acompañan la expo','As marcas que acompanham a expo','The brands behind the expo','Die Marken hinter der Expo'),
+  tixSub:L('Sáb 5 y dom 6 de diciembre · 13 a 21 h · Centro de Eventos LATU','Sáb 5 e dom 6 de dezembro · 13h às 21h · Centro de Eventos LATU','Sat Dec 5 & Sun Dec 6 · 1–9 pm · Centro de Eventos LATU','Sa 5. & So 6. Dezember · 13–21 Uhr · Centro de Eventos LATU'),
+  prLvl:L('Nivel de precio','Faixa de preço','Price level','Preisniveau'),
+  prNote:L('$ a $$$$: nivel de precio de referencia. Valores finales en RedTickets.','$ a $$$$: faixa de preço de referência. Valores finais no RedTickets.','$ to $$$$: price level for reference. Final prices on RedTickets.','$ bis $$$$: Preisniveau zur Orientierung. Endpreise bei RedTickets.'),
+  allIncl:L('Todas las entradas incluyen','Todos os ingressos incluem','Every ticket includes','Jedes Ticket enthält'),
+  eachDay:L('Qué pasa cada día','O que rola em cada dia','What’s on each day','Was an jedem Tag läuft'),
+  satL:L('Sábado 5','Sábado 5','Saturday 5','Samstag 5.'), sunL:L('Domingo 6','Domingo 6','Sunday 6','Sonntag 6.'),
+  onStage:L('En el escenario','No palco','On stage','Auf der Bühne'), hlDay:L('Destacado','Destaque','Highlight','Highlight'),
+  pass2:L('Pasaporte 2 días','Passaporte 2 dias','2-day pass','2-Tages-Pass'),
+  bothDays:L('Sáb 5 y dom 6 · 13 a 21 h','Sáb 5 e dom 6 · 13h às 21h','Sat 5 & Sun 6 · 1–9 pm','Sa 5. & So 6. · 13–21 Uhr'),
+  vipDay:L('Por día · acceso VIP','Por dia · acesso VIP','Per day · VIP access','Pro Tag · VIP-Zugang'),
+  fullDays:L('Los 2 días · experiencia completa','Os 2 dias · experiência completa','Both days · the full experience','Beide Tage · das volle Erlebnis'),
 };
 const LANGS=[['es','ES','Español'],['pt','PT','Português'],['en','EN','English'],['de','DE','Deutsch']];
 
@@ -717,11 +846,15 @@ const FOOD=[
    {img:'cafe',no:'T4',prods:[PR(L('Café','Café','Coffee','Kaffee'),120),PR(L('Café con leche de cáñamo','Café com leite de cânhamo','Coffee with hemp milk','Kaffee mit Hanfmilch'),160),PR(L('Torta del día','Bolo do dia','Cake of the day','Kuchen des Tages'),190),PR(L('Agua para el termo','Água para a garrafa térmica','Hot water refill','Heißwasser für die Thermoskanne'),60)]}),
  P('f5','food','Heladería Nube','food',{x:795,y:552,w:72,h:58},'S581',[[785,581],[831,581]],L('Helado artesanal y paletas veganas.','Sorvete artesanal e picolés veganos.','Craft ice cream and vegan popsicles.','Handgemachtes Eis und vegane Eis am Stiel.'),
    {img:'helado',no:'T5',prods:[PR(L('1 bocha','1 bola','1 scoop','1 Kugel'),140),PR(L('2 bochas','2 bolas','2 scoops','2 Kugeln'),220),PR(L('Paleta vegana','Picolé vegano','Vegan popsicle','Veganes Eis am Stiel'),160)]}),
+ P('f6','food','Empanadas Criollas','food',{x:877,y:552,w:72,h:58},'S581',[[785,581],[913,581]],L('Empanadas al horno de barro: carne, jamón y queso, verdura.','Empanadas no forno de barro: carne, presunto e queijo, legumes.','Clay-oven empanadas: beef, ham & cheese, veggie.','Empanadas aus dem Lehmofen: Rind, Schinken-Käse, Gemüse.'),{img:'emp',no:'T6',prods:[]}),
+ P('f7','food','Torta Frita & Churros','food',{x:795,y:618,w:72,h:58},'S647',[[785,647],[831,647]],L('Torta frita, churros y bizcochos con dulce de leche.','Torta frita, churros e doces com doce de leite.','Torta frita, churros and pastries with dulce de leche.','Torta frita, Churros und Gebäck mit Dulce de Leche.'),{img:'tfr',no:'T7',prods:[]}),
+ P('f8','food','Jugo Vivo','food',{x:877,y:618,w:72,h:58},'S647',[[785,647],[913,647]],L('Jugos naturales, licuados y limonadas.','Sucos naturais, vitaminas e limonadas.','Fresh juices, smoothies and lemonades.','Frische Säfte, Smoothies und Limonaden.'),{img:'jugo',no:'T8',prods:[]}),
+ P('f9','food','Waffles & Crepes','food',{x:795,y:684,w:72,h:58},'S713',[[785,713],[831,713]],L('Waffles y crepes dulces y salados.','Waffles e crepes doces e salgados.','Sweet and savory waffles and crepes.','Süße und herzhafte Waffeln und Crêpes.'),{img:'waf',no:'T9',prods:[]}),
 ];
 const BARS=[
  P('b1','bar',L('Barra Oeste','Bar Oeste','West bar','Bar West'),'bar',{x:60,y:50,w:130,h:64},'T125',[[125,114]],L('Barra sobre el césped, junto al chill-out.','Bar no gramado, ao lado do chill-out.','Bar on the lawn, next to the chill-out.','Bar auf dem Rasen, neben dem Chill-out.'),{prods:DRINKS}),
  P('b2','bar',L('Barra Este','Bar Leste','East bar','Bar Ost'),'bar',{x:810,y:50,w:130,h:64},'T875',[[875,114]],L('Barra sobre el césped, junto al VIP.','Bar no gramado, ao lado do VIP.','Bar on the lawn, next to VIP.','Bar auf dem Rasen, neben VIP.'),{prods:DRINKS}),
- P('b3','bar',L('Barra del patio','Bar da praça','Food court bar','Food-Court-Bar'),'bar',{x:795,y:620,w:154,h:44},'S640',[[785,642],[872,642]],L('Bebidas frías junto al patio de comidas.','Bebidas geladas ao lado da praça de alimentação.','Cold drinks by the food court.','Kalte Getränke am Food Court.'),{prods:DRINKS}),
+ P('b3','bar',L('Barra del patio','Bar da praça','Food court bar','Food-Court-Bar'),'bar',{x:795,y:750,w:154,h:44},'S772',[[785,772],[872,772]],L('Bebidas frías junto al patio de comidas.','Bebidas geladas ao lado da praça de alimentação.','Cold drinks by the food court.','Kalte Getränke am Food Court.'),{prods:DRINKS}),
 ];
 const SVC=[
  P('stage','zone',L('Escenario principal','Palco principal','Main stage','Hauptbühne'),'stage',{x:380,y:40,w:240,h:96},'T500',[[500,136]],L('Bandas y DJs los dos días, de 14 a 21 h.','Bandas e DJs nos dois dias, das 14h às 21h.','Bands and DJs both days, 2–9 pm.','Bands und DJs an beiden Tagen, 14–21 Uhr.')),
@@ -731,8 +864,8 @@ const SVC=[
  P('foro','room',L('Foro y talleres','Fórum e oficinas','Forum & workshops','Forum & Workshops'),'room',{x:325,y:868,w:190,h:200},'B420',[[420,1068]],L('Talleres prácticos con cupo. Anotate en la puerta.','Oficinas práticas com vagas limitadas. Inscreva-se na porta.','Hands-on workshops with limited spots. Sign up at the door.','Praxis-Workshops mit begrenzten Plätzen. Anmeldung an der Tür.'),{icon:'tools'}),
  P('med','svc',L('Consultorio medicinal','Consultório medicinal','Medical advice desk','Medizinische Beratung'),'care',{x:530,y:868,w:182,h:96},'S916',[[712,916]],L('Orientación con profesionales de la salud sobre uso medicinal. Incluido con la entrada.','Orientação com profissionais de saúde sobre uso medicinal. Incluído no ingresso.','Guidance from health professionals on medical use. Included with your ticket.','Beratung durch Gesundheitsfachleute zur medizinischen Anwendung. Im Ticket enthalten.'),{img:'consult',icon:'cross'}),
  P('legal','svc',L('Consultorio legal','Consultório jurídico','Legal advice desk','Rechtsberatung'),'care',{x:530,y:972,w:182,h:96},'S1020',[[712,1020]],L('Asesoramiento sobre la regulación uruguaya, con Estudio Podestá (DEMO). Incluido con la entrada.','Orientação sobre a regulação uruguaia, com Estudio Podestá (DEMO). Incluído no ingresso.','Advice on Uruguayan regulation, with Estudio Podestá (DEMO). Included with your ticket.','Beratung zur Regulierung in Uruguay, mit Estudio Podestá (DEMO). Im Ticket enthalten.'),{img:'consult',icon:'scale'}),
- P('wc','svc',L('Baños','Banheiros','Restrooms','Toiletten'),'care',{x:785,y:730,w:170,h:52},'S756',[[785,756]],L('Baños accesibles y cambiador.','Banheiros acessíveis e fraldário.','Accessible restrooms and changing table.','Barrierefreie Toiletten und Wickeltisch.'),{icon:'wc'}),
- P('aid','svc',L('Primeros auxilios','Primeiros socorros','First aid','Erste Hilfe'),'care',{x:785,y:794,w:170,h:52},'S820',[[785,820]],L('Personal de salud durante todo el evento.','Equipe de saúde durante todo o evento.','Medical staff on site throughout the event.','Sanitätsdienst während der ganzen Veranstaltung.'),{icon:'cross'}),
+ P('wc','svc',L('Baños','Banheiros','Restrooms','Toiletten'),'care',{x:785,y:820,w:170,h:52},'S846',[[785,846]],L('Baños accesibles y cambiador.','Banheiros acessíveis e fraldário.','Accessible restrooms and changing table.','Barrierefreie Toiletten und Wickeltisch.'),{icon:'wc'}),
+ P('aid','svc',L('Primeros auxilios','Primeiros socorros','First aid','Erste Hilfe'),'care',{x:785,y:884,w:170,h:52},'S910',[[785,910]],L('Personal de salud durante todo el evento.','Equipe de saúde durante todo o evento.','Medical staff on site throughout the event.','Sanitätsdienst während der ganzen Veranstaltung.'),{icon:'cross'}),
  P('entry','svc',L('Acceso y boletería','Entrada e bilheteria','Entrance & tickets','Eingang & Tickets'),'care',{x:785,y:975,w:170,h:90},'K',[[870,1065]],L('Entradas, pulseras y guardarropa. Solo mayores de 18.','Ingressos, pulseiras e guarda-volumes. Somente maiores de 18.','Tickets, wristbands and cloakroom. 18+ only.','Tickets, Bändchen und Garderobe. Ab 18.'),{icon:'door'}),
 ];
 const ALL=[...STANDS,...FOOD,...BARS,...SVC];
@@ -788,10 +921,10 @@ const INCL=[L('Stands','Estandes','Stands','Stände'),L('Shows','Shows','Shows',
 
 /* ---------- grafo de caminos ---------- */
 const N={K:[870,1110],B760:[760,1110],B420:[420,1110],B185:[185,1110]};
-[360,449,500,515,581,640,722,756,820,916,1020].forEach(y=>N['S'+y]=[760,y]);
+[360,449,500,515,581,647,713,722,772,846,910,916,1020].forEach(y=>N['S'+y]=[760,y]);
 [125,210,500,725,875].forEach(x=>N['T'+x]=[x,360]);
 const chain=ids=>ids.slice(1).map((b,i)=>[ids[i],b]);
-const E=[...chain(['S360','S449','S500','S515','S581','S640','S722','S756','S820','S916','S1020','B760']),...chain(['K','B760']),...chain(['B760','B420','B185']),
+const E=[...chain(['S360','S449','S500','S515','S581','S647','S713','S722','S772','S846','S910','S916','S1020','B760']),...chain(['K','B760']),...chain(['B760','B420','B185']),
  ...chain(['T125','T210','T500','T725','S360']),['S360','T875']];
 const adj={};Object.keys(N).forEach(k=>adj[k]=[]);
 const d2=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
@@ -828,7 +961,7 @@ const price=v=>v==='gift'?T(UI.gift):v==='ask'?T(UI.ask):v==='incl'?T(UI.include
 
 /* ---------- mapa: papel botánico ---------- */
 const INK='#14133A',PAPER='#FFFFFF';
-const WALKS='M60 360H940M760 360V1110M60 1110H940M712 500H760M712 722H760M500 360V136M210 360V310M725 360V245M125 360V114M875 360V114M185 1110V1068M420 1110V1068M712 916H760M712 1020H760M760 449H785M760 515H785M760 581H785M760 642H785M760 756H785M760 820H785M870 1110V1065';
+const WALKS='M60 360H940M760 360V1110M60 1110H940M712 500H760M712 722H760M500 360V136M210 360V310M725 360V245M125 360V114M875 360V114M185 1110V1068M420 1110V1068M712 916H760M712 1020H760M760 449H785M760 515H785M760 581H785M760 647H785M760 713H785M760 772H785M760 846H785M760 910H785M870 1110V1065';
 const zl=(x,y,t,s,a,fill)=>`<text class="zl" x="${x}" y="${y}" font-size="${Math.round(s*.7)}" text-anchor="${a||'middle'}"${fill?` style="fill:${fill}"`:''}>${esc(t)}</text>`;
 function zone(p,label,size,sub,icon,fill){const s=p.shape,c=CATS[p.cat].c,cx=s.x+s.w/2,cy=s.y+s.h/2;
   const iy=sub||label?cy-(s.h>90?26:12):cy;const big=s.h>90;
@@ -863,10 +996,10 @@ function renderMap(){
     (s.tier?`<use href="#ic-star" x="${g.x+g.w-25}" y="${g.y+6}" width="19" height="19" fill="${INK}" stroke="none"/>`:'')+
     ls.map((l,i)=>`<text class="sn" x="${g.x+g.w/2}" y="${g.y+g.h-12-(ls.length-1-i)*15}" font-size="13.5" text-anchor="middle">${esc(l)}</text>`).join('')+`</g>`});
   // patio de comidas
-  h+=`<rect x="785" y="385" width="170" height="290" rx="18" fill="${PAPER}" stroke="${INK}" stroke-width="2"/><rect x="791" y="391" width="158" height="22" rx="8" fill="#F4B183"/>`;
+  h+=`<rect x="785" y="385" width="170" height="420" rx="18" fill="${PAPER}" stroke="${INK}" stroke-width="2"/><rect x="791" y="391" width="158" height="22" rx="8" fill="#F4B183"/>`;
   h+=zl(870,407,T(L('PATIO DE COMIDAS','PRAÇA DE ALIMENTAÇÃO','FOOD COURT','FOOD COURT')),17,'middle',INK);
   FOOD.forEach(f=>{const s=f.shape;const ls=wrap(f.name,9);h+=`<g class="poi hit" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.name)}"><rect class="shape" x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="10" fill="#FBE3D2" stroke="${INK}" stroke-width="1.5"/>${ls.map((l,i)=>`<text class="sn" x="${s.x+s.w/2}" y="${s.y+s.h/2+5+(i-(ls.length-1)/2)*14}" font-size="12" text-anchor="middle">${esc(l)}</text>`).join('')}</g>`});
-  h+=`<rect x="877" y="552" width="72" height="58" rx="10" fill="none" stroke="${INK}" stroke-opacity=".4" stroke-dasharray="4 5"/><text class="zs ink2" x="913" y="586" font-size="12" text-anchor="middle">${esc(T(L('Mesas','Mesas','Tables','Tische')))}</text>`;
+  h+=`<rect x="877" y="684" width="72" height="58" rx="10" fill="none" stroke="${INK}" stroke-opacity=".4" stroke-dasharray="4 5"/><text class="zs ink2" x="913" y="718" font-size="12" text-anchor="middle">${esc(T(L('Mesas','Mesas','Tables','Tische')))}</text>`;
   h+=zone(byId.b3,T(byId.b3.name),18,null,null,'#F4B183');
   h+=zone(byId.wc,T(byId.wc.name),20);
   h+=zone(byId.aid,T(byId.aid.name),20);
@@ -981,7 +1114,7 @@ function openPlace(p,extra){
   if(p.kind==='stand')h+=`<p style="margin:0;display:flex;gap:.35em;flex-wrap:wrap"><span class="pill date"><b>5-6</b> | ${esc(T(UI.dec))}</span><span class="pill date">Centro de Eventos LATU</span></p>`;
   h+=`</div></div>`;
   const sh=$('sheet');sh.innerHTML=h;sh.classList.add('open');sh.querySelector('.sheet-in').scrollTop=0;
-  $('sheetX').onclick=closeSheet;
+  $('sheetX').onclick=()=>{const top=HIST[HIST.length-1];if(top&&top.view==='map'&&!top.sel){try{history.back();return}catch(_){}}closeSheet()};
 }
 function closeSheet(){st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');drawRoute(null)}
 
@@ -1025,11 +1158,31 @@ function snd(k){if(!SND.on)return;try{switch(k){
 function renderSnd(){$('sndBtn').innerHTML=ic(SND.on?'sound':'mute');$('sndBtn').setAttribute('aria-label',T(SND.on?UI.sndOn:UI.sndOff))}
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('button,[data-id]');if(b&&!b.dataset.noTap)snd('tap')},{passive:true});
 
+
+/* ---------- navegación: el "atrás" del celu y la barra de abajo ---------- */
+const HIST=[];let ignorePop=false;
+const snap=()=>({view:st.view,lcat:st.lcat,ag:st.ag,day:st.day,tab:st.tab,sel:st.sel,extra:st.extra});
+function pushNav(){if(!st.view)return;HIST.push(snap());try{history.pushState({n:HIST.length},'')}catch(_){}}
+function resetNav(){const n=HIST.length;HIST.length=0;if(n){ignorePop=true;try{history.go(-n)}catch(_){ignorePop=false}}}
+function restoreNav(o){st.lcat=o.lcat;st.ag=o.ag;st.day=o.day;st.tab=o.tab;
+  if(o.view==='map'){go('map',true);renderTabs();renderPane();if(o.sel&&byId[o.sel])openPlace(byId[o.sel],o.extra);else closeSheet()}
+  else go(o.view,true);snd('back')}
+function navBack(){
+  if(!$('qrModal').hidden){$('qrModal').hidden=true;return}
+  if(st.picking){stopPick();if(st.listing)closeSheet();return}
+  if(HIST.length){restoreNav(HIST.pop());return}
+  if(st.view==='list'&&st.lcat&&st.lcat!=='food'){st.lcat=null;renderLocales();snd('back');return}
+  if(st.view!=='home')go('home')}
+addEventListener('popstate',()=>{if(ignorePop){ignorePop=false;return}if(!$('attract').hidden)return;navBack()});
+function renderNav(){$('bnav').hidden=st.view==='home'||!st.view;$('bBack').innerHTML=`${ic('arrow')}<span>${esc(T(UI.back))}</span>`;$('bHome').innerHTML=`${ic('grid')}<span>${esc(T(UI.home))}</span>`}
+$('bBack').addEventListener('click',()=>{if(HIST.length){try{history.back();return}catch(_){}}navBack()});
+$('bHome').addEventListener('click',()=>{resetNav();closeSheet();stopPick();go('home')});
+
 /* ---------- vistas: inicio · locales · agenda · plano ---------- */
 const media=(key,cls)=>IMG['v_'+key]?`<video class="${cls||''}" src="${IMG['v_'+key]}" muted loop playsinline autoplay></video>`:IMG[key]?`<img class="${cls||''}" src="${IMG[key]}" alt="">`:'';
 function go(v,opt){if(st.view===v&&!opt)return;const prev=st.view;st.view=v;if(v!=='map'){closeSheet();stopPick()}
-  ['Home','List','Agenda','Map'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
-  if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();
+  ['Home','List','Agenda','Map','Tix','Spons'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
+  if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();if(v==='tix')renderTix();if(v==='spons')renderSpons();renderNav();
   if(v==='map'){const m=$('map');m.classList.remove('noanim');renderMap();setTimeout(()=>m.classList.add('noanim'),1400)}
   if(prev)snd(v==='home'?'back':'go');bump();
 }
@@ -1045,15 +1198,15 @@ function renderHome(){
   const arw=`<span class="go">${ic('arrow')}</span>`;
   const big=n=>ic(n).replace('class="i"','class="i big"');
   const tile=(i,c,attrs,art,title,sub,badge)=>`<button type="button" class="dtile" ${attrs} style="--i:${i};--c:${c}">${badge?`<span class="badge2">${badge}</span>`:''}<span class="art">${art}</span><span class="foot"><span class="tx"><b>${esc(title)}</b><small>${esc(sub)}</small></span>${arw}</span></button>`;
-  const nRub=LOCS.filter(o=>o.items().length).length;
+  const nRub=LOCS.filter(o=>o.k!=='food'&&o.items().length).length;
   const mos4=['par','sem','cul','cbd'].map(k=>`<img class="kb" src="${IMG[k]}" alt="" style="animation-delay:-${(k.length*3)%9}s">`).join('');
   h+=`<div class="dgrid3 stagger">`;
   h+=tile(0,'#7FE3E0','data-go="map"',media('plano','kb'),T(UI.tMap),`${T(UI.youAre)} ${placeLabel(startPlace())}`);
   h+=tile(1,'#F3B4DC','data-go="list"',`<span class="mosaic">${mos4}</span>`,T(UI.tLoc),`${nRub} ${T(L('rubros','categorias','categories','Bereiche'))}`);
   h+=tile(2,'#B7A6F5','data-go="agenda"',media('ag','kb')||big('cal'),T(UI.tAg),T(UI.tAgSub));
   h+=tile(3,'#F4B183','data-go="list" data-catgo="food"',media('food','kb'),T(UI.tFood),`${FOOD.length+BARS.length} ${T(UI.places_n)}`);
-  h+=tile(4,'#F6E08A','data-go="map" data-tabgo="spons"',media('spons','kb')||`<img class="xm" src="${IMG.xmark}" alt="">`,T(UI.tSp),'Blunt Rey · Lion Rolling Circus');
-  h+=tile(5,'#8EE6A8','data-go="map" data-tabgo="tix"',media('tix','kb')||big('ticket'),T(UI.tTix),'VIP · Full Experience');
+  h+=tile(4,'#F6E08A','data-go="spons"',media('spons','kb')||`<img class="xm" src="${IMG.xmark}" alt="">`,T(UI.tSp),'Blunt Rey · Lion Rolling Circus');
+  h+=tile(5,'#8EE6A8','data-go="tix"',media('tix','kb')||big('ticket'),T(UI.tTix),'VIP · Full Experience');
   h+=`</div>`;
   $('homeIn').innerHTML=h;
   // mini plano: copia liviana del dibujo actual
@@ -1061,22 +1214,22 @@ function renderHome(){
   $('homeIn').scrollTop=0;
 }
 const LOCS=[
- {k:'food',n:UI.food,c:'#F4B183',img:'food',items:()=>FOOD},
+ {k:'food',n:UI.food,c:'#F4B183',img:'food',items:()=>[...FOOD,...BARS]},
  {k:'par',img:'par'},{k:'hon',img:'hon'},{k:'club',img:'club'},{k:'sem',img:'sem'},{k:'cul',img:'cul'},{k:'cbd',img:'cbd'},{k:'ind',img:'ind'},{k:'svc',img:'consult'},
  {k:'exh',img:'exh',items:()=>STANDS.filter(s=>s.cat==='exh'||s.cat==='net')},{k:'tbc',img:'tbc'},
- {k:'bar',n:UI.bars,c:'#F4B183',img:'bar',items:()=>BARS},
 ].map(o=>Object.assign({n:CATS[o.k]?CATS[o.k].n:o.n,c:CATS[o.k]?CATS[o.k].c:o.c,icon:CATS[o.k]&&CATS[o.k].icon,items:()=>STANDS.filter(s=>s.cat===o.k)},o));
 function locMedia(o,cls){return o.img?media(o.img,cls):`<span class="ico" style="--c:${o.c}">${ic(o.icon||'store')}</span>`}
 function renderLocales(){
   let h='';
   if(!st.lcat){
-    h+=`<div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tLoc))}<small>${esc(T(UI.locSub))}</small></h2></div><div class="cgrid stagger">`;
-    LOCS.forEach((o,i)=>{const n=o.items().length;if(!n)return;h+=`<button type="button" class="ctile" data-lcat="${o.k}" style="--i:${i};--c:${o.c}"><span class="media">${locMedia(o,'kb')}</span><span class="lab"><b>${esc(T(o.n))}</b><span class="n">${n}</span></span></button>`});
-    h+=`</div>`;
+    h+=`<div class="fill"><div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tLoc))}<small>${esc(T(UI.locSub))}</small></h2></div><div class="dgrid3 lgrid stagger">`;
+    LOCS.forEach((o,i)=>{if(o.k==='food')return;const n=o.items().length;if(!n)return;h+=`<button type="button" class="dtile" data-lcat="${o.k}" style="--i:${i};--c:${o.c}"><span class="art">${locMedia(o,'kb')}</span><span class="foot"><span class="tx"><b>${esc(T(o.n))}</b><small>${n} ${esc(T(n===1?UI.place1:UI.places_n))}</small></span><span class="go">${ic('arrow')}</span></span></button>`});
+    h+=`</div></div>`;
   } else {
     const o=LOCS.find(x=>x.k===st.lcat);const items=o.items();
-    h+=`<div class="vhead"><button type="button" class="back" data-lcat="">${ic('arrow')}${esc(T(UI.tLoc))}</button><h2>${esc(T(o.n))}<small>${items.length} ${esc(T(UI.places_n))}</small></h2></div>`;
-    h+=`<div class="cbanner" style="--c:${o.c}">${locMedia(o,'kb')}</div><div class="list1 stagger">${items.map((p,i)=>p.kind==='stand'?scard(p).replace('class="scard"',`class="scard" style="--c:${CATS[p.cat].c};--i:${i}"`):fcard(p,T(p.desc)).replace('class="fcard"',`class="fcard" style="--c:${CATS[p.cat].c};--i:${i}"`)).join('')}</div>`;
+    const n=items.length,lc=n<=4?n:(n%4===0?4:(n%3===0?3:4));
+    h+=`<div class="fill rub"><div class="vhead"><button type="button" class="back" data-lcat="">${ic('arrow')}${esc(T(UI.tLoc))}</button><h2>${esc(T(o.n))}<small>${items.length} ${esc(T(items.length===1?UI.place1:UI.places_n))}</small></h2></div>`;
+    h+=`<div class="cbanner" style="--c:${o.c}">${locMedia(o,'kb')}</div><div class="list1 stagger" style="--lc:${lc}">${items.map((p,i)=>p.kind==='stand'?scard(p).replace('class="scard"',`class="scard" style="--c:${CATS[p.cat].c};--i:${i}"`):fcard(p,T(p.desc)).replace('class="fcard"',`class="fcard" style="--c:${CATS[p.cat].c};--i:${i}"`)).join('')}</div></div>`;
   }
   $('listIn').innerHTML=h;$('listIn').scrollTop=0;
 }
@@ -1085,7 +1238,7 @@ function renderAgenda(){
   const a=AGK[st.ag]||AGK.bands;const today=now().getDate();
   const items=a.list.map((x,i)=>[x,i]).filter(([x])=>x.day===st.day&&a.f(x)).sort((p,q)=>toMin(p[0].start)-toMin(q[0].start));
   let nextMarked=false;
-  let h=`<div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tAg))}<small>${esc(T(UI.agSub))}</small></h2></div>`;
+  let h=`<div class="fill agfill"><div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tAg))}<small>${esc(T(UI.agSub))}</small></h2></div>`;
   h+=`<div class="seg" role="group">${[['bands','music',UI.bands],['talks','mic',UI.talks2],['events','tools',UI.events]].map(([k,i,n])=>`<button type="button" data-ag="${k}" aria-pressed="${(st.ag||'bands')===k}">${ic(i)}${esc(T(n))}</button>`).join('')}</div>`;
   h+=dayToggle()+`<div class="note"><span class="demo">DEMO</span>${esc(T(UI.gridDemo))}</div><div class="rows stagger">`;
   h+=items.map(([x,i],n)=>{const s=status(x);let badge='';
@@ -1094,10 +1247,38 @@ function renderAgenda(){
     else if(x.place!=='stage')badge=`<span class="badge room">${esc(T(x.sub))}</span>`;
     const who=x.who?T(x.who)+' · ':'';
     return `<button type="button" class="row${s==='past'?' past':''}${s==='live'?' is-live':''}" style="--i:${n}" data-sched="${a.key}${i}"><span class="t">${x.start}</span><span style="min-width:0"><b>${esc(T(x.title))}</b><small>${esc(x.place==='stage'?T(x.sub):who+T(byId[x.place].name))}</small></span>${badge}</button>`}).join('');
-  h+=`</div>`;
+  h+=`</div></div>`;
   $('agIn').innerHTML=h;
 }
 function ensureMap(){if(st.view!=='map')go('map')}
+function renderTix(){
+  const lvl=n=>`<span class="pr" aria-label="${esc(T(UI.prLvl))} ${n}/4">${'$'.repeat(n)}<i>${'$'.repeat(4-n)}</i></span>`;
+  const TX=[
+    {n:TIX[0].n,s:TIX[0].s,c:'#7FE3E0',lv:1},{n:TIX[1].n,s:TIX[1].s,c:'#F3B4DC',lv:1},
+    {n:UI.pass2,s:UI.bothDays,c:'#F6E08A',lv:2,wide:1},
+    {n:'VIP',s:UI.vipDay,c:'#8EE6A8',lv:3,wide:1,items:XP[0].items},
+    {n:'Full Experience',s:UI.fullDays,c:'#B7A6F5',lv:4,wide:1,items:XP[1].items}];
+  const HL={5:[0,3],6:[9,11]};
+  let a=`<div class="tixgrid stagger">${TX.map((t,i)=>`<div class="tcard${t.wide?' wide':''}" style="--c:${t.c};--i:${i}"><div class="tt"><span><span class="tn">${esc(T(t.n))}</span><br><span class="td">${esc(T(t.s))}</span></span>${lvl(t.lv)}</div>${t.items?`<ul>${t.items.map(x=>`<li><img src="${IMG.xmark}" alt="">${esc(T(x))}</li>`).join('')}</ul>`:''}</div>`).join('')}</div>`;
+  a+=`<p class="prnote"><span class="demo">DEMO</span>${esc(T(UI.prNote))}</p>`;
+  a+=`<div class="sec">${esc(T(UI.allIncl))}</div><div class="incl">${INCL.map(x=>`<span>${esc(T(x))}</span>`).join('')}</div>`;
+  let b=`<div class="sec">${esc(T(UI.eachDay))}</div><div class="days2">${[5,6].map(d=>`<div class="dcard" style="--c:${d===5?'#7FE3E0':'#F3B4DC'}"><h3>${esc(T(d===5?UI.satL:UI.sunL))}</h3><span class="k2">${esc(T(UI.onStage))}</span>${SHOWS.filter(x=>x.day===d).map(x=>`<div class="dl"><span>${x.start}</span>${esc(x.title)}</div>`).join('')}<span class="k2">${esc(T(UI.hlDay))}</span>${HL[d].map(k=>{const x=TALKS[k];return `<div class="hl"><span>${x.start} · ${esc(T(x.sub))}</span>${esc(T(x.title))}</div>`}).join('')}</div>`).join('')}</div>`;
+  b+=`<p class="fine">${esc(T(UI.tixNote))}</p>`;
+  $('tixIn').innerHTML=`<div class="tixpage"><div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tTix))}<small>${esc(T(UI.tixSub))}</small></h2></div><div>${a}</div><div>${b}</div></div>`;
+  $('tixIn').scrollTop=0;
+}
+function renderSpons(){
+  const nm=lv=>SPONS.filter(s=>s.lv===lv);
+  const big=(s,cls,lv)=>`<button type="button" class="sbig ${cls}" data-open="${s.id}"><span><span class="lv">${esc(T(lv))}</span><br><span class="nm">${esc(s.name)}</span><br><small>${esc(T(UI.stand))} ${byId[s.id].no}</small></span><span class="go2">${ic('pin')}${esc(T(UI.seeMap))}</span></button>`;
+  const sm=(s,lv)=>`<div class="sbig media"><span class="lv">${esc(T(lv))}</span><span class="nm">${esc(s.name)}</span></div>`;
+  let h=`<div class="fill"><div class="vhead">${backBtn('home')}<h2>${esc(T(UI.tSp))}<small>${esc(T(UI.spSub))}</small></h2></div><div class="spgrid stagger">`;
+  h+=`<div class="sbig main"><span class="lv">MAIN</span><span class="nm">${esc(T(UI.main))}</span><small>${esc(T(UI.mainTx))}</small></div>`;
+  h+=nm('oro').map(s=>big(s,'oro',UI.oro)).join('')+nm('plata').map(s=>big(s,'plata',UI.plata)).join('');
+  h+=nm('media').map(s=>sm(s,UI.mediaP)).join('')+nm('apoyo').map(s=>sm(s,UI.apoyo)).join('');
+  h+=`</div><p class="fine">${esc(T(UI.logosNote))}</p></div>`;
+  $('spIn').innerHTML=h;$('spIn').scrollTop=0;
+}
+
 
 /* ---------- en vivo + sponsors rotando ---------- */
 function liveNow(){const day=now().getDate(),m=nowMin();const today=SHOWS.filter(s=>s.day===day);
@@ -1127,38 +1308,38 @@ function renderStatic(){
   tickClock();renderLive();renderStrip();
 }
 function tickClock(){const n=now();$('clock').innerHTML=`${T(UI.week)[n.getDay()]} ${n.getDate()} · ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}<small>${esc(T(UI.simClock))}</small>`}
-function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
+function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.view==='tix')renderTix();if(st.view==='spons')renderSpons();renderNav();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
 
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,[data-id]');if(!t)return;
   if(t.dataset.lang){snd('lang');lang=t.dataset.lang;renderAll();return}
   if(t.id==='sndBtn'){SND.on=!SND.on;try{localStorage.setItem('expoSnd',SND.on?'1':'0')}catch(_){}renderSnd();if(SND.on)snd('open');return}
-  if(t.dataset.lcat!==undefined&&!t.dataset.go){st.lcat=t.dataset.lcat||null;snd(st.lcat?'open':'back');renderLocales();return}
+  if(t.dataset.lcat!==undefined&&!t.dataset.go){if(t.dataset.lcat)pushNav();st.lcat=t.dataset.lcat||null;snd(st.lcat?'open':'back');renderLocales();return}
   if(t.dataset.ag&&!t.dataset.go){st.ag=t.dataset.ag;renderAgenda();return}
-  if(t.dataset.go){const v=t.dataset.go;if(v==='list')st.lcat=t.dataset.catgo||null;if(v==='agenda'){st.ag=t.dataset.ag||st.ag||'bands';st.day=now().getDate()}
-    if(v==='map'){closeSheet();stopPick();if(t.dataset.tabgo){st.tab=t.dataset.tabgo}renderTabs();renderPane()}
+  if(t.dataset.go){const v=t.dataset.go;if(v!==st.view||v==='list')pushNav();if(v==='list')st.lcat=t.dataset.catgo||null;if(v==='agenda'){st.ag=t.dataset.ag||st.ag||'bands';st.day=now().getDate()}
+    if(v==='map'){closeSheet();stopPick();renderTabs();renderPane()}
     go(v,true);return}
   if(t.dataset.alang){e.stopPropagation();lang=t.dataset.alang;renderAll();hideAttract();return}
   if(t.dataset.tab){st.tab=t.dataset.tab;closeSheet();renderTabs();renderPane();$('pane').scrollTop=0;return}
   if(t.dataset.cat){st.cat=t.dataset.cat;renderPane();return}
   if(t.dataset.day){st.day=+t.dataset.day;if(st.view==='agenda')renderAgenda();else renderPane();return}
-  if(t.id==='liveChip'){st.ag='bands';st.day=now().getDate();go('agenda',true);return}
-  if(t.dataset.open){ensureMap();openPlace(byId[t.dataset.open]);snd('open');return}
-  if(t.dataset.sched){const k=t.dataset.sched;const it=(k[0]==='s'?SHOWS:TALKS)[+k.slice(1)];ensureMap();openPlace(byId[it.place],it);snd('open');return}
+  if(t.id==='liveChip'){pushNav();st.ag='bands';st.day=now().getDate();go('agenda',true);return}
+  if(t.dataset.open){pushNav();ensureMap();openPlace(byId[t.dataset.open]);snd('open');return}
+  if(t.dataset.sched){pushNav();const k=t.dataset.sched;const it=(k[0]==='s'?SHOWS:TALKS)[+k.slice(1)];ensureMap();openPlace(byId[it.place],it);snd('open');return}
   if(t.dataset.from){setFrom(t.dataset.from);return}
   if(t.id==='whereBtn'){startPick();return}
   if(t.id==='pickList'){openPlaceList();return}
   if(t.id==='pickCancel'){stopPick();if(st.listing)closeSheet();return}
-  if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}openPlace(byId[t.dataset.id]);snd('open');return}
+  if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}pushNav();openPlace(byId[t.dataset.id]);snd('open');return}
 });
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('#map [data-id]')){e.preventDefault();const id=e.target.closest('[data-id]').dataset.id;if(st.picking)setFrom(id);else openPlace(byId[id])}});
 $('attract').addEventListener('click',e=>{if(!e.target.closest('[data-alang]'))hideAttract()});
-$('homeBtn').addEventListener('click',()=>{closeSheet();stopPick();go('home')});
+$('homeBtn').addEventListener('click',()=>{resetNav();closeSheet();stopPick();go('home')});
 let loading=false;
 function hideAttract(){if(loading)return;loading=true;const L=$('loader');L.hidden=false;L.innerHTML=L.innerHTML;$('loadX').src=IMG.xmark;$('loadTxt').textContent=T(UI.loading);snd('load');
   setTimeout(()=>{$('attract').hidden=true;st.view=null;go('home');setTimeout(()=>{L.hidden=true;loading=false},250)},reduce?200:1250);bump()}
-function showAttract(){closeSheet();stopPick();st.from='entry';lang='es';st.tab='stands';st.cat='all';st.q='';st.day=5;st.lcat=null;st.ag='bands';$('qrModal').hidden=true;renderAll();go('home',true);$('attract').hidden=false}
+function showAttract(){resetNav();closeSheet();stopPick();st.from='entry';lang='es';st.tab='stands';st.cat='all';st.q='';st.day=5;st.lcat=null;st.ag='bands';$('qrModal').hidden=true;renderAll();go('home',true);$('attract').hidden=false}
 
 let qrDone=false;
 $('qrBtn').addEventListener('click',()=>{$('qrModal').hidden=false;
