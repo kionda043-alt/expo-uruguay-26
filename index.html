@@ -618,6 +618,16 @@ button:active{transform:scale(.97)}
 .mfrom svg.i{width:1.1em;height:1.1em;color:var(--amarillo);flex:0 0 auto}
 .mfrom span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mfrom u{text-decoration:none;background:var(--amarillo);color:var(--ink);border-radius:999px;padding:.1em .6em;flex:0 0 auto;font-weight:900}
+
+/* ===== v7: resultados en una fila abajo, el plano siempre a la vista ===== */
+.mrow{position:absolute;left:.5em;right:.5em;bottom:.5em;z-index:4;display:flex;gap:.45em;overflow-x:auto;overscroll-behavior:contain;scrollbar-width:none;padding:.1em 0 .15em;animation:rise .25s ease both}
+.mrow::-webkit-scrollbar{display:none}
+.mrow .pitem{flex:0 0 auto;max-width:72%;background:var(--noche2);border:2px solid var(--c);box-shadow:0 .4em 1em rgba(0,0,0,.4);padding:.45em .8em .45em .5em}
+.mrow .pitem>span:last-child{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .pitem small{display:block;font-size:.72em;color:var(--muted);font-weight:700}
+.mrow .empty{flex:0 0 auto;background:var(--noche2);border:1px solid var(--line);border-radius:999px;padding:.6em 1em;margin:0;color:var(--fg);font-weight:700}
+@media (max-aspect-ratio: 1/1){#mres{display:none!important}}
+@media (min-aspect-ratio: 1/1){.mrow{display:none!important}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -683,6 +693,7 @@ button:active{transform:scale(.97)}
     <div class="mapwrap">
       <div class="mzoom"><button type="button" id="zIn"><svg class="i" aria-hidden="true"><use href="#ic-plus"/></svg></button><button type="button" id="zOut"><svg class="i" aria-hidden="true"><use href="#ic-minus"/></svg></button><button type="button" id="zFit"><svg class="i" aria-hidden="true"><use href="#ic-fit"/></svg></button></div>
       <div class="mstrip" id="mstrip" hidden></div>
+      <div class="mrow" id="mrow" hidden></div>
       <div class="sheet" id="sheet" role="dialog" aria-modal="false"></div>
       <button class="back mapback" id="mapBack" type="button"></button>
       <svg id="map" viewBox="0 0 1000 1180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Plano de la expo"></svg>
@@ -1133,9 +1144,19 @@ function renderMSearch(){
   $('zIn').setAttribute('aria-label',T(UI.zIn));$('zOut').setAttribute('aria-label',T(UI.zOut));$('zFit').setAttribute('aria-label',T(UI.zFit));
   $('mchips').innerHTML=MCATS.map(([k,n,c])=>`<button type="button" class="chip" data-mcat="${k}" aria-pressed="${(st.mcat||'all')===k}" style="--c:${c||CATS[k].c}">${k==='all'?'':'<span class="dot"></span>'}${esc(T(k==='all'?UI.all:(n||CATS[k].n)))}</button>`).join('');
   renderMRes()}
-function renderMRes(){const m=mapMatches();const el=$('mres');if(!m){el.hidden=true;el.innerHTML='';return}
-  el.hidden=false;el.innerHTML=m.length?m.map(x=>`<button type="button" class="pitem" data-mgo="${x.id}" style="--c:${CATS[x.cat].c}"><span class="no">${x.no||ic(x.icon||CATS[x.cat].icon||'pin')}</span><span>${esc(T(x.name))}<small>${esc(T(CATS[x.cat].n))}</small></span></button>`).join(''):`<p class="empty">${esc(T(UI.noRes))}</p>`;el.scrollTop=0}
-function clearMapFilter(){st.mq='';st.mcat='all';renderMSearch();dimStands()}
+function renderMRes(){const m=mapMatches();const el=$('mres'),row=$('mrow');
+  if(!m){el.hidden=true;el.innerHTML='';row.hidden=true;row.innerHTML='';if(!st.sel)$('whereBtn').hidden=false;return}
+  const items=m.map(x=>`<button type="button" class="pitem" data-mgo="${x.id}" style="--c:${CATS[x.cat].c}"><span class="no">${x.no||ic(x.icon||CATS[x.cat].icon||'pin')}</span><span>${esc(T(x.name))}<small>${esc(T(CATS[x.cat].n))}</small></span></button>`).join('');
+  const none=`<p class="empty">${esc(T(UI.noRes))}</p>`;
+  el.hidden=false;el.innerHTML=m.length?items:none;el.scrollTop=0;
+  row.hidden=false;row.innerHTML=m.length?items:none;row.scrollLeft=0;$('whereBtn').hidden=true;$('mstrip').hidden=true;
+  fitMatches(m)}
+let fitT=0;function fitMatches(m){clearTimeout(fitT);fitT=setTimeout(()=>{if(st.view!=='map')return;
+  if(!m||!m.length){mapFit(true);return}let b=[1e9,1e9,-1e9,-1e9];
+  m.forEach(x=>{const g=x.g||x.shape;if(!g)return;b=[Math.min(b[0],g.x),Math.min(b[1],g.y),Math.max(b[2],g.x+g.w),Math.max(b[3],g.y+g.h)]});
+  if(b[0]>b[2])return;b=[b[0]-40,b[1]-40,b[2]+40,b[3]+40];const r=mRect(),z=$('zIn').parentNode,f=fitVB();
+  animVB(fitTo(b,{t:14,b:botPad(),l:14,r:z.offsetWidth+22},f.w/2.3/r.width))},120)}
+function clearMapFilter(){const had=st.mq||(st.mcat&&st.mcat!=='all');st.mq='';st.mcat='all';renderMSearch();dimStands();if(had&&!st.sel)mapFit(true)}
 
 
 /* ---------- panel ---------- */
@@ -1204,7 +1225,7 @@ function mRect(){return $('map').getBoundingClientRect()}
 function fitTo(b,pd,minS){const r=mRect();const W=Math.max(40,r.width-pd.l-pd.r),H=Math.max(40,r.height-pd.t-pd.b);
   const bw=b[2]-b[0],bh=b[3]-b[1];let sc=Math.max(bw/W,bh/H);if(minS)sc=Math.max(sc,minS);
   return{x:b[0]-pd.l*sc-(W*sc-bw)/2,y:b[1]-pd.t*sc-(H*sc-bh)/2,w:r.width*sc,h:r.height*sc}}
-function botPad(){const m=$('mstrip'),w=$('whereBtn');const el=!m.hidden?m:(!w.hidden?w:null);return el?el.offsetHeight+18:12}
+function botPad(){const m=$('mstrip'),w=$('whereBtn'),rw=$('mrow');const el=!m.hidden?m:(!rw.hidden&&getComputedStyle(rw).display!=='none'?rw:(!w.hidden?w:null));return el?el.offsetHeight+18:12}
 function fitVB(){return fitTo([0,0,1000,1180],{t:8,b:botPad(),l:8,r:8})}
 function setVB(v){const r=mRect(),f=fitVB(),a=(r.width||1)/(r.height||1);let w=Math.min(f.w*1.05,Math.max(f.w/6,v.w)),h=w/a;
   let cx=v.x+v.w/2,cy=v.y+v.h/2;const mx=.08*w,mt=.12*h,mb=.4*h;
@@ -1437,7 +1458,7 @@ function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,[data-id]');if(!t)return;
   if(t.dataset.lang){snd('lang');lang=t.dataset.lang;renderAll();return}
-  if(t.dataset.mcat){st.mcat=t.dataset.mcat;renderMSearch();dimStands();return}
+  if(t.dataset.mcat){if(st.sel)closeSheet();const was=st.mcat;st.mcat=t.dataset.mcat;renderMSearch();dimStands();if(st.mcat==='all'&&!st.mq&&was!=='all')mapFit(true);return}
   if(t.dataset.mgo){pushNav();$('mq').blur();openPlace(byId[t.dataset.mgo]);snd('open');return}
   if(t.id==='mqx'){clearMapFilter();$('mq').focus();return}
   if(t.id==='sndBtn'){SND.on=!SND.on;try{localStorage.setItem('expoSnd',SND.on?'1':'0')}catch(_){}renderSnd();if(SND.on)snd('open');return}
@@ -1460,7 +1481,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}pushNav();openPlace(byId[t.dataset.id]);snd('open');return}
 });
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('#map [data-id]')){e.preventDefault();const id=e.target.closest('[data-id]').dataset.id;if(st.picking)setFrom(id);else openPlace(byId[id])}});
-$('mq').addEventListener('input',e=>{st.mq=e.target.value;$('mqx').hidden=!st.mq;dimStands();renderMRes()});
+$('mq').addEventListener('input',e=>{if(st.sel)closeSheet();st.mq=e.target.value;$('mqx').hidden=!st.mq;dimStands();renderMRes()});
 $('mq').addEventListener('keydown',e=>{if(e.key==='Enter'){const m=mapMatches();if(m&&m.length===1){pushNav();e.target.blur();openPlace(m[0]);snd('open')}else e.target.blur()}});
 $('attract').addEventListener('click',e=>{if(!e.target.closest('[data-alang]'))hideAttract()});
 $('homeBtn').addEventListener('click',()=>{resetNav();closeSheet();stopPick();go('home')});
