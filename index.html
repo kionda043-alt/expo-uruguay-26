@@ -611,6 +611,13 @@ button:active{transform:scale(.97)}
   #vMap .msearch .chips{flex-wrap:wrap;overflow:visible}
   #vMap .mres{position:static;flex:1 1 auto;max-height:none;min-height:0;box-shadow:none}
 }
+
+/* ===== v6: "Estás en" abajo, ruta siempre a la vista ===== */
+.where{top:auto;bottom:.6em}
+.mfrom{display:flex;align-items:center;gap:.35em;font-size:.78em;font-weight:800;color:var(--fg);margin-top:.15em;text-align:left;min-width:0;max-width:100%}
+.mfrom svg.i{width:1.1em;height:1.1em;color:var(--amarillo);flex:0 0 auto}
+.mfrom span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mfrom u{text-decoration:none;background:var(--amarillo);color:var(--ink);border-radius:999px;padding:.1em .6em;flex:0 0 auto;font-weight:900}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -811,6 +818,7 @@ const UI={
   gift:L('Regalo','Presente','Free','Gratis'),
   room:L('Sala','Sala','Room','Saal'),
   back:L('Volver','Voltar','Back','Zurück'),
+  startHere:L('Salís de acá','Você sai daqui','You start here','Start hier'), from:L('Desde','De','From','Von'),
   mq:L('Buscá un stand, puesto o servicio…','Busque um estande, barraca ou serviço…','Search a stand, food stall or service…','Stand, Essen oder Service suchen…'),
   spaces:L('Espacios y baños','Espaços e banheiros','Spaces & restrooms','Bereiche & WC'),
   noRes:L('No encontramos nada con esa búsqueda.','Não encontramos nada com essa busca.','Nothing matches that search.','Nichts gefunden.'),
@@ -1080,12 +1088,13 @@ function renderMap(){
   dimStands();
 }
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function drawMe(){
-  const k=startPt(),lbl=T(UI.here),lw=lbl.length*10+30;
+function drawMe(){if(!$('me'))return;
+  const k=startPt(),lbl=T(st.sel?UI.startHere:UI.here),lw=lbl.length*11+34;
   const below=k[1]<1000,left=k[0]>500;
-  const bx=left?k[0]-lw-16:k[0]+16,by=below?k[1]+16:k[1]-50;
-  $('me').innerHTML=`<circle cx="${k[0]}" cy="${k[1]}" r="16" fill="#F6E08A" opacity=".35">${reduce?'':'<animate attributeName="r" values="14;40" dur="1.9s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="1.9s" repeatCount="indefinite"/>'}</circle><circle cx="${k[0]}" cy="${k[1]}" r="12" fill="#F6E08A" stroke="${INK}" stroke-width="3.5"/>`+
-   `<rect x="${bx}" y="${by}" width="${lw}" height="34" rx="17" fill="#F6E08A" stroke="${INK}" stroke-width="2"/><text x="${bx+lw/2}" y="${by+23}" font-size="17" font-weight="900" fill="${INK}" text-anchor="middle" font-family="Nunito,sans-serif">${esc(lbl)}</text>`;
+  const bx=left?k[0]-lw-22:k[0]+22,by=below?k[1]+18:k[1]-60;
+  window.ME_BOX=[Math.min(bx,k[0]-30),Math.min(by,k[1]-30),Math.max(bx+lw,k[0]+30),Math.max(by+42,k[1]+30)];
+  $('me').innerHTML=`<circle cx="${k[0]}" cy="${k[1]}" r="20" fill="#F6E08A" opacity=".35">${reduce?'':'<animate attributeName="r" values="18;54" dur="1.9s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="1.9s" repeatCount="indefinite"/>'}</circle><circle cx="${k[0]}" cy="${k[1]}" r="16" fill="#F6E08A" stroke="${INK}" stroke-width="4"/><circle cx="${k[0]}" cy="${k[1]}" r="5" fill="${INK}"/>`+
+   `<rect x="${bx}" y="${by}" width="${lw}" height="42" rx="21" fill="#F6E08A" stroke="${INK}" stroke-width="2.5"/><text x="${bx+lw/2}" y="${by+28}" font-size="20" font-weight="900" fill="${INK}" text-anchor="middle" font-family="Nunito,sans-serif">${esc(lbl)}</text>`;
 }
 let raf=0;
 function drawRoute(p,instant){
@@ -1095,7 +1104,12 @@ function drawRoute(p,instant){
   const R=routeFor(p);const dd='M'+R.pts.map(q=>q.join(' ')).join('L');
   r.setAttribute('d',dd);rb.setAttribute('d',dd);
   const t=R.pts[R.pts.length-1];
-  d.innerHTML=`<circle cx="${t[0]}" cy="${t[1]}" r="10" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>`;
+  const nm=T(p.kind==='stand'?p.short||p.name:p.name),nw=Math.min(380,nm.length*11+34),up=t[1]>150;
+  const lx=Math.max(8,Math.min(992-nw,t[0]-nw/2)),ly=up?t[1]-112:t[1]+16;
+  window.DEST_BOX=[Math.min(lx,t[0]-26),Math.min(ly,t[1]-60),Math.max(lx+nw,t[0]+26),Math.max(ly+42,t[1]+8)];
+  d.innerHTML=`<circle cx="${t[0]}" cy="${t[1]}" r="9" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>`+
+   `<g transform="translate(${t[0]} ${t[1]})"><path d="M0 -4C-10 -20-22 -30-22 -46a22 22 0 1 1 44 0C22 -30 10 -20 0 -4Z" fill="#F3B4DC" stroke="${INK}" stroke-width="3.5"/><circle cy="-46" r="8" fill="${INK}"/></g>`+
+   `<rect x="${lx}" y="${ly}" width="${nw}" height="42" rx="12" fill="${PAPER}" stroke="${INK}" stroke-width="2.5"/><text x="${lx+nw/2}" y="${ly+28}" font-size="19" font-weight="900" fill="${INK}" text-anchor="middle" font-family="Nunito,sans-serif">${esc(nm.length>30?nm.slice(0,29)+'…':nm)}</text>`;
   if(!reduce){const L0=Math.max(1,r.getTotalLength()),dur=Math.max(2.4,L0/170).toFixed(1);
     d.insertAdjacentHTML('beforeend',`<circle r="7" fill="${INK}" stroke="#F6E08A" stroke-width="3" opacity="0"><animateMotion dur="${dur}s" repeatCount="indefinite" begin="indefinite" path="${dd}"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.85;1" dur="${dur}s" repeatCount="indefinite" begin="indefinite"/></circle>`);
     const w=d.lastElementChild;setTimeout(()=>{if(w.isConnected){w.setAttribute('opacity','1');w.querySelectorAll('animate,animateMotion').forEach(a=>{try{a.beginElement()}catch(_){}})}},instant?50:1150)}
@@ -1178,8 +1192,8 @@ function openPlace(p,extra){
   const kind=extra?T(extra.sub):(p.kind==='stand'?`${T(UI.stand)} ${p.no} · ${T(CATS[p.cat].n)}`:T(CATS[p.cat].n));
   const title=extra?T(extra.title):T(p.name);
   const when=extra?`${T(extra.day===5?UI.sat:UI.sun)} ${extra.start}–${extra.end} · ${T(p.name)} · `:'';
-  const el=$('mstrip');el.innerHTML=`<span class="mth" style="--c:${CATS[p.cat].c}">${m.img?`<img src="${m.img}" alt="">`:ic(m.icon)}</span><span class="mtx"><small>${esc(kind)}<span class="demo">DEMO</span></small><b>${esc(title)}</b><span class="mm">${esc(when)}≈ ${walkMin(R.m)} ${esc(T(UI.min))} · ${R.m} m</span></span><button type="button" class="mx" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button>`;
-  el.hidden=false;el.style.animation='none';void el.offsetWidth;el.style.animation='';
+  const el=$('mstrip');el.innerHTML=`<span class="mth" style="--c:${CATS[p.cat].c}">${m.img?`<img src="${m.img}" alt="">`:ic(m.icon)}</span><span class="mtx"><small>${esc(kind)}<span class="demo">DEMO</span></small><b>${esc(title)}</b><span class="mm">${esc(when)}≈ ${walkMin(R.m)} ${esc(T(UI.min))} · ${R.m} m</span><button type="button" class="mfrom" id="mFrom">${ic('pin')}<span>${esc(T(UI.from))} <b>${esc(placeLabel(startPlace()))}</b></span><u>${esc(T(UI.change))}</u></button></span><button type="button" class="mx" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button>`;
+  $('whereBtn').hidden=true;drawMe();el.hidden=false;el.style.animation='none';void el.offsetWidth;el.style.animation='';
   $('sheetX').onclick=()=>{const top=HIST[HIST.length-1];if(top&&top.view==='map'&&!top.sel){try{history.back();return}catch(_){}}closeSheet()};
   requestAnimationFrame(()=>zoomToRoute(R));
 }
@@ -1187,16 +1201,26 @@ function openPlace(p,extra){
 /* ---------- zoom del plano: dos dedos, rueda y botones ---------- */
 const MV={x:0,y:0,w:1000,h:1180};let zAnim=0;
 function mRect(){return $('map').getBoundingClientRect()}
-function fitVB(){const r=mRect();const a=(r.width||1)/(r.height||1);let w=1000,h=1180;if(w/h<a)w=h*a;else h=w/a;return{x:500-w/2,y:590-h/2,w,h}}
-function setVB(v){const f=fitVB();const a=f.w/f.h;let w=Math.min(f.w,Math.max(f.w/6,v.w)),h=w/a;let cx=v.x+v.w/2,cy=v.y+v.h/2;
-  cx=w>=1000?500:Math.min(1000-w/2,Math.max(w/2,cx));cy=h>=1180?590:Math.min(1180-h/2,Math.max(h/2,cy));
+function fitTo(b,pd,minS){const r=mRect();const W=Math.max(40,r.width-pd.l-pd.r),H=Math.max(40,r.height-pd.t-pd.b);
+  const bw=b[2]-b[0],bh=b[3]-b[1];let sc=Math.max(bw/W,bh/H);if(minS)sc=Math.max(sc,minS);
+  return{x:b[0]-pd.l*sc-(W*sc-bw)/2,y:b[1]-pd.t*sc-(H*sc-bh)/2,w:r.width*sc,h:r.height*sc}}
+function botPad(){const m=$('mstrip'),w=$('whereBtn');const el=!m.hidden?m:(!w.hidden?w:null);return el?el.offsetHeight+18:12}
+function fitVB(){return fitTo([0,0,1000,1180],{t:8,b:botPad(),l:8,r:8})}
+function setVB(v){const r=mRect(),f=fitVB(),a=(r.width||1)/(r.height||1);let w=Math.min(f.w*1.05,Math.max(f.w/6,v.w)),h=w/a;
+  let cx=v.x+v.w/2,cy=v.y+v.h/2;const mx=.08*w,mt=.12*h,mb=.4*h;
+  let lo=w/2-mx,hi=1000-w/2+mx;cx=lo>hi?(lo+hi)/2:Math.min(hi,Math.max(lo,cx));
+  lo=h/2-mt;hi=1180-h/2+mb;const fc=f.y+f.h/2;cy=lo>hi?fc:Math.min(hi,Math.max(lo,cy));
+  if(w>=f.w*.999){cx=f.x+f.w/2;cy=fc}
   MV.x=cx-w/2;MV.y=cy-h/2;MV.w=w;MV.h=h;$('map').setAttribute('viewBox',`${MV.x.toFixed(1)} ${MV.y.toFixed(1)} ${MV.w.toFixed(1)} ${MV.h.toFixed(1)}`)}
 function animVB(t){cancelAnimationFrame(zAnim);if(reduce){setVB(t);return}const f={...MV},t0=performance.now(),D=480;
   const step=n=>{const k=Math.min(1,(n-t0)/D),e=1-Math.pow(1-k,3);setVB({x:f.x+(t.x-f.x)*e,y:f.y+(t.y-f.y)*e,w:f.w+(t.w-f.w)*e,h:f.h+(t.h-f.h)*e});if(k<1)zAnim=requestAnimationFrame(step)};zAnim=requestAnimationFrame(step)}
 function mapFit(anim){const f=fitVB();anim?animVB(f):setVB(f)}
 function zoomBy(fac){const c=[MV.x+MV.w/2,MV.y+MV.h/2];const w=MV.w/fac,h=MV.h/fac;animVB({x:c[0]-w/2,y:c[1]-h/2,w,h})}
-function zoomToRoute(R){const pts=[...R.pts,startPt()];let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
-  const f=fitVB(),a=f.w/f.h;x0-=90;x1+=90;y0-=110;y1+=170;let w=Math.max(x1-x0,(y1-y0)*a,f.w/3.2);animVB({x:(x0+x1)/2-w/2,y:(y0+y1)/2-w/a/2,w,h:w/a})}
+function zoomToRoute(R){const pts=[...R.pts,startPt()];let b=[1e9,1e9,-1e9,-1e9];
+  const add=q=>{b[0]=Math.min(b[0],q[0]);b[1]=Math.min(b[1],q[1]);b[2]=Math.max(b[2],q[2]??q[0]);b[3]=Math.max(b[3],q[3]??q[1])};
+  pts.forEach(add);if(window.ME_BOX)add(ME_BOX);if(window.DEST_BOX)add(DEST_BOX);b=[b[0]-30,b[1]-30,b[2]+30,b[3]+30];
+  const r=mRect(),z=$('zIn').parentNode,f=fitVB();
+  animVB(fitTo(b,{t:14,b:botPad(),l:14,r:z.offsetWidth+22},f.w/3.4/r.width))}
 const svgPt=(cx,cy)=>{const r=mRect();return[MV.x+(cx-r.left)/r.width*MV.w,MV.y+(cy-r.top)/r.height*MV.h]};
 (function(){const m=$('map'),PT=new Map();let drag=null,pinch=null,moved=false;
   m.addEventListener('pointerdown',e=>{PT.set(e.pointerId,[e.clientX,e.clientY]);cancelAnimationFrame(zAnim);
@@ -1215,7 +1239,7 @@ const svgPt=(cx,cy)=>{const r=mRect();return[MV.x+(cx-r.left)/r.width*MV.w,MV.y+
   $('zIn').addEventListener('click',()=>zoomBy(1.6));$('zOut').addEventListener('click',()=>zoomBy(1/1.6));$('zFit').addEventListener('click',()=>mapFit(true));
   try{new ResizeObserver(()=>{if(st.view!=='map')return;if(st.sel)setVB(MV);else mapFit()}).observe(document.querySelector('.mapwrap'))}catch(_){}
 })();
-function closeSheet(){const had=!!st.sel;st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');$('mstrip').hidden=true;drawRoute(null);if(had&&st.view==='map')mapFit(true)}
+function closeSheet(){const had=!!st.sel;st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');$('mstrip').hidden=true;$('whereBtn').hidden=false;drawRoute(null);drawMe();if(had&&st.view==='map')mapFit(true)}
 
 /* ---------- ¿dónde estoy? ---------- */
 const placeLabel=p=>p.kind==='stand'?`${T(UI.stand)} ${p.no} · ${T(p.name)}`:T(p.name);
@@ -1430,7 +1454,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.open){pushNav();ensureMap();openPlace(byId[t.dataset.open]);snd('open');return}
   if(t.dataset.sched){pushNav();const k=t.dataset.sched;const it=(k[0]==='s'?SHOWS:TALKS)[+k.slice(1)];ensureMap();openPlace(byId[it.place],it);snd('open');return}
   if(t.dataset.from){setFrom(t.dataset.from);return}
-  if(t.id==='whereBtn'){startPick();return}
+  if(t.id==='whereBtn'||t.id==='mFrom'){startPick();return}
   if(t.id==='pickList'){openPlaceList();return}
   if(t.id==='pickCancel'){stopPick();if(st.listing)closeSheet();return}
   if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}pushNav();openPlace(byId[t.dataset.id]);snd('open');return}

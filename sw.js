@@ -1,6 +1,6 @@
-/* Expo Uruguay · service worker. Versión del contenido: 94371871d0
+/* Expo Uruguay · service worker. Versión del contenido: 5ed5d7591a
    Guarda la app completa la primera vez que se abre, así sigue andando sin internet. */
-const CACHE='expo-uy-94371871d0';
+const CACHE='expo-uy-5ed5d7591a';
 const FILES=[
 "./",
 ".nojekyll",
