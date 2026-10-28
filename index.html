@@ -628,6 +628,65 @@ button:active{transform:scale(.97)}
 .mrow .empty{flex:0 0 auto;background:var(--noche2);border:1px solid var(--line);border-radius:999px;padding:.6em 1em;margin:0;color:var(--fg);font-weight:700}
 @media (max-aspect-ratio: 1/1){#mres{display:none!important}}
 @media (min-aspect-ratio: 1/1){.mrow{display:none!important}}
+
+/* ===== v8: marcas protagonistas + ficha de cada lugar ===== */
+.rub .cbanner{flex:0 0 auto!important;height:20cqh!important;min-height:0!important}
+.blist{display:grid;grid-template-columns:minmax(0,1fr);gap:.6em;padding-bottom:.6em}
+.bcard{display:flex;align-items:center;gap:.85em;text-align:left;background:var(--surface);border:2px solid var(--line);border-left:.45em solid var(--c);border-radius:1.1em;padding:.75em .85em;min-width:0;transition:transform .12s ease}
+.bcard:active{transform:scale(.985)}
+.bcard .bth{width:3.6em;height:3.6em;border-radius:.75em;overflow:hidden;flex:0 0 auto;background:var(--c);display:grid;place-items:center;color:var(--ink)}
+.bcard .bth img{width:100%;height:100%;object-fit:cover;display:block}
+.bcard.food .bth{width:5.2em;height:5.2em}
+.bcard .btx{min-width:0;flex:1;display:flex;flex-direction:column;gap:.2em}
+.bcard .bk{font-family:var(--f-cond);font-weight:800;font-size:.68em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:.5em;align-items:center;flex-wrap:wrap}
+.bcard .bk .no2{background:var(--c);color:var(--ink);border-radius:999px;padding:.1em .55em}
+.bcard .bn{font-family:var(--f-head);font-weight:400;font-size:1.6em;line-height:1.02;overflow-wrap:anywhere}
+.bcard .bd2{font-size:.82em;color:var(--muted);font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bcard .brow{display:flex;gap:.45em;align-items:center;flex-wrap:wrap;margin-top:.15em}
+.bcard .seemap{color:var(--celeste);font-size:.78em}
+.bcard .more{flex:0 0 auto;width:2.2em;height:2.2em;border-radius:50%;background:var(--surface2);display:grid;place-items:center;color:var(--fg)}
+.lvl{font-family:var(--f-cond);font-weight:900;letter-spacing:.06em;color:var(--amarillo);white-space:nowrap}
+.lvl i{font-style:normal;opacity:.25}
+.tagv{font-size:.68em;font-weight:900;letter-spacing:.04em;padding:.2em .6em;border-radius:999px;background:var(--menta);color:var(--ink);white-space:nowrap}
+.tagv.tacc{background:var(--amarillo)}.tagv.vgn{background:var(--lima)}
+/* ficha */
+.place{display:flex;flex-direction:column;gap:.75em;padding-bottom:.6em}
+.phero{position:relative;height:20cqh;border-radius:1.1em;overflow:hidden;border:2px solid var(--ink);background:var(--c);flex:0 0 auto}
+.phero img,.phero video{width:100%;height:100%;object-fit:cover;display:block}
+.phero .ico{width:100%;height:100%;border-radius:0;background:var(--c) var(--teximg) center/9em;background-blend-mode:luminosity;color:var(--ink)}
+.phero .ico svg{width:4em;height:4em}
+.pband{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+.pband .no{min-width:2.1em;height:2.1em;padding:0 .4em;box-sizing:border-box;border-radius:999px;background:var(--c);color:var(--ink);display:grid;place-items:center;font-family:var(--f-head)}
+.pband b{font-family:var(--f-cond);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.8em;color:var(--muted)}
+.pband .tg{font-size:.65em;font-weight:900;letter-spacing:.1em;padding:.25em .6em;border-radius:999px;background:var(--magenta);color:var(--blanco)}
+.pband .tg.st{background:var(--amarillo);color:var(--ink)}
+.pname{font-family:var(--f-head);font-weight:400;font-size:2.5em;line-height:1;margin:0;text-wrap:balance;overflow-wrap:anywhere}
+.pmeta{display:flex;gap:.5em;align-items:center;flex-wrap:wrap}
+.pmeta .lvl{font-size:1.3em}
+.pmeta .tagv{font-size:.8em}
+.pdesc{margin:0;font-size:1.02em;line-height:1.5;max-width:42em}
+.pbox{background:var(--surface);border:1px solid var(--line);border-radius:1em;padding:.75em .9em;display:flex;flex-direction:column;gap:.3em}
+.pbox .k2{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.7em;color:var(--muted)}
+.pbox b{font-family:var(--f-head);font-weight:400;font-size:1.3em;line-height:1.1}
+.pbox.hl{border-left:.35em solid var(--amarillo)}
+.pbox.hl p{margin:0;font-weight:700;line-height:1.4}
+.pitems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45em}
+.pitems span{background:var(--surface);border:1px solid var(--line);border-radius:.8em;padding:.55em .75em;font-weight:800;font-size:.9em;display:flex;gap:.5em;align-items:center;min-width:0}
+.pitems span::before{content:"";width:.55em;height:.55em;border-radius:50%;background:var(--c);flex:0 0 auto}
+.pitems span:last-child:nth-child(odd){grid-column:1/-1}
+.pgo{display:flex;align-items:center;justify-content:center;gap:.55em;width:100%;padding:.85em 1em;border-radius:1em;background:var(--amarillo);color:var(--ink);border:2px solid var(--ink);box-shadow:0 .25em 0 var(--ink);font-weight:900;font-size:1.1em;margin-top:.2em;margin-bottom:.25em}
+.pgo svg.i{width:1.3em;height:1.3em;stroke-width:2.2}
+.pgo small{font-weight:800;opacity:.75;font-size:.8em}
+@media (min-aspect-ratio: 1/1){
+  .rub .cbanner{height:22cqh!important}
+  .blist{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .blist>:last-child:nth-child(odd){grid-column:auto}
+  .place{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:1.2em;align-items:start}
+  .place .phero{grid-column:1;grid-row:1/span 12;height:auto;aspect-ratio:1/1;max-height:62cqh}
+  .place>*:not(.phero){grid-column:2}
+  .pitems{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pitems span:last-child:nth-child(odd){grid-column:auto}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -688,6 +747,7 @@ button:active{transform:scale(.97)}
     <div class="view" id="vAgenda" hidden><div class="scroll" id="agIn"></div></div>
     <div class="view" id="vTix" hidden><div class="scroll" id="tixIn"></div></div>
     <div class="view" id="vSpons" hidden><div class="scroll" id="spIn"></div></div>
+    <div class="view" id="vPlace" hidden><div class="scroll" id="plIn"></div></div>
     <div class="view" id="vMap" hidden>
     <div class="msearch"><div class="msrow"><svg class="i" aria-hidden="true"><use href="#ic-search"/></svg><input id="mq" type="search" autocomplete="off" enterkeyhint="search"><button type="button" class="x2" id="mqx" hidden><svg class="i" aria-hidden="true"><use href="#ic-close"/></svg></button></div><div class="chips" id="mchips" role="group"></div><div class="mres" id="mres" hidden></div></div>
     <div class="mapwrap">
@@ -829,6 +889,10 @@ const UI={
   gift:L('Regalo','Presente','Free','Gratis'),
   room:L('Sala','Sala','Room','Saal'),
   back:L('Volver','Voltar','Back','Zurück'),
+  atExpo:L('En la expo','Na expo','At the expo','Auf der Messe'), mainDish:L('Plato principal','Prato principal','Signature dish','Hauptgericht'), mainDrink:L('Lo más pedido','O mais pedido','Most ordered','Am meisten bestellt'),
+  whatTheyHave:L('Qué vas a encontrar','O que você vai encontrar','What you’ll find','Was du findest'), drinks:L('Bebidas','Bebidas','Drinks','Getränke'),
+  tg_vgn:L('Vegano','Vegano','Vegan','Vegan'), tg_veg:L('Vegetariano','Vegetariano','Vegetarian','Vegetarisch'), tg_tacc:L('Sin TACC','Sem glúten','Gluten-free','Glutenfrei'),
+  prNoteFood:L('$ a $$$$: nivel de precio de referencia (DEMO).','$ a $$$$: faixa de preço de referência (DEMO).','$ to $$$$: price level for reference (DEMO).','$ bis $$$$: Preisniveau zur Orientierung (DEMO).'),
   startHere:L('Salís de acá','Você sai daqui','You start here','Start hier'), from:L('Desde','De','From','Von'),
   mq:L('Buscá un stand, puesto o servicio…','Busque um estande, barraca ou serviço…','Search a stand, food stall or service…','Stand, Essen oder Service suchen…'),
   spaces:L('Espacios y baños','Espaços e banheiros','Spaces & restrooms','Bereiche & WC'),
@@ -952,7 +1016,40 @@ const SVC=[
  P('entry','svc',L('Acceso y boletería','Entrada e bilheteria','Entrance & tickets','Eingang & Tickets'),'care',{x:785,y:975,w:170,h:90},'K',[[870,1065]],L('Entradas, pulseras y guardarropa. Solo mayores de 18.','Ingressos, pulseiras e guarda-volumes. Somente maiores de 18.','Tickets, wristbands and cloakroom. 18+ only.','Tickets, Bändchen und Garderobe. Ab 18.'),{icon:'door'}),
 ];
 const ALL=[...STANDS,...FOOD,...BARS,...SVC];
-ALL.forEach(x=>{if(x.prods)x.prods=[]}); // v3: sin productos ni precios
+/* ---------- fichas: info extra DEMO de cada stand, puesto y barra ---------- */
+const EX={
+ blunt:{hl:L('Presenta su línea 2026 de papelillos y armá tu kit en el stand.','Apresenta sua linha 2026 de sedas; monte seu kit no estande.','Showing its 2026 rolling paper line; build your own kit at the stand.','Zeigt die Blättchen-Linie 2026; stell dir dein Set am Stand zusammen.')},
+ lion:{hl:L('Show de armado y sorteos cada hora.','Show de bolar e sorteios a cada hora.','Rolling show and giveaways every hour.','Dreh-Show und Verlosungen zu jeder vollen Stunde.')},
+ raw:{hl:L('Papeles sin blanquear, conos y bandejas de toda la línea.','Sedas sem branqueamento, cones e bandejas de toda a linha.','Unbleached papers, cones and trays from the full range.','Ungebleichte Blättchen, Cones und Trays der ganzen Linie.')},
+ papelito:{hl:L('Combos de papelillos y filtros para la expo.','Combos de sedas e piteiras para a expo.','Paper and tip combos for the expo.','Kombis aus Blättchen und Filtern zur Messe.')},
+ dutch:{hl:L('Asesoramiento para elegir genética según tu espacio y clima.','Orientação para escolher genética conforme seu espaço e clima.','Advice to pick genetics for your space and climate.','Beratung zur Genetik passend zu Platz und Klima.')},
+ humboldt:{hl:L('Charla sobre búsqueda de fenotipos con cultivadores locales.','Conversa sobre caça de fenótipos com cultivadores locais.','Talk on phenotype hunting with local growers.','Gespräch über Phänotypen-Suche mit lokalen Growern.')},
+ positronics:{hl:L('Catálogo de feminizadas y consejos para la temporada.','Catálogo de feminizadas e dicas para a temporada.','Feminized catalogue and tips for the season.','Feminisierter Katalog und Tipps für die Saison.')},
+ plagron:{hl:L('Tabla de cultivo y asesoramiento sobre sustratos y nutrientes.','Tabela de cultivo e orientação sobre substratos e nutrientes.','Grow schedule and advice on substrates and nutrients.','Anbauplan und Beratung zu Substraten und Dünger.')},
+ sunflower:{hl:L('Demostración en vivo de trimmers de cosecha.','Demonstração ao vivo de trimmers de colheita.','Live demo of harvest trimmers.','Live-Vorführung von Ernte-Trimmern.')},
+ uhx:{hl:L('Cáñamo de productores uruguayos y degustación de productos con CBD.','Cânhamo de produtores uruguaios e degustação de produtos com CBD.','Hemp from Uruguayan growers and CBD product tasting.','Hanf von uruguayischen Produzenten und CBD-Verkostung.')},
+ santa:{hl:L('Lo que van a mostrar se confirma más cerca de la fecha.','O que vão mostrar será confirmado perto da data.','What they’ll show will be confirmed closer to the date.','Was gezeigt wird, folgt kurz vor dem Termin.'),items:[]},
+ alterna:{hl:L('Prendas de cáñamo y algodón orgánico, edición expo.','Roupas de cânhamo e algodão orgânico, edição expo.','Hemp and organic cotton clothing, expo edition.','Kleidung aus Hanf und Bio-Baumwolle, Messe-Edition.'),items:[L('Remeras','Camisetas','T-shirts','T-Shirts'),L('Buzos','Moletons','Sweatshirts','Pullover'),L('Gorros','Gorros','Beanies','Mützen'),L('Bolsos de cáñamo','Bolsas de cânhamo','Hemp bags','Hanftaschen')]},
+ podesta:{hl:L('Consultas gratis sobre la ley uruguaya en el consultorio legal.','Consultas grátis sobre a lei uruguaia no consultório jurídico.','Free questions on Uruguayan law at the legal desk.','Kostenlose Fragen zum uruguayischen Recht am Rechtsberatungsstand.'),items:[L('Registro de cultivo','Registro de cultivo','Grow registration','Anbau-Registrierung'),L('Clubes y asociaciones','Clubes e associações','Clubs and associations','Clubs und Vereine'),L('Empresas del sector','Empresas do setor','Industry companies','Branchenunternehmen')]},
+ club:{hl:L('Te explican paso a paso cómo asociarte a un club.','Explicam passo a passo como se associar a um clube.','Step-by-step on how to join a club.','Schritt für Schritt: so wirst du Clubmitglied.'),items:[L('Cómo asociarse','Como se associar','How to join','Mitglied werden'),L('Registro en el IRCCA','Registro no IRCCA','IRCCA registration','IRCCA-Registrierung'),L('Qué incluye la cuota','O que inclui a mensalidade','What the fee includes','Was der Beitrag umfasst')]},
+ galeria:{hl:L('Muestra de artistas de la región y charla con los autores.','Mostra de artistas da região e conversa com os autores.','Regional artists’ show and a chat with the authors.','Ausstellung regionaler Künstler und Gespräch mit ihnen.'),items:[L('Obras originales','Obras originais','Original works','Originalwerke'),L('Láminas','Gravuras','Prints','Drucke'),L('Fotografía','Fotografia','Photography','Fotografie')]},
+ jardin:{hl:L('Plantas en floración de cultivadores uruguayos.','Plantas em floração de cultivadores uruguaios.','Flowering plants from Uruguayan growers.','Blühende Pflanzen uruguayischer Grower.'),items:[L('Variedades uruguayas','Variedades uruguaias','Uruguayan strains','Uruguayische Sorten'),L('Cultivo en suelo vivo','Cultivo em solo vivo','Living soil grows','Anbau in lebendem Boden'),L('Charlas con cultivadores','Conversas com cultivadores','Chats with growers','Gespräche mit Growern')]},
+ hongos:{hl:L('Kits para cultivar gírgolas en casa y degustación.','Kits para cultivar shimeji em casa e degustação.','Grow-at-home oyster kits and tasting.','Austernpilz-Zuchtsets für zu Hause und Verkostung.')},
+ network:{hl:L('Mesas para reuniones entre marcas, clubes y emprendedores.','Mesas para reuniões entre marcas, clubes e empreendedores.','Tables for meetings between brands, clubs and founders.','Tische für Treffen von Marken, Clubs und Gründern.'),items:[L('Mesas de reunión','Mesas de reunião','Meeting tables','Besprechungstische'),L('Café','Café','Coffee','Kaffee'),L('Intercambio de contactos','Troca de contatos','Contact exchange','Kontaktaustausch')]},
+ f1:{main:L('Chivito canadiense al pan','Chivito canadense no pão','Chivito sandwich','Chivito-Sandwich'),lvl:3,tags:[]},
+ f2:{main:L('Bowl verde con semillas de cáñamo','Bowl verde com sementes de cânhamo','Green bowl with hemp seeds','Grüne Bowl mit Hanfsamen'),lvl:2,tags:['vgn','veg','tacc']},
+ f3:{main:L('Pizza muzzarella a la piedra','Pizza muçarela na pedra','Stone-baked mozzarella pizza','Steinofen-Mozzarella-Pizza'),lvl:2,tags:['veg']},
+ f4:{main:L('Café con leche de cáñamo','Café com leite de cânhamo','Coffee with hemp milk','Kaffee mit Hanfmilch'),lvl:1,tags:['veg']},
+ f5:{main:L('Helado artesanal de dulce de leche','Sorvete artesanal de doce de leite','Dulce de leche craft ice cream','Dulce-de-Leche-Eis'),lvl:1,tags:['veg','tacc']},
+ f6:{main:L('Empanada de carne cortada a cuchillo','Empanada de carne cortada à faca','Hand-cut beef empanada','Empanada mit handgeschnittenem Rind'),lvl:1,tags:[],items:[L('Empanada de carne','Empanada de carne','Beef empanada','Rind-Empanada'),L('Jamón y queso','Presunto e queijo','Ham & cheese','Schinken-Käse'),L('Verdura','Legumes','Veggie','Gemüse'),L('Caprese','Caprese','Caprese','Caprese')]},
+ f7:{main:L('Torta frita con azúcar','Torta frita com açúcar','Sugared torta frita','Torta frita mit Zucker'),lvl:1,tags:['veg'],items:[L('Torta frita','Torta frita','Torta frita','Torta frita'),L('Churros con dulce de leche','Churros com doce de leite','Dulce de leche churros','Churros mit Dulce de Leche'),L('Bizcochos','Doces folhados','Pastries','Gebäck'),L('Mate cocido','Mate cozido','Mate tea','Mate-Tee')]},
+ f8:{main:L('Licuado de frutos rojos','Vitamina de frutas vermelhas','Berry smoothie','Beeren-Smoothie'),lvl:1,tags:['vgn','veg','tacc'],items:[L('Jugo de naranja','Suco de laranja','Orange juice','Orangensaft'),L('Licuado verde','Vitamina verde','Green smoothie','Grüner Smoothie'),L('Licuado de frutos rojos','Vitamina de frutas vermelhas','Berry smoothie','Beeren-Smoothie'),L('Limonada con menta','Limonada com hortelã','Mint lemonade','Minz-Limonade')]},
+ f9:{main:L('Waffle con frutillas y crema','Waffle com morangos e creme','Waffle with strawberries & cream','Waffel mit Erdbeeren und Sahne'),lvl:2,tags:['veg'],items:[L('Waffle con frutillas','Waffle com morangos','Strawberry waffle','Erdbeer-Waffel'),L('Crepe de dulce de leche','Crepe de doce de leite','Dulce de leche crepe','Dulce-de-Leche-Crêpe'),L('Crepe de jamón y queso','Crepe de presunto e queijo','Ham & cheese crepe','Schinken-Käse-Crêpe'),L('Crepe vegano de banana','Crepe vegano de banana','Vegan banana crepe','Veganer Bananen-Crêpe')]},
+ b1:{main:L('Cerveza artesanal tirada','Cerveja artesanal de chope','Draft craft beer','Craft-Bier vom Fass'),lvl:2,tags:[]},
+ b2:{main:L('Tragos de autor','Drinks autorais','Signature cocktails','Signature-Cocktails'),lvl:3,tags:[]},
+ b3:{main:L('Limonada y cerveza bien fría','Limonada e cerveja bem gelada','Lemonade and ice-cold beer','Limonade und eiskaltes Bier'),lvl:2,tags:[]},
+};
+ALL.forEach(x=>{const e=EX[x.id]||{};x.items=e.items||(x.prods||[]).filter(q=>q.p!=='incl').map(q=>q.n);if(x.prods)x.prods=[];Object.assign(x,{hl:e.hl,main:e.main,lvl:e.lvl,tags:e.tags})}); // v3: sin productos ni precios
 const byId=Object.fromEntries(ALL.map(x=>[x.id,x]));
 
 /* ---------- grilla DEMO ---------- */
@@ -1305,10 +1402,10 @@ document.addEventListener('pointerdown',e=>{const b=e.target.closest('button,[da
 
 /* ---------- navegación: el "atrás" del celu y la barra de abajo ---------- */
 const HIST=[];let ignorePop=false;
-const snap=()=>({view:st.view,lcat:st.lcat,ag:st.ag,day:st.day,tab:st.tab,sel:st.sel,extra:st.extra});
+const snap=()=>({view:st.view,place:st.place,lcat:st.lcat,ag:st.ag,day:st.day,tab:st.tab,sel:st.sel,extra:st.extra});
 function pushNav(){if(!st.view)return;HIST.push(snap());try{history.pushState({n:HIST.length},'')}catch(_){}}
 function resetNav(){const n=HIST.length;HIST.length=0;if(n){ignorePop=true;try{history.go(-n)}catch(_){ignorePop=false}}}
-function restoreNav(o){st.lcat=o.lcat;st.ag=o.ag;st.day=o.day;st.tab=o.tab;
+function restoreNav(o){st.place=o.place;st.lcat=o.lcat;st.ag=o.ag;st.day=o.day;st.tab=o.tab;
   if(o.view==='map'){go('map',true);renderTabs();renderPane();if(o.sel&&byId[o.sel])openPlace(byId[o.sel],o.extra);else closeSheet()}
   else go(o.view,true);snd('back')}
 function navBack(){
@@ -1325,8 +1422,8 @@ $('bHome').addEventListener('click',()=>{resetNav();closeSheet();stopPick();go('
 /* ---------- vistas: inicio · locales · agenda · plano ---------- */
 const media=(key,cls)=>IMG['v_'+key]?`<video class="${cls||''}" src="${IMG['v_'+key]}" muted loop playsinline autoplay></video>`:IMG[key]?`<img class="${cls||''}" src="${IMG[key]}" alt="">`:'';
 function go(v,opt){if(st.view===v&&!opt)return;const prev=st.view;st.view=v;if(v!=='map'){closeSheet();stopPick()}
-  ['Home','List','Agenda','Map','Tix','Spons'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
-  if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();if(v==='tix')renderTix();if(v==='spons')renderSpons();renderNav();
+  ['Home','List','Agenda','Map','Tix','Spons','Place'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
+  if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();if(v==='tix')renderTix();if(v==='spons')renderSpons();if(v==='place')renderPlace();renderNav();
   if(v==='map'){const m=$('map');m.classList.remove('noanim');renderMap();renderMSearch();mapFit();setTimeout(()=>m.classList.add('noanim'),1400)}
   if(prev)snd(v==='home'?'back':'go');bump();
 }
@@ -1372,8 +1469,8 @@ function renderLocales(){
   } else {
     const o=LOCS.find(x=>x.k===st.lcat);const items=o.items();
     const n=items.length,lc=n<=4?n:(n%4===0?4:(n%3===0?3:4));
-    h+=`<div class="fill rub"><div class="vhead"><button type="button" class="back" data-lcat="">${ic('arrow')}${esc(T(UI.tLoc))}</button><h2>${esc(T(o.n))}<small>${items.length} ${esc(T(items.length===1?UI.place1:UI.places_n))}</small></h2></div>`;
-    h+=`<div class="cbanner" style="--c:${o.c}">${locMedia(o,'kb')}</div><div class="list1 stagger" style="--lc:${lc}">${items.map((p,i)=>p.kind==='stand'?scard(p).replace('class="scard"',`class="scard" style="--c:${CATS[p.cat].c};--i:${i}"`):fcard(p,T(p.desc)).replace('class="fcard"',`class="fcard" style="--c:${CATS[p.cat].c};--i:${i}"`)).join('')}</div></div>`;
+    h+=`<div class="rub"><div class="vhead"><button type="button" class="back" data-lcat="">${ic('arrow')}${esc(T(UI.tLoc))}</button><h2>${esc(T(o.n))}<small>${items.length} ${esc(T(items.length===1?UI.place1:UI.places_n))}</small></h2></div>`;
+    h+=`<div class="cbanner" style="--c:${o.c}">${locMedia(o,'kb')}</div><div class="blist stagger">${items.map(bcard).join('')}</div></div>`;
   }
   $('listIn').innerHTML=h;$('listIn').scrollTop=0;
 }
@@ -1395,6 +1492,26 @@ function renderAgenda(){
   $('agIn').innerHTML=h;
 }
 function ensureMap(){if(st.view!=='map')go('map')}
+const lvlHtml=n=>n?`<span class="lvl" aria-label="${esc(T(UI.prLvl))} ${n}/4">${'$'.repeat(n)}<i>${'$'.repeat(4-n)}</i></span>`:'';
+const tagsHtml=p=>(p.tags||[]).map(t=>`<span class="tagv ${t}">${esc(T(UI['tg_'+t]))}</span>`).join('');
+function bcard(p,i){const c=CATS[p.cat].c,m=mediaOf(p),food=p.kind==='food'||p.kind==='bar';
+  const kick=p.kind==='stand'?`<span class="no2">${p.no}</span>${esc(T(CATS[p.cat].n))}${p.tier?` · ★ ${esc(T(p.tier==='oro'?UI.oro:UI.plata))}`:''}`:`<span class="no2">${p.no||ic('glass')}</span>${esc(T(CATS[p.cat].n))}`;
+  return `<button type="button" class="bcard${food?' food':''}" data-place="${p.id}" style="--c:${c};--i:${i}"><span class="bth">${m.img?`<img src="${m.img}" alt="" loading="lazy">`:ic(m.icon)}</span><span class="btx"><span class="bk">${kick}</span><span class="bn">${esc(T(p.name))}</span>${food?`<span class="bd2">${esc(T(p.desc))}</span>`:''}<span class="brow">${food?lvlHtml(p.lvl)+tagsHtml(p):''}<span class="seemap" data-seemap="${p.id}">${ic('pin')}${esc(T(UI.seeMap))}</span></span></span><span class="more">${ic('arrow')}</span></button>`}
+function renderPlace(){const p=byId[st.place];if(!p){go('home',true);return}
+  const c=CATS[p.cat].c,food=p.kind==='food'||p.kind==='bar';const key=p.img||CATS[p.cat].img;
+  const hero=key?media(key,'kb'):`<span class="ico">${ic(mediaOf(p).icon)}</span>`;const R=routeFor(p);
+  let h=`<div class="place stagger" style="--c:${c}"><div class="phero">${hero}</div>`;
+  h+=`<div class="pband">${p.no?`<span class="no">${p.no}</span>`:''}<b>${esc(p.kind==='stand'?T(UI.stand)+' '+p.no+' · '+T(CATS[p.cat].n):T(CATS[p.cat].n))}</b>${p.tier?`<span class="tg st">★ ${esc(T(p.tier==='oro'?UI.oro:UI.plata))}</span>`:''}<span class="tg">DEMO</span></div>`;
+  h+=`<h2 class="pname">${esc(T(p.name))}</h2>`;
+  if(food)h+=`<div class="pmeta">${lvlHtml(p.lvl)}${tagsHtml(p)}</div>`;
+  h+=`<p class="pdesc">${esc(T(p.desc))}</p>`;
+  if(p.main)h+=`<div class="pbox"><span class="k2">${esc(T(p.kind==='bar'?UI.mainDrink:UI.mainDish))}</span><b>${esc(T(p.main))}</b></div>`;
+  if(p.hl)h+=`<div class="pbox hl"><span class="k2">${esc(T(UI.atExpo))}</span><p>${esc(T(p.hl))}</p></div>`;
+  if(p.items&&p.items.length)h+=`<div class="sec">${esc(T(p.kind==='stand'?UI.whatTheyHave:p.kind==='bar'?UI.drinks:UI.menu))}</div><div class="pitems">${p.items.map(x=>`<span>${esc(T(x))}</span>`).join('')}</div>`;
+  if(food)h+=`<p class="prnote">${esc(T(UI.prNoteFood))}</p>`;
+  h+=`<button type="button" class="pgo" data-seemap="${p.id}">${ic('pin')}${esc(T(UI.seeMap))}<small>· ≈ ${walkMin(R.m)} ${esc(T(UI.min))}</small></button></div>`;
+  $('plIn').innerHTML=h;$('plIn').scrollTop=0}
+
 function renderTix(){
   const lvl=n=>`<span class="pr" aria-label="${esc(T(UI.prLvl))} ${n}/4">${'$'.repeat(n)}<i>${'$'.repeat(4-n)}</i></span>`;
   const TX=[
@@ -1452,11 +1569,13 @@ function renderStatic(){
   tickClock();renderLive();renderStrip();
 }
 function tickClock(){const n=now();$('clock').innerHTML=`${T(UI.week)[n.getDay()]} ${n.getDate()} · ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}<small>${esc(T(UI.simClock))}</small>`}
-function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.view==='tix')renderTix();if(st.view==='spons')renderSpons();renderMSearch();renderNav();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
+function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.view==='tix')renderTix();if(st.view==='spons')renderSpons();if(st.view==='place')renderPlace();renderMSearch();renderNav();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
 
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
+  const sm=e.target.closest('[data-seemap]');if(sm){pushNav();ensureMap();openPlace(byId[sm.dataset.seemap]);snd('open');return}
   const t=e.target.closest('button,[data-id]');if(!t)return;
+  if(t.dataset.place){pushNav();st.place=t.dataset.place;snd('open');go('place',true);return}
   if(t.dataset.lang){snd('lang');lang=t.dataset.lang;renderAll();return}
   if(t.dataset.mcat){if(st.sel)closeSheet();const was=st.mcat;st.mcat=t.dataset.mcat;renderMSearch();dimStands();if(st.mcat==='all'&&!st.mq&&was!=='all')mapFit(true);return}
   if(t.dataset.mgo){pushNav();$('mq').blur();openPlace(byId[t.dataset.mgo]);snd('open');return}
