@@ -558,6 +558,59 @@ button:active{transform:scale(.97)}
   .sbig.oro,.sbig.plata{grid-column:span 2}
 }
 
+
+/* ===== v5 (28/10): plano grande con buscador, categorías, zoom y tira chica ===== */
+#vMap{position:relative}
+#vMap .panel,.spstrip{display:none!important}
+#map{touch-action:none;cursor:grab}
+#map .poi{transition:opacity .3s}
+#map .poi.dim{opacity:.2}
+.where{top:.6em;bottom:auto}
+.mapwrap.picking .mstrip,.mapwrap.picking .mzoom{display:none}
+
+/* buscador */
+.msearch{position:relative;z-index:6;display:flex;flex-direction:column;gap:.45em;padding-bottom:.5em;flex:0 0 auto;min-width:0}
+.msrow{display:flex;align-items:center;gap:.5em;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:.15em .35em .15em .9em}
+.msrow:focus-within{border-color:var(--celeste)}
+.msrow>svg{color:var(--muted)}
+.msrow input{flex:1;min-width:0;font:inherit;font-size:1em;font-weight:700;background:none;border:0;color:var(--fg);padding:.6em 0;outline:none}
+.msrow input::placeholder{color:var(--muted);font-weight:600}
+.msrow input::-webkit-search-cancel-button{display:none}
+.msrow .x2{width:2.1em;height:2.1em;border-radius:50%;display:grid;place-items:center;background:var(--surface2);flex:0 0 auto}
+.msearch .chips .chip{font-size:.85em;padding:.45em .9em}
+.mres{position:absolute;left:0;right:0;top:100%;max-height:36cqh;overflow-y:auto;overscroll-behavior:contain;background:var(--noche2);border:1px solid var(--line);border-radius:1em;padding:.5em;box-shadow:0 1em 2em rgba(0,0,0,.45);display:flex;flex-direction:column;gap:.35em}
+.mres .pitem{font-size:.95em}
+.mres .pitem>span:last-child{min-width:0}
+.mres .pitem small{display:block;font-size:.75em;color:var(--muted);font-weight:700}
+.mres .empty{padding:.5em .6em;margin:0}
+
+/* zoom */
+.mzoom{position:absolute;right:.6em;top:.6em;z-index:3;display:flex;flex-direction:column;gap:.4em}
+.mzoom button{width:2.6em;height:2.6em;border-radius:.8em;background:rgba(28,27,71,.94);border:1px solid var(--line);display:grid;place-items:center;color:var(--fg)}
+.mzoom svg.i{width:1.25em;height:1.25em;stroke-width:2.2}
+
+/* tira chica del lugar elegido */
+.mstrip{position:absolute;left:.5em;right:.5em;bottom:.5em;z-index:4;display:flex;align-items:center;gap:.7em;background:var(--noche2);border:2px solid var(--amarillo);border-radius:1em;padding:.5em .55em;animation:rise .3s ease both;box-shadow:0 .6em 1.4em rgba(0,0,0,.4)}
+.mth{width:3.1em;height:3.1em;border-radius:.7em;overflow:hidden;flex:0 0 auto;background:var(--c);display:grid;place-items:center;color:var(--ink)}
+.mth img{width:100%;height:100%;object-fit:cover;display:block}
+.mtx{min-width:0;flex:1;display:flex;flex-direction:column;gap:.12em}
+.mtx small{font-family:var(--f-cond);font-weight:800;font-size:.66em;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:.5em;align-items:center;white-space:nowrap;overflow:hidden}
+.mtx small .demo{font-size:.85em;padding:.15em .5em}
+.mtx b{font-family:var(--f-head);font-weight:400;font-size:1.15em;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtx .mm{font-weight:800;font-size:.8em;color:var(--amarillo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mx{width:2.4em;height:2.4em;border-radius:50%;background:var(--surface2);display:grid;place-items:center;flex:0 0 auto}
+
+/* "Ver en el plano" en cada tarjeta */
+.seemap{display:inline-flex;align-items:center;gap:.3em;font-weight:900;font-size:.72em;white-space:nowrap}
+.seemap svg.i{width:1.1em;height:1.1em}
+.scard .seemap{margin:0 .3em .35em;align-self:flex-start;background:var(--ink);color:var(--blanco);border-radius:999px;padding:.25em .7em}
+.fcard .seemap{color:var(--celeste);margin-top:.3em}
+
+@media (min-aspect-ratio: 1/1){
+  #vMap .msearch{order:2;flex:0 0 min(30%,23em);padding-bottom:max(.9em,env(safe-area-inset-bottom,0px));min-height:0}
+  #vMap .msearch .chips{flex-wrap:wrap;overflow:visible}
+  #vMap .mres{position:static;flex:1 1 auto;max-height:none;min-height:0;box-shadow:none}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -589,6 +642,10 @@ button:active{transform:scale(.97)}
  <symbol id="ic-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
  <symbol id="ic-ticket" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 0 0 4v6h18v-6a2 2 0 0 1 0-4V5H3zM14 5v12" stroke-dasharray="0"/></symbol>
  <symbol id="ic-food" viewBox="0 0 24 24"><path d="M5 3v8a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2.5 1.5-3.5 4-3.5 8h3.5"/></symbol>
+ <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+ <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="ic-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+ <symbol id="ic-fit" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
 </svg>
 
 <div class="app" id="app">
@@ -615,7 +672,11 @@ button:active{transform:scale(.97)}
     <div class="view" id="vTix" hidden><div class="scroll" id="tixIn"></div></div>
     <div class="view" id="vSpons" hidden><div class="scroll" id="spIn"></div></div>
     <div class="view" id="vMap" hidden>
+    <div class="msearch"><div class="msrow"><svg class="i" aria-hidden="true"><use href="#ic-search"/></svg><input id="mq" type="search" autocomplete="off" enterkeyhint="search"><button type="button" class="x2" id="mqx" hidden><svg class="i" aria-hidden="true"><use href="#ic-close"/></svg></button></div><div class="chips" id="mchips" role="group"></div><div class="mres" id="mres" hidden></div></div>
     <div class="mapwrap">
+      <div class="mzoom"><button type="button" id="zIn"><svg class="i" aria-hidden="true"><use href="#ic-plus"/></svg></button><button type="button" id="zOut"><svg class="i" aria-hidden="true"><use href="#ic-minus"/></svg></button><button type="button" id="zFit"><svg class="i" aria-hidden="true"><use href="#ic-fit"/></svg></button></div>
+      <div class="mstrip" id="mstrip" hidden></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="false"></div>
       <button class="back mapback" id="mapBack" type="button"></button>
       <svg id="map" viewBox="0 0 1000 1180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Plano de la expo"></svg>
       <button class="where" id="whereBtn" type="button"></button>
@@ -626,7 +687,6 @@ button:active{transform:scale(.97)}
     <section class="panel">
       <nav class="tabs" id="tabs" role="tablist"></nav>
       <div class="pane" id="pane"></div>
-      <div class="sheet" id="sheet" role="dialog" aria-modal="false"></div>
     </section>
     </div>
     <nav class="bnav" id="bnav" hidden><button type="button" class="bback" id="bBack"></button><button type="button" class="bhome" id="bHome"></button></nav>
@@ -751,6 +811,10 @@ const UI={
   gift:L('Regalo','Presente','Free','Gratis'),
   room:L('Sala','Sala','Room','Saal'),
   back:L('Volver','Voltar','Back','Zurück'),
+  mq:L('Buscá un stand, puesto o servicio…','Busque um estande, barraca ou serviço…','Search a stand, food stall or service…','Stand, Essen oder Service suchen…'),
+  spaces:L('Espacios y baños','Espaços e banheiros','Spaces & restrooms','Bereiche & WC'),
+  noRes:L('No encontramos nada con esa búsqueda.','Não encontramos nada com essa busca.','Nothing matches that search.','Nichts gefunden.'),
+  zIn:L('Acercar','Aproximar','Zoom in','Vergrößern'), zOut:L('Alejar','Afastar','Zoom out','Verkleinern'), zFit:L('Ver todo el plano','Ver o mapa inteiro','Show whole map','Ganze Karte'),
   place1:L('lugar','lugar','spot','Ort'),
   seeMap:L('Ver en el plano','Ver no mapa','See on map','Auf der Karte'),
   spSub:L('Las marcas que acompañan la expo','As marcas que acompanham a expo','The brands behind the expo','Die Marken hinter der Expo'),
@@ -954,7 +1018,7 @@ function status(it){const day=now().getDate(),m=nowMin();
   if(m>=toMin(it.end))return'past';if(m>=toMin(it.start))return'live';return'future'}
 
 /* ---------- estado ---------- */
-const st={tab:'stands',cat:'all',q:'',day:5,sel:null,extra:null,from:'entry',picking:false,view:null,lcat:null,ag:'bands'};
+const st={mq:'',mcat:'all',tab:'stands',cat:'all',q:'',day:5,sel:null,extra:null,from:'entry',picking:false,view:null,lcat:null,ag:'bands'};
 const mediaOf=p=>{if(p.img)return{img:IMG[p.img]};const c=CATS[p.cat];if(c.img)return{img:IMG[c.img]};return{icon:p.icon||c.icon||'spark'}};
 const thumb=(p,cls)=>{const m=mediaOf(p);return m.img?`<img src="${m.img}" alt="" loading="lazy">`:`<span class="ico ${cls||''}">${ic(m.icon)}</span>`};
 const price=v=>v==='gift'?T(UI.gift):v==='ask'?T(UI.ask):v==='incl'?T(UI.included):'$'+Number(v).toLocaleString('es-UY');
@@ -1044,12 +1108,26 @@ function drawRoute(p,instant){
 }
 function standList(){const q=st.q.trim().toLowerCase();
   return STANDS.filter(s=>(st.cat==='all'||s.cat===st.cat)&&(!q||[T(s.name),T(s.desc),T(CATS[s.cat].n),...s.prods.map(p=>T(p.n))].join(' ').toLowerCase().includes(q)))}
-function dimStands(){const on=st.tab==='stands';const ids=new Set(standList().map(s=>s.id));document.querySelectorAll('#map .stand').forEach(g=>g.classList.toggle('dim',on&&!ids.has(g.dataset.id)))}
+const norm=x=>String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const MCATS=[['all',null,'#FFFFFF'],['food',UI.food,'#F4B183'],['bar',UI.bars,'#F4B183'],['par'],['hon'],['club'],['sem'],['cul'],['cbd'],['ind'],['svc'],['exh'],['tbc'],['spaces',UI.spaces,'#7FE3E0']];
+function mapMatches(){const q=norm(st.mq);const c=st.mcat||'all';if(!q&&c==='all')return null;
+  const pool=c==='all'?ALL:c==='food'?FOOD:c==='bar'?BARS:c==='spaces'?SVC:STANDS.filter(x=>x.cat===c||(c==='exh'&&x.cat==='net'));
+  return pool.filter(x=>!q||norm([T(x.name),T(x.short||''),T(x.desc||''),T(CATS[x.cat].n),x.no||''].join(' ')).includes(q))}
+function dimStands(){const m=mapMatches();const ids=m&&new Set(m.map(x=>x.id));document.querySelectorAll('#map [data-id]').forEach(g=>g.classList.toggle('dim',!!ids&&!ids.has(g.dataset.id)))}
+function renderMSearch(){
+  $('mq').placeholder=T(UI.mq);if($('mq').value!==(st.mq||''))$('mq').value=st.mq||'';$('mqx').hidden=!st.mq;
+  $('zIn').setAttribute('aria-label',T(UI.zIn));$('zOut').setAttribute('aria-label',T(UI.zOut));$('zFit').setAttribute('aria-label',T(UI.zFit));
+  $('mchips').innerHTML=MCATS.map(([k,n,c])=>`<button type="button" class="chip" data-mcat="${k}" aria-pressed="${(st.mcat||'all')===k}" style="--c:${c||CATS[k].c}">${k==='all'?'':'<span class="dot"></span>'}${esc(T(k==='all'?UI.all:(n||CATS[k].n)))}</button>`).join('');
+  renderMRes()}
+function renderMRes(){const m=mapMatches();const el=$('mres');if(!m){el.hidden=true;el.innerHTML='';return}
+  el.hidden=false;el.innerHTML=m.length?m.map(x=>`<button type="button" class="pitem" data-mgo="${x.id}" style="--c:${CATS[x.cat].c}"><span class="no">${x.no||ic(x.icon||CATS[x.cat].icon||'pin')}</span><span>${esc(T(x.name))}<small>${esc(T(CATS[x.cat].n))}</small></span></button>`).join(''):`<p class="empty">${esc(T(UI.noRes))}</p>`;el.scrollTop=0}
+function clearMapFilter(){st.mq='';st.mcat='all';renderMSearch();dimStands()}
+
 
 /* ---------- panel ---------- */
 function renderTabs(){$('tabs').innerHTML=Object.keys(UI.tabs).map(k=>`<button type="button" role="tab" aria-selected="${st.tab===k}" data-tab="${k}">${ic(UI.tabIc[k])}${esc(T(UI.tabs[k]))}</button>`).join('')}
-function scard(s){const c=CATS[s.cat].c;return `<button type="button" class="scard" data-open="${s.id}" style="--c:${c}"><span class="hd"><span class="no">${s.no}</span><small>${esc(T(CATS[s.cat].n))}</small>${s.tier?`<span class="star">${s.tier==='oro'?'★':'☆'}</span>`:''}</span><span class="bd">${thumb(s)}<b>${esc(T(s.name))}</b></span></button>`}
-function fcard(p,sub){const c=CATS[p.cat].c;return `<button type="button" class="fcard" data-open="${p.id}" style="--c:${c}">${thumb(p)}<span class="tx"><b>${esc(T(p.name))}</b><small>${esc(sub)}</small></span></button>`}
+function scard(s){const c=CATS[s.cat].c;return `<button type="button" class="scard" data-open="${s.id}" style="--c:${c}"><span class="hd"><span class="no">${s.no}</span><small>${esc(T(CATS[s.cat].n))}</small>${s.tier?`<span class="star">${s.tier==='oro'?'★':'☆'}</span>`:''}</span><span class="bd">${thumb(s)}<b>${esc(T(s.name))}</b></span><span class="seemap">${ic('pin')}${esc(T(UI.seeMap))}</span></button>`}
+function fcard(p,sub){const c=CATS[p.cat].c;return `<button type="button" class="fcard" data-open="${p.id}" style="--c:${c}">${thumb(p)}<span class="tx"><b>${esc(T(p.name))}</b><small>${esc(sub)}</small><span class="seemap">${ic('pin')}${esc(T(UI.seeMap))}</span></span></button>`}
 const dayToggle=()=>`<div class="days" role="group">${[5,6].map(d=>`<button type="button" data-day="${d}" aria-pressed="${st.day===d}">${esc(T(d===5?UI.sat:UI.sun))}</button>`).join('')}</div>`;
 function schedRows(list,key){
   const items=list.map((x,i)=>[x,i]).filter(([x])=>x.day===st.day).sort((a,b)=>toMin(a[0].start)-toMin(b[0].start));
@@ -1095,28 +1173,49 @@ function renderPane(){
 /* ---------- ficha ---------- */
 const walkMin=m=>Math.max(1,Math.ceil(m/70));
 function openPlace(p,extra){
-  st.listing=false;st.sel=p.id;st.extra=extra||null;const R=drawRoute(p);const c=CATS[p.cat].c;const m=mediaOf(p);
-  let h=`<div class="sheet-in" style="--c:${c}"><div class="hero">${m.img?`<img src="${m.img}" alt="">`:`<span class="ico">${ic(m.icon)}</span>`}</div><button type="button" class="x" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button>`;
-  if(extra){
-    h+=`<div class="band speaker"><b>${esc(T(extra.who||extra.title))}</b>${extra.cc?`<span class="tg">${extra.cc}</span>`:''}<span class="tg" style="background:#D93FBF">${extra.real?esc(T(L('ANUNCIADO','ANUNCIADO','ANNOUNCED','ANGEKÜNDIGT'))):'DEMO'}</span></div>`;
-    h+=`<div class="body"><span class="badge kind" style="align-self:flex-start">${esc(T(extra.sub))}</span><h2>${esc(T(extra.title))}</h2>${extra.desc?`<p class="desc">${esc(T(extra.desc))}</p>`:''}`;
-  } else {
-    const no=p.no||'';
-    h+=`<div class="band">${no?`<span class="no">${no}</span>`:''}<b>${esc(T(CATS[p.cat].n))}</b>${p.tier?`<span class="tg" style="background:${p.tier==='oro'?'#14133A':'#14133A'}">★ ${esc(T(p.tier==='oro'?UI.oro:UI.plata))}</span>`:''}<span class="tg" style="background:#D93FBF">DEMO</span></div>`;
-    h+=`<div class="body"><h2>${esc(T(p.name))}</h2><p class="desc">${esc(T(p.desc))}</p>`;
-    if(p.prods&&p.prods.length)h+=`<div class="prods"><div class="ph"><span>${esc(T(p.kind==='stand'?UI.prods:UI.menu))}</span><span class="ex">${esc(T(UI.example))}</span></div>${p.prods.map(x=>`<div class="prod"><span>${esc(T(x.n))}</span><b>${price(x.p)}</b></div>`).join('')}</div>`;
-  }
-  h+=`<div class="facts">`;
-  if(extra)h+=`<div class="fact"><span>${esc(T(UI.when))}</span><b>${esc(T(extra.day===5?UI.sat:UI.sun))} · ${extra.start}–${extra.end}</b></div>`;
-  h+=`<div class="fact"><span>${esc(T(UI.where))}</span><b>${esc(p.kind==='stand'?T(UI.stand)+' '+p.no:T(p.name))}</b></div>`;
-  h+=`<div class="fact"><span>${esc(T(UI.walk))}</span><b>≈ ${walkMin(R.m)} ${esc(T(UI.min))}</b></div><div class="fact"><span>${esc(T(UI.dist))}</span><b>${R.m} m</b></div></div>`;
-  h+=`<div class="rnote"><i></i>${esc(T(UI.follow))}</div>`;
-  if(p.kind==='stand')h+=`<p style="margin:0;display:flex;gap:.35em;flex-wrap:wrap"><span class="pill date"><b>5-6</b> | ${esc(T(UI.dec))}</span><span class="pill date">Centro de Eventos LATU</span></p>`;
-  h+=`</div></div>`;
-  const sh=$('sheet');sh.innerHTML=h;sh.classList.add('open');sh.querySelector('.sheet-in').scrollTop=0;
+  if(st.mq||(st.mcat&&st.mcat!=='all'))clearMapFilter();
+  st.listing=false;st.sel=p.id;st.extra=extra||null;$('sheet').classList.remove('open');const R=drawRoute(p);const m=mediaOf(p);
+  const kind=extra?T(extra.sub):(p.kind==='stand'?`${T(UI.stand)} ${p.no} · ${T(CATS[p.cat].n)}`:T(CATS[p.cat].n));
+  const title=extra?T(extra.title):T(p.name);
+  const when=extra?`${T(extra.day===5?UI.sat:UI.sun)} ${extra.start}–${extra.end} · ${T(p.name)} · `:'';
+  const el=$('mstrip');el.innerHTML=`<span class="mth" style="--c:${CATS[p.cat].c}">${m.img?`<img src="${m.img}" alt="">`:ic(m.icon)}</span><span class="mtx"><small>${esc(kind)}<span class="demo">DEMO</span></small><b>${esc(title)}</b><span class="mm">${esc(when)}≈ ${walkMin(R.m)} ${esc(T(UI.min))} · ${R.m} m</span></span><button type="button" class="mx" id="sheetX" aria-label="${esc(T(UI.close))}">${ic('close')}</button>`;
+  el.hidden=false;el.style.animation='none';void el.offsetWidth;el.style.animation='';
   $('sheetX').onclick=()=>{const top=HIST[HIST.length-1];if(top&&top.view==='map'&&!top.sel){try{history.back();return}catch(_){}}closeSheet()};
+  requestAnimationFrame(()=>zoomToRoute(R));
 }
-function closeSheet(){st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');drawRoute(null)}
+
+/* ---------- zoom del plano: dos dedos, rueda y botones ---------- */
+const MV={x:0,y:0,w:1000,h:1180};let zAnim=0;
+function mRect(){return $('map').getBoundingClientRect()}
+function fitVB(){const r=mRect();const a=(r.width||1)/(r.height||1);let w=1000,h=1180;if(w/h<a)w=h*a;else h=w/a;return{x:500-w/2,y:590-h/2,w,h}}
+function setVB(v){const f=fitVB();const a=f.w/f.h;let w=Math.min(f.w,Math.max(f.w/6,v.w)),h=w/a;let cx=v.x+v.w/2,cy=v.y+v.h/2;
+  cx=w>=1000?500:Math.min(1000-w/2,Math.max(w/2,cx));cy=h>=1180?590:Math.min(1180-h/2,Math.max(h/2,cy));
+  MV.x=cx-w/2;MV.y=cy-h/2;MV.w=w;MV.h=h;$('map').setAttribute('viewBox',`${MV.x.toFixed(1)} ${MV.y.toFixed(1)} ${MV.w.toFixed(1)} ${MV.h.toFixed(1)}`)}
+function animVB(t){cancelAnimationFrame(zAnim);if(reduce){setVB(t);return}const f={...MV},t0=performance.now(),D=480;
+  const step=n=>{const k=Math.min(1,(n-t0)/D),e=1-Math.pow(1-k,3);setVB({x:f.x+(t.x-f.x)*e,y:f.y+(t.y-f.y)*e,w:f.w+(t.w-f.w)*e,h:f.h+(t.h-f.h)*e});if(k<1)zAnim=requestAnimationFrame(step)};zAnim=requestAnimationFrame(step)}
+function mapFit(anim){const f=fitVB();anim?animVB(f):setVB(f)}
+function zoomBy(fac){const c=[MV.x+MV.w/2,MV.y+MV.h/2];const w=MV.w/fac,h=MV.h/fac;animVB({x:c[0]-w/2,y:c[1]-h/2,w,h})}
+function zoomToRoute(R){const pts=[...R.pts,startPt()];let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
+  const f=fitVB(),a=f.w/f.h;x0-=90;x1+=90;y0-=110;y1+=170;let w=Math.max(x1-x0,(y1-y0)*a,f.w/3.2);animVB({x:(x0+x1)/2-w/2,y:(y0+y1)/2-w/a/2,w,h:w/a})}
+const svgPt=(cx,cy)=>{const r=mRect();return[MV.x+(cx-r.left)/r.width*MV.w,MV.y+(cy-r.top)/r.height*MV.h]};
+(function(){const m=$('map'),PT=new Map();let drag=null,pinch=null,moved=false;
+  m.addEventListener('pointerdown',e=>{PT.set(e.pointerId,[e.clientX,e.clientY]);cancelAnimationFrame(zAnim);
+    if(PT.size===1){drag={x:e.clientX,y:e.clientY,vb:{...MV}};moved=false}
+    else if(PT.size===2){const[a,b]=[...PT.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1])||1,vb:{...MV},c:svgPt((a[0]+b[0])/2,(a[1]+b[1])/2)};moved=true}});
+  addEventListener('pointermove',e=>{if(!PT.has(e.pointerId))return;PT.set(e.pointerId,[e.clientX,e.clientY]);const r=mRect();
+    if(PT.size>=2&&pinch){const[a,b]=[...PT.values()];const f=Math.hypot(a[0]-b[0],a[1]-b[1])/pinch.d;const w=pinch.vb.w/f,h=pinch.vb.h/f;const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
+      setVB({x:pinch.c[0]-(mx-r.left)/r.width*w,y:pinch.c[1]-(my-r.top)/r.height*h,w,h})}
+    else if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!moved&&Math.hypot(dx,dy)>7)moved=true;
+      if(moved)setVB({x:drag.vb.x-dx/r.width*drag.vb.w,y:drag.vb.y-dy/r.height*drag.vb.h,w:drag.vb.w,h:drag.vb.h})}},{passive:true});
+  const up=e=>{if(!PT.has(e.pointerId))return;PT.delete(e.pointerId);if(PT.size<2)pinch=null;
+    if(PT.size===1){const[q]=[...PT.values()];drag={x:q[0],y:q[1],vb:{...MV}}}else if(!PT.size)drag=null};
+  addEventListener('pointerup',up);addEventListener('pointercancel',up);
+  m.addEventListener('click',e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
+  m.addEventListener('wheel',e=>{e.preventDefault();cancelAnimationFrame(zAnim);const c=svgPt(e.clientX,e.clientY),f=e.deltaY<0?1.15:1/1.15;setVB({x:c[0]-(c[0]-MV.x)/f,y:c[1]-(c[1]-MV.y)/f,w:MV.w/f,h:MV.h/f})},{passive:false});
+  $('zIn').addEventListener('click',()=>zoomBy(1.6));$('zOut').addEventListener('click',()=>zoomBy(1/1.6));$('zFit').addEventListener('click',()=>mapFit(true));
+  try{new ResizeObserver(()=>{if(st.view!=='map')return;if(st.sel)setVB(MV);else mapFit()}).observe(document.querySelector('.mapwrap'))}catch(_){}
+})();
+function closeSheet(){const had=!!st.sel;st.sel=null;st.extra=null;st.listing=false;$('sheet').classList.remove('open');$('mstrip').hidden=true;drawRoute(null);if(had&&st.view==='map')mapFit(true)}
 
 /* ---------- ¿dónde estoy? ---------- */
 const placeLabel=p=>p.kind==='stand'?`${T(UI.stand)} ${p.no} · ${T(p.name)}`:T(p.name);
@@ -1183,7 +1282,7 @@ const media=(key,cls)=>IMG['v_'+key]?`<video class="${cls||''}" src="${IMG['v_'+
 function go(v,opt){if(st.view===v&&!opt)return;const prev=st.view;st.view=v;if(v!=='map'){closeSheet();stopPick()}
   ['Home','List','Agenda','Map','Tix','Spons'].forEach(n=>$('v'+n).hidden=('v'+n)!==('v'+v[0].toUpperCase()+v.slice(1)));
   if(v==='home')renderHome();if(v==='list')renderLocales();if(v==='agenda')renderAgenda();if(v==='tix')renderTix();if(v==='spons')renderSpons();renderNav();
-  if(v==='map'){const m=$('map');m.classList.remove('noanim');renderMap();setTimeout(()=>m.classList.add('noanim'),1400)}
+  if(v==='map'){const m=$('map');m.classList.remove('noanim');renderMap();renderMSearch();mapFit();setTimeout(()=>m.classList.add('noanim'),1400)}
   if(prev)snd(v==='home'?'back':'go');bump();
 }
 const backBtn=(to)=>`<button type="button" class="back" data-go="${to}">${ic('arrow')}${esc(T(to==='home'?UI.home:UI.tLoc))}</button>`;
@@ -1308,12 +1407,15 @@ function renderStatic(){
   tickClock();renderLive();renderStrip();
 }
 function tickClock(){const n=now();$('clock').innerHTML=`${T(UI.week)[n.getDay()]} ${n.getDate()} · ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}<small>${esc(T(UI.simClock))}</small>`}
-function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.view==='tix')renderTix();if(st.view==='spons')renderSpons();renderNav();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
+function renderAll(){renderStatic();renderMap();renderTabs();renderPane();if(st.view==='home')renderHome();if(st.view==='list')renderLocales();if(st.view==='agenda')renderAgenda();if(st.view==='tix')renderTix();if(st.view==='spons')renderSpons();renderMSearch();renderNav();if(st.sel&&byId[st.sel])openPlace(byId[st.sel],st.extra)}
 
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,[data-id]');if(!t)return;
   if(t.dataset.lang){snd('lang');lang=t.dataset.lang;renderAll();return}
+  if(t.dataset.mcat){st.mcat=t.dataset.mcat;renderMSearch();dimStands();return}
+  if(t.dataset.mgo){pushNav();$('mq').blur();openPlace(byId[t.dataset.mgo]);snd('open');return}
+  if(t.id==='mqx'){clearMapFilter();$('mq').focus();return}
   if(t.id==='sndBtn'){SND.on=!SND.on;try{localStorage.setItem('expoSnd',SND.on?'1':'0')}catch(_){}renderSnd();if(SND.on)snd('open');return}
   if(t.dataset.lcat!==undefined&&!t.dataset.go){if(t.dataset.lcat)pushNav();st.lcat=t.dataset.lcat||null;snd(st.lcat?'open':'back');renderLocales();return}
   if(t.dataset.ag&&!t.dataset.go){st.ag=t.dataset.ag;renderAgenda();return}
@@ -1334,12 +1436,14 @@ document.addEventListener('click',e=>{
   if(t.dataset.id&&t.closest('#map')){if(st.picking){setFrom(t.dataset.id);return}pushNav();openPlace(byId[t.dataset.id]);snd('open');return}
 });
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('#map [data-id]')){e.preventDefault();const id=e.target.closest('[data-id]').dataset.id;if(st.picking)setFrom(id);else openPlace(byId[id])}});
+$('mq').addEventListener('input',e=>{st.mq=e.target.value;$('mqx').hidden=!st.mq;dimStands();renderMRes()});
+$('mq').addEventListener('keydown',e=>{if(e.key==='Enter'){const m=mapMatches();if(m&&m.length===1){pushNav();e.target.blur();openPlace(m[0]);snd('open')}else e.target.blur()}});
 $('attract').addEventListener('click',e=>{if(!e.target.closest('[data-alang]'))hideAttract()});
 $('homeBtn').addEventListener('click',()=>{resetNav();closeSheet();stopPick();go('home')});
 let loading=false;
 function hideAttract(){if(loading)return;loading=true;const L=$('loader');L.hidden=false;L.innerHTML=L.innerHTML;$('loadX').src=IMG.xmark;$('loadTxt').textContent=T(UI.loading);snd('load');
   setTimeout(()=>{$('attract').hidden=true;st.view=null;go('home');setTimeout(()=>{L.hidden=true;loading=false},250)},reduce?200:1250);bump()}
-function showAttract(){resetNav();closeSheet();stopPick();st.from='entry';lang='es';st.tab='stands';st.cat='all';st.q='';st.day=5;st.lcat=null;st.ag='bands';$('qrModal').hidden=true;renderAll();go('home',true);$('attract').hidden=false}
+function showAttract(){resetNav();st.mq='';st.mcat='all';closeSheet();stopPick();st.from='entry';lang='es';st.tab='stands';st.cat='all';st.q='';st.day=5;st.lcat=null;st.ag='bands';$('qrModal').hidden=true;renderAll();go('home',true);$('attract').hidden=false}
 
 let qrDone=false;
 $('qrBtn').addEventListener('click',()=>{$('qrModal').hidden=false;
